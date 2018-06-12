@@ -9,38 +9,48 @@ import (
 	"gopkg.in/telegram-bot-api.v4"
 )
 
+// The BotConfig struct is used to store run-time configuration
+// information for the bot application.
 type BotConfig struct {
 	BotToken string `json:"bot_token"`
 	ChatID   int64  `json:"chat_id"`
 	Locked   bool   `json:"locked"`
+	BotDebug bool   `json:"botdebug"`
 }
 
 var (
 	config BotConfig
 )
 
+// parseFlags parses command line flags and populates the run-time applicaton configuration
 func parseFlags() {
 	flag.StringVar(&config.BotToken, "bottoken", "", "telegram bot token (provided by the @BotFather")
-	log.Debugf("Parameter: bottoken = %s", config.BotToken)
 	flag.Int64Var(&config.ChatID, "chatid", -1, "lock telegram bot to specific chatid")
+	flag.BoolVar(&config.BotDebug, "botdebug", false, "Bot API debugging")
+	flag.Parse()
+
+	log.Debugf("Parameter: bottoken = %s", config.BotToken)
 	log.Debugf("Parameter: chatid =  %v", config.ChatID)
+	log.Debugf("Parameter: botdebug = %v", config.BotDebug)
 	if config.ChatID == -1 {
 		config.Locked = false
 	} else {
 		config.Locked = true
 		log.Infof("Bot locked to ChatID: ", config.ChatID)
 	}
-	flag.Parse()
 }
 
+// allowedToRespondToChat determines if the bot has been locked to a specific
+// chat ID or no. It it has it then compares this to the chatid parameter provided
+// to determine if it is allowed to respond or not.
 func allowedToRespondToChat(chatid int64) bool {
 	if config.Locked {
 		// Chat is locked, so check the provided chatid to see if we are allowed to respond.
 		return chatid == config.ChatID
-	} else {
-		// Chat is not locked, so we are allowed to respond to anyone.
-		return true
 	}
+
+	// In all other cases, the chat is not locked, so we are allowed to respond to anyone.
+	return true
 }
 
 func main() {
@@ -55,8 +65,8 @@ func main() {
 		log.Panic(err)
 	}
 
-	// Enable bot interface debugging
-	bot.Debug = true
+	// Setup bot interface debugging
+	bot.Debug = config.BotDebug
 	log.Infof("Authorised on account %s", bot.Self.UserName)
 
 	u := tgbotapi.NewUpdate(0)
@@ -74,6 +84,7 @@ func main() {
 			// Allowed to respond to this Chat ID
 			if update.Message.IsCommand() {
 				msg := tgbotapi.NewMessage(update.Message.Chat.ID, "")
+				log.Debugf("Command: %s", update.Message.Command())
 				switch update.Message.Command() {
 				case "help":
 					msg.Text = "type /sayhi or /status or /chatid or /lock or /unlock."
