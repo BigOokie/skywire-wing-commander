@@ -53,8 +53,6 @@ func watchFile(eventMsg chan<- string, filename string) {
 		log.Panic(err)
 	}
 
-	//done := make(chan bool)
-	//go func() {
 	log.Infof("Now watching file: %s", filename)
 	for {
 		select {
@@ -71,17 +69,10 @@ func watchFile(eventMsg chan<- string, filename string) {
 		}
 		time.Sleep(2 * time.Second)
 	}
-	//}()
-
-	//err = watcher.Add(filename)
-	//if err != nil {
-	//	log.Panic(err)
-	//}
-	//<-done
 }
 
 // Create new telegram bot using the bot token passed on the cmd line
-func startTelegramBot() {
+func startTelegramBot(eventMsg <-chan string) {
 	telegramBot, err := tgbotapi.NewBotAPI(config.BotToken)
 	if err != nil {
 		log.Panic(err)
@@ -102,7 +93,15 @@ func startTelegramBot() {
 		msg := tgbotapi.NewMessage(config.ChatID, "")
 		msg.Text = "Hello. I'm up and running. Further updates will be provided in this chat session."
 		telegramBot.Send(msg)
-		return
+		break
+		//return
+	}
+
+	for {
+		txt := fmt.Sprintf("Event Received: %v", <-eventMsg)
+		log.Debugln(txt)
+		msg := tgbotapi.NewMessage(config.ChatID, txt)
+		telegramBot.Send(msg)
 	}
 }
 
@@ -115,7 +114,7 @@ func main() {
 	msgChannel := make(chan string, 1)
 
 	// Start the telegram bot
-	startTelegramBot()
+	go startTelegramBot(msgChannel)
 
 	// Start watching the Skywire Monitors clients.json file
 	go watchFile(msgChannel, "./test.json")
