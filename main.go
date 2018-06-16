@@ -5,7 +5,6 @@ import (
 	"flag"
 
 	"github.com/fsnotify/fsnotify"
-
 	log "github.com/sirupsen/logrus"
 )
 
@@ -71,7 +70,7 @@ func watchFile(filename string) {
 				if event.Op&fsnotify.Write == fsnotify.Write {
 					log.Infof("File watcher(%s) handling event  [%s]", event.Name, event.Op)
 				} else {
-					log.Infof("File watcher(%s) ignorning event [%s]", event.Name, event.Op)
+					log.Debugf("File watcher(%s) ignorning event [%s]", event.Name, event.Op)
 				}
 			case err := <-watcher.Errors:
 				log.Errorln("File watcher error:", err)
