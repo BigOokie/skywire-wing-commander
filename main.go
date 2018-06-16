@@ -4,6 +4,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"time"
 
 	"github.com/fsnotify/fsnotify"
 	log "github.com/sirupsen/logrus"
@@ -47,30 +48,36 @@ func watchFile(eventMsg chan<- string, filename string) {
 	}
 	defer watcher.Close()
 
-	done := make(chan bool)
-	go func() {
-		log.Infof("Now watching file: %s", filename)
-		for {
-			select {
-			case event := <-watcher.Events:
-				if event.Op&fsnotify.Write == fsnotify.Write {
-					msgText := fmt.Sprintf("File watcher(%s) handling event  [%s]", event.Name, event.Op)
-					log.Info(msgText)
-					//eventMsg <- msgText
-				} else {
-					log.Debugf("File watcher(%s) ignorning event [%s]", event.Name, event.Op)
-				}
-			case err := <-watcher.Errors:
-				log.Errorln("File watcher error:", err)
-			}
-		}
-	}()
-
 	err = watcher.Add(filename)
 	if err != nil {
 		log.Panic(err)
 	}
-	<-done
+
+	//done := make(chan bool)
+	//go func() {
+	log.Infof("Now watching file: %s", filename)
+	for {
+		select {
+		case event := <-watcher.Events:
+			if event.Op&fsnotify.Write == fsnotify.Write {
+				msgText := fmt.Sprintf("File watcher(%s) handling event  [%s]", event.Name, event.Op)
+				log.Info(msgText)
+				eventMsg <- msgText
+			} else {
+				log.Debugf("File watcher(%s) ignorning event [%s]", event.Name, event.Op)
+			}
+		case err := <-watcher.Errors:
+			log.Errorln("File watcher error:", err)
+		}
+		time.Sleep(2 * time.Second)
+	}
+	//}()
+
+	//err = watcher.Add(filename)
+	//if err != nil {
+	//	log.Panic(err)
+	//}
+	//<-done
 }
 
 // Create new telegram bot using the bot token passed on the cmd line
@@ -111,10 +118,11 @@ func main() {
 	startTelegramBot()
 
 	// Start watching the Skywire Monitors clients.json file
-	watchFile(msgChannel, "./test.json")
+	go watchFile(msgChannel, "./test.json")
 
 	for {
-		log.Debugf("Event: %v", <-msgChannel)
+		txt := <-msgChannel
+		log.Debugf("Event: %v", txt)
 	}
 
 	/*
