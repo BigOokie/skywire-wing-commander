@@ -26,37 +26,30 @@ var (
 // parseFlags parses command line flags and populates the run-time applicaton configuration
 func parseFlags() {
 	flag.StringVar(&config.BotToken, "bottoken", "", "telegram bot token (provided by the @BotFather")
-	flag.Int64Var(&config.ChatID, "chatid", -1, "lock telegram bot to specific chatid")
+	//flag.Int64Var(&config.ChatID, "chatid", -1, "lock telegram bot to specific chatid")
 	flag.BoolVar(&config.BotDebug, "botdebug", false, "Bot API debugging")
 	flag.Parse()
 
 	log.Debugf("Parameter: bottoken = %s", config.BotToken)
-	log.Debugf("Parameter: chatid =  %v", config.ChatID)
+	//log.Debugf("Parameter: chatid =  %v", config.ChatID)
 	log.Debugf("Parameter: botdebug = %v", config.BotDebug)
-	if config.ChatID == -1 {
-		config.Locked = false
-	} else {
-		config.Locked = true
-		log.Infof("Bot locked to ChatID: ", config.ChatID)
-	}
+	/*
+		if config.ChatID == -1 {
+			config.Locked = false
+		} else {
+			config.Locked = true
+			log.Infof("Bot locked to ChatID: ", config.ChatID)
+		}
+	*/
 }
 
-// allowedToRespondToChat determines if the bot has been locked to a specific
-// chat ID or no. It it has it then compares this to the chatid parameter provided
-// to determine if it is allowed to respond or not.
-func allowedToRespondToChat(chatid int64) bool {
-	if config.Locked {
-		// Chat is locked, so check the provided chatid to see if we are allowed to respond.
-		return chatid == config.ChatID
-	}
-
-	// In all other cases, the chat is not locked, so we are allowed to respond to anyone.
-	return true
+func chatSetup() bool {
+	return (config.ChatID != -1)
 }
 
 // watchFile will watch the file specified by filename
 func watchFile(filename string) {
-	log.Debugf("Seting up file watch on file: %s", filename)
+	log.Infof("Seting up file watch on file: %s", filename)
 	watcher, err := fsnotify.NewWatcher()
 	if err != nil {
 		log.Panic(err)
@@ -71,6 +64,11 @@ func watchFile(filename string) {
 			case event := <-watcher.Events:
 				if event.Op&fsnotify.Write == fsnotify.Write {
 					log.Infof("File watcher(%s) handling event  [%s]", event.Name, event.Op)
+					//if chatSetup() {
+					//	msg := tgbotapi.NewMessage(config.ChatID, "")
+					//	msg.Text = fmt.Sprintf("File watcher(%s) handling event  [%s]", event.Name, event.Op)
+					//	telegramBot.Send(msg)
+					//}
 				} else {
 					log.Debugf("File watcher(%s) ignorning event [%s]", event.Name, event.Op)
 				}
@@ -94,12 +92,29 @@ func startTelegramBot() {
 		log.Panic(err)
 	}
 	telegramBot.Debug = config.BotDebug
+	log.Infof("Telegram Bot connected and authorised on account %s", telegramBot.Self.UserName)
+
+	u := tgbotapi.NewUpdate(0)
+	u.Timeout = 60
+	updates, err := telegramBot.GetUpdatesChan(u)
+	for update := range updates {
+		if update.Message == nil {
+			log.Warn("Ignoring empty message.")
+			continue
+		}
+		config.ChatID = update.Message.Chat.ID
+		log.Debugf("Message recieved from ChatID: %v", config.ChatID)
+		msg := tgbotapi.NewMessage(config.ChatID, "")
+		msg.Text = "Hello. I'm up and running. Further updates will be provided in this chat session."
+		telegramBot.Send(msg)
+		return
+	}
 }
 
 func main() {
 	log.SetFormatter(&log.TextFormatter{})
 	log.SetLevel(log.DebugLevel)
-	log.Infoln("Starting Telegram Notification Bot App.")
+	log.Infoln("Starting Skywire Telegram Notification Bot App.")
 	parseFlags()
 
 	// Start the telegram bot
@@ -109,10 +124,6 @@ func main() {
 	watchFile("test.json")
 
 	/*
-		// Setup bot interface debugging
-		bot.Debug = config.BotDebug
-		log.Infof("Authorised on account %s", bot.Self.UserName)
-
 		u := tgbotapi.NewUpdate(0)
 		u.Timeout = 60
 		updates, err := bot.GetUpdatesChan(u)
