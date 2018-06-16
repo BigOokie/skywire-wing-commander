@@ -6,6 +6,7 @@ import (
 
 	"github.com/fsnotify/fsnotify"
 	log "github.com/sirupsen/logrus"
+	"gopkg.in/telegram-bot-api.v4"
 )
 
 // The BotConfig struct is used to store run-time configuration
@@ -18,7 +19,8 @@ type BotConfig struct {
 }
 
 var (
-	config BotConfig
+	config      BotConfig
+	telegramBot tgbotapi.BotAPI
 )
 
 // parseFlags parses command line flags and populates the run-time applicaton configuration
@@ -85,19 +87,23 @@ func watchFile(filename string) {
 	<-done
 }
 
+// Create new telegram bot using the bot token passed on the cmd line
+func startTelegramBot() {
+	telegramBot, err := tgbotapi.NewBotAPI(config.BotToken)
+	if err != nil {
+		log.Panic(err)
+	}
+	telegramBot.Debug = config.BotDebug
+}
+
 func main() {
 	log.SetFormatter(&log.TextFormatter{})
 	log.SetLevel(log.DebugLevel)
 	log.Infoln("Starting Telegram Notification Bot App.")
 	parseFlags()
 
-	/*
-		// Create new telegram bot using the bot token passed on the cmd line
-		bot, err := tgbotapi.NewBotAPI(config.BotToken)
-		if err != nil {
-			log.Panic(err)
-		}
-	*/
+	// Start the telegram bot
+	startTelegramBot()
 
 	// Start watching the Skywire Monitors clients.json file
 	watchFile("test.json")
