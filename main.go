@@ -3,6 +3,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 
 	"github.com/fsnotify/fsnotify"
 	log "github.com/sirupsen/logrus"
@@ -26,21 +27,11 @@ var (
 // parseFlags parses command line flags and populates the run-time applicaton configuration
 func parseFlags() {
 	flag.StringVar(&config.BotToken, "bottoken", "", "telegram bot token (provided by the @BotFather")
-	//flag.Int64Var(&config.ChatID, "chatid", -1, "lock telegram bot to specific chatid")
 	flag.BoolVar(&config.BotDebug, "botdebug", false, "Bot API debugging")
 	flag.Parse()
 
 	log.Debugf("Parameter: bottoken = %s", config.BotToken)
-	//log.Debugf("Parameter: chatid =  %v", config.ChatID)
 	log.Debugf("Parameter: botdebug = %v", config.BotDebug)
-	/*
-		if config.ChatID == -1 {
-			config.Locked = false
-		} else {
-			config.Locked = true
-			log.Infof("Bot locked to ChatID: ", config.ChatID)
-		}
-	*/
 }
 
 func chatSetup() bool {
@@ -48,7 +39,7 @@ func chatSetup() bool {
 }
 
 // watchFile will watch the file specified by filename
-func watchFile(filename string) {
+func watchFile(eventMsg chan<- string, filename string) {
 	log.Infof("Seting up file watch on file: %s", filename)
 	watcher, err := fsnotify.NewWatcher()
 	if err != nil {
@@ -63,12 +54,9 @@ func watchFile(filename string) {
 			select {
 			case event := <-watcher.Events:
 				if event.Op&fsnotify.Write == fsnotify.Write {
-					log.Infof("File watcher(%s) handling event  [%s]", event.Name, event.Op)
-					//if chatSetup() {
-					//	msg := tgbotapi.NewMessage(config.ChatID, "")
-					//	msg.Text = fmt.Sprintf("File watcher(%s) handling event  [%s]", event.Name, event.Op)
-					//	telegramBot.Send(msg)
-					//}
+					msgText := fmt.Sprintf("File watcher(%s) handling event  [%s]", event.Name, event.Op)
+					log.Info(msgText)
+					//eventMsg <- msgText
 				} else {
 					log.Debugf("File watcher(%s) ignorning event [%s]", event.Name, event.Op)
 				}
@@ -117,11 +105,17 @@ func main() {
 	log.Infoln("Starting Skywire Telegram Notification Bot App.")
 	parseFlags()
 
+	msgChannel := make(chan string, 1)
+
 	// Start the telegram bot
 	startTelegramBot()
 
 	// Start watching the Skywire Monitors clients.json file
-	watchFile("test.json")
+	watchFile(msgChannel, "./test.json")
+
+	for {
+		log.Debugf("Event: %v", <-msgChannel)
+	}
 
 	/*
 		u := tgbotapi.NewUpdate(0)
