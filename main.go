@@ -2,14 +2,57 @@
 package main
 
 import (
+	"encoding/json"
 	"flag"
 	"fmt"
+	"io/ioutil"
+	"os"
 	"time"
 
 	"github.com/fsnotify/fsnotify"
 	log "github.com/sirupsen/logrus"
 	"gopkg.in/telegram-bot-api.v4"
 )
+
+//var clientPath = filepath.Join(file.UserHome(), ".skywire", "manager", "clients.json")
+var clientPath = "./test.json"
+
+type ClientConnection struct {
+	Label   string `json:"label"`
+	NodeKey string `json:"nodeKey"`
+	AppKey  string `json:"appKey"`
+	Count   int    `json:"count"`
+}
+type clientConnectionSlice []ClientConnection
+
+// Determines if the specified ClientConnection exists within the clientConnectionSlice
+func (c clientConnectionSlice) Exist(rf ClientConnection) bool {
+	for _, v := range c {
+		if v.AppKey == rf.AppKey && v.NodeKey == rf.NodeKey {
+			return true
+		}
+	}
+	return false
+}
+
+func readClientConnectionConfig() (cfs map[string]clientConnectionSlice, err error) {
+	fb, err := ioutil.ReadFile(clientPath)
+	if err != nil {
+		if os.IsNotExist(err) {
+			cfs = nil
+			err = nil
+			return
+		} else {
+			return
+		}
+	}
+	cfs = make(map[string]clientConnectionSlice)
+	err = json.Unmarshal(fb, &cfs)
+	if err != nil {
+		return
+	}
+	return
+}
 
 // The BotConfig struct is used to store run-time configuration
 // information for the bot application.
@@ -94,7 +137,6 @@ func startTelegramBot(eventMsg <-chan string) {
 		msg.Text = "Hello. I'm up and running. Further updates will be provided in this chat session."
 		telegramBot.Send(msg)
 		break
-		//return
 	}
 
 	for {
@@ -110,6 +152,20 @@ func main() {
 	log.SetLevel(log.DebugLevel)
 	log.Infoln("Starting Skywire Telegram Notification Bot App.")
 	parseFlags()
+
+	cfs, err := readClientConnectionConfig()
+	if err == nil {
+		for k, _ := range cfs {
+			log.Debugf("Client Type: [%s]", k)
+			for _, b := range cfs[k] {
+				log.Debugf("NodeKey: %s", b.NodeKey)
+				log.Debugf("AppKey:  %s", b.AppKey)
+				log.Debugln("")
+			}
+		}
+	}
+
+	return
 
 	msgChannel := make(chan string, 1)
 
