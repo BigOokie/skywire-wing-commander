@@ -18,12 +18,16 @@ import (
 //var clientPath = filepath.Join(file.UserHome(), ".skywire", "manager", "clients.json")
 var clientPath = "./test.json"
 
+// ClientConnection is a structure that represents the JSON file structure
+// of the clients.json file (from Skywire project)
 type ClientConnection struct {
 	Label   string `json:"label"`
 	NodeKey string `json:"nodeKey"`
 	AppKey  string `json:"appKey"`
 	Count   int    `json:"count"`
 }
+
+// Defines an in-memory slice (dynamic array) based on the ClientConnection struct
 type clientConnectionSlice []ClientConnection
 
 // Determines if the specified ClientConnection exists within the clientConnectionSlice
@@ -36,6 +40,7 @@ func (c clientConnectionSlice) Exist(rf ClientConnection) bool {
 	return false
 }
 
+// Reads the physical Skywire Clients.JSON file into an in-memory structure
 func readClientConnectionConfig() (cfs map[string]clientConnectionSlice, err error) {
 	fb, err := ioutil.ReadFile(clientPath)
 	if err != nil {
@@ -53,6 +58,37 @@ func readClientConnectionConfig() (cfs map[string]clientConnectionSlice, err err
 		return
 	}
 	return
+}
+
+// getClientConnectionListString will iterate over the ClientConnectionConfig JSON
+// file and return a formatted string for all Clients and their Nodes
+func getClientConnectionListString() string {
+	var clientsb strings.Builder
+
+	// Read the Client Connection Config (JSON) into ccc
+	ccc, err := readClientConnectionConfig()
+	if err == nil {
+		// Iterate ccc reading the Keys (k), we can ignore the values (_)
+		for k, _ := range ccc {
+			// Output to our string builder the current Client Type (from K)
+			// Add an newline if this isnt the first itteration
+			if clientsb.String() != "" {
+				clientsb.WriteString("\n")
+			}
+			clientsb.WriteString(fmt.Sprintf("ClientType: [%s]\n", k))
+			// Iterate all Nodes in the current client type (ccc[k])
+			for _, b := range ccc[k] {
+				// Output the details for each node of this client type
+				clientsb.WriteString(fmt.Sprintf("Label:   %s\n", b.Label))
+				clientsb.WriteString(fmt.Sprintf("NodeKey: %s\n", b.NodeKey))
+				clientsb.WriteString(fmt.Sprintf("AppKey:  %s\n", b.AppKey))
+				clientsb.WriteString("\n")
+			}
+		}
+	}
+	log.Debugln(clientsb.String())
+	// Return the built string
+	return clientsb.String()
 }
 
 // The BotConfig struct is used to store run-time configuration
@@ -146,36 +182,6 @@ func startTelegramBot(eventMsg <-chan string) {
 		msg := tgbotapi.NewMessage(config.ChatID, txt)
 		telegramBot.Send(msg)
 	}
-}
-
-func getClientConnectionListString() string {
-	var clientsb strings.Builder
-
-	// Read the Client Connection Config (JSON) into ccc
-	ccc, err := readClientConnectionConfig()
-	if err == nil {
-		// Iterate ccc reading the Keys (k), we can ignore the values (_)
-		for k, _ := range ccc {
-			// Output to our string builder the current Client Type (from K)
-			// Add an newline if this isnt the first itteration
-			if clientsb.String() != "" {
-				clientsb.WriteString("\n")
-			}
-			clientsb.WriteString(fmt.Sprintf("ClientType: [%s]\n", k))
-			// Iterate all Nodes in the current client type (ccc[k])
-			for _, b := range ccc[k] {
-				// Output the details for each node of this client type
-				clientsb.WriteString(fmt.Sprintf("Label:   %s\n", b.Label))
-				clientsb.WriteString(fmt.Sprintf("NodeKey: %s\n", b.NodeKey))
-				clientsb.WriteString(fmt.Sprintf("AppKey:  %s\n", b.AppKey))
-				clientsb.WriteString("\n")
-			}
-
-		}
-	}
-	log.Debugln(clientsb.String())
-	// Return the built string
-	return clientsb.String()
 }
 
 func main() {
