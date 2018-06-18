@@ -8,7 +8,7 @@ import (
 	"io/ioutil"
 	"os"
 	"strings"
-	"time"
+	"sync"
 
 	"github.com/fsnotify/fsnotify"
 	log "github.com/sirupsen/logrus"
@@ -18,9 +18,9 @@ import (
 //var clientPath = filepath.Join(file.UserHome(), ".skywire", "manager", "clients.json")
 var clientPath = "./test.json"
 
-// ClientConnection is a structure that represents the JSON file structure
+// clientConnection is a structure that represents the JSON file structure
 // of the clients.json file (from Skywire project)
-type ClientConnection struct {
+type clientConnection struct {
 	Label   string `json:"label"`
 	NodeKey string `json:"nodeKey"`
 	AppKey  string `json:"appKey"`
@@ -28,10 +28,10 @@ type ClientConnection struct {
 }
 
 // Defines an in-memory slice (dynamic array) based on the ClientConnection struct
-type clientConnectionSlice []ClientConnection
+type clientConnectionSlice []clientConnection
 
 // Determines if the specified ClientConnection exists within the clientConnectionSlice
-func (c clientConnectionSlice) Exist(rf ClientConnection) bool {
+func (c clientConnectionSlice) Exist(rf clientConnection) bool {
 	for _, v := range c {
 		if v.AppKey == rf.AppKey && v.NodeKey == rf.NodeKey {
 			return true
@@ -68,8 +68,8 @@ func getClientConnectionListString() string {
 	// Read the Client Connection Config (JSON) into ccc
 	ccc, err := readClientConnectionConfig()
 	if err == nil {
-		// Iterate ccc reading the Keys (k), we can ignore the values (_)
-		for k, _ := range ccc {
+		// Iterate ccc reading the Keys (k)
+		for k := range ccc {
 			// Output to our string builder the current Client Type (from K)
 			// Add an newline if this isnt the first itteration
 			if clientsb.String() != "" {
@@ -93,7 +93,7 @@ func getClientConnectionListString() string {
 
 // The BotConfig struct is used to store run-time configuration
 // information for the bot application.
-type BotConfig struct {
+type botConfig struct {
 	BotToken string `json:"bot_token"`
 	ChatID   int64  `json:"chat_id"`
 	Locked   bool   `json:"locked"`
@@ -101,7 +101,7 @@ type BotConfig struct {
 }
 
 var (
-	config      BotConfig
+	config      botConfig
 	telegramBot tgbotapi.BotAPI
 )
 
@@ -115,12 +115,13 @@ func parseFlags() {
 	log.Debugf("Parameter: botdebug = %v", config.BotDebug)
 }
 
+// chatSetup checks
 func chatSetup() bool {
 	return (config.ChatID != -1)
 }
 
 // watchFile will watch the file specified by filename
-func watchFile(eventMsg chan<- string, filename string) {
+func watchFile(fileEventMsg chan<- string, stopEvent chan bool, filename string) {
 	log.Infof("Seting up file watch on file: %s", filename)
 	watcher, err := fsnotify.NewWatcher()
 	if err != nil {
@@ -138,25 +139,33 @@ func watchFile(eventMsg chan<- string, filename string) {
 		select {
 		case event := <-watcher.Events:
 			if event.Op&fsnotify.Write == fsnotify.Write {
-				msgText := fmt.Sprintf("File watcher(%s) handling event  [%s]", event.Name, event.Op)
-				log.Info(msgText)
-				eventMsg <- msgText
+				log.Debugf("File watcher(%s) handling event  [%s]\n", event.Name, event.Op)
+				msgText := getClientConnectionListString()
+				log.Debug(msgText)
+				fileEventMsg <- msgText
 			} else {
-				log.Debugf("File watcher(%s) ignorning event [%s]", event.Name, event.Op)
+				log.Debugf("File watcher(%s) ignorning event [%s]\n", event.Name, event.Op)
 			}
 		case err := <-watcher.Errors:
 			log.Errorln("File watcher error:", err)
+		case <-stopEvent:
+			log.Debugln("File watcher: Stop event recieved.")
+			return
 		}
-		time.Sleep(2 * time.Second)
 	}
 }
 
 // Create new telegram bot using the bot token passed on the cmd line
-func startTelegramBot(eventMsg <-chan string) {
+func startTelegramBot(botwg *sync.WaitGroup) {
+	var watcherRunning bool = false
 	telegramBot, err := tgbotapi.NewBotAPI(config.BotToken)
 	if err != nil {
 		log.Panic(err)
 	}
+
+	monitorMsgEvent := make(chan string)
+	monitorStopEvent := make(chan bool)
+
 	telegramBot.Debug = config.BotDebug
 	log.Infof("Telegram Bot connected and authorised on account %s", telegramBot.Self.UserName)
 
@@ -168,43 +177,78 @@ func startTelegramBot(eventMsg <-chan string) {
 			log.Warn("Ignoring empty message.")
 			continue
 		}
-		config.ChatID = update.Message.Chat.ID
-		log.Debugf("Message recieved from ChatID: %v", config.ChatID)
-		msg := tgbotapi.NewMessage(config.ChatID, "")
-		msg.Text = "Hello. I'm up and running. Further updates will be provided in this chat session."
-		telegramBot.Send(msg)
-		break
-	}
 
-	for {
-		txt := fmt.Sprintf("Event Received: %v", <-eventMsg)
-		log.Debugln(txt)
-		msg := tgbotapi.NewMessage(config.ChatID, txt)
-		telegramBot.Send(msg)
+		/*
+			config.ChatID = update.Message.Chat.ID
+			log.Debugf("Message recieved from ChatID: %v", config.ChatID)
+			msg := tgbotapi.NewMessage(config.ChatID, "")
+			msg.Text = "Hello. I'm up and running. Further updates will be provided in this chat session."
+			telegramBot.Send(msg)
+			break
+		*/
+
+		config.ChatID = update.Message.Chat.ID
+		log.Infof("Message recieved from ChatID: %v", config.ChatID)
+
+		if update.Message.IsCommand() {
+			msg := tgbotapi.NewMessage(update.Message.Chat.ID, "")
+			log.Debugf("Recieved Command: %s", update.Message.Command())
+			switch update.Message.Command() {
+			case "help":
+				msg.Text = "type /about or /status or /chatid or /start or /stop."
+			case "about":
+				msg.Text = "Skywire Manager TelegraTelegram Monitoring Bot\n"
+				msg.Text = msg.Text + "By @BigOokie\n"
+				msg.Text = msg.Text + "GitHub: https://github.com/BigOokie/skywire-telegram-notify-bot"
+			case "status":
+				msg.Text = "I'm fine. Still running :)"
+			case "chatid":
+				msg.Text = fmt.Sprintf("ChatID: %v", update.Message.Chat.ID)
+			case "start":
+				if watcherRunning {
+					msg.Text = "Monitor start has already been requested."
+					log.Debugln(msg.Text)
+				} else {
+					watcherRunning = true
+					msg.Text = "Monitor start requested."
+					// Start watching the Skywire Monitors clients.json file
+					go watchFile(monitorMsgEvent, monitorStopEvent, "./test.json")
+				}
+			case "stop":
+				msg.Text = "Monitor stop requested."
+				monitorStopEvent <- true
+				watcherRunning = false
+			default:
+				msg.Text = "Sorry. I don't know that command."
+			}
+			telegramBot.Send(msg)
+		}
 	}
+	// Signal the Bot has finished
+	botwg.Done()
 }
 
 func main() {
 	log.SetFormatter(&log.TextFormatter{})
 	log.SetLevel(log.DebugLevel)
 	log.Infoln("Starting Skywire Telegram Notification Bot App.")
+	defer log.Infoln("Stopping Skywire Telegram Notification Bot App. Bye.")
 	parseFlags()
 
-	getClientConnectionListString()
-	return
-
-	msgChannel := make(chan string, 1)
-
+	// Setup a waitgroup to sync and wait for the Telegram Bot to end.
+	var botwg sync.WaitGroup
+	botwg.Add(1)
 	// Start the telegram bot
-	go startTelegramBot(msgChannel)
+	go startTelegramBot(&botwg)
+	botwg.Wait()
 
 	// Start watching the Skywire Monitors clients.json file
-	go watchFile(msgChannel, "./test.json")
+	//go watchFile(msgChannel, "./test.json")
 
-	for {
-		txt := <-msgChannel
-		log.Debugf("Event: %v", txt)
-	}
+	//for {
+	//	txt := <-msgChannel
+	//	log.Debugf("Event: %v", txt)
+	//}
 
 	/*
 		u := tgbotapi.NewUpdate(0)
