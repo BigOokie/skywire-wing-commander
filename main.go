@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/fsnotify/fsnotify"
@@ -147,24 +148,43 @@ func startTelegramBot(eventMsg <-chan string) {
 	}
 }
 
+func getClientConnectionListString() string {
+	var clientsb strings.Builder
+
+	// Read the Client Connection Config (JSON) into ccc
+	ccc, err := readClientConnectionConfig()
+	if err == nil {
+		// Iterate ccc reading the Keys (k), we can ignore the values (_)
+		for k, _ := range ccc {
+			// Output to our string builder the current Client Type (from K)
+			// Add an newline if this isnt the first itteration
+			if clientsb.String() != "" {
+				clientsb.WriteString("\n")
+			}
+			clientsb.WriteString(fmt.Sprintf("ClientType: [%s]\n", k))
+			// Iterate all Nodes in the current client type (ccc[k])
+			for _, b := range ccc[k] {
+				// Output the details for each node of this client type
+				clientsb.WriteString(fmt.Sprintf("Label:   %s\n", b.Label))
+				clientsb.WriteString(fmt.Sprintf("NodeKey: %s\n", b.NodeKey))
+				clientsb.WriteString(fmt.Sprintf("AppKey:  %s\n", b.AppKey))
+				clientsb.WriteString("\n")
+			}
+
+		}
+	}
+	log.Debugln(clientsb.String())
+	// Return the built string
+	return clientsb.String()
+}
+
 func main() {
 	log.SetFormatter(&log.TextFormatter{})
 	log.SetLevel(log.DebugLevel)
 	log.Infoln("Starting Skywire Telegram Notification Bot App.")
 	parseFlags()
 
-	cfs, err := readClientConnectionConfig()
-	if err == nil {
-		for k, _ := range cfs {
-			log.Debugf("Client Type: [%s]", k)
-			for _, b := range cfs[k] {
-				log.Debugf("NodeKey: %s", b.NodeKey)
-				log.Debugf("AppKey:  %s", b.AppKey)
-				log.Debugln("")
-			}
-		}
-	}
-
+	getClientConnectionListString()
 	return
 
 	msgChannel := make(chan string, 1)
