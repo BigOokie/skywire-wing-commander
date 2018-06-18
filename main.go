@@ -122,77 +122,75 @@ func chatSetup() bool {
 
 // watchFile will watch the file specified by filename
 func watchFile(fileEventMsg chan<- string, stopEvent chan bool, filename string) {
-	log.Infof("Seting up file watch on file: %s", filename)
+	log.Debugf("[FWM] Seting up monitoring on file: %s", filename)
 	watcher, err := fsnotify.NewWatcher()
 	if err != nil {
 		log.Panic(err)
 	}
 	defer watcher.Close()
+	defer log.Infof("[FWM] Stop watching file: %s", filename)
 
 	err = watcher.Add(filename)
 	if err != nil {
 		log.Panic(err)
 	}
 
-	log.Infof("Now watching file: %s", filename)
+	log.Infof("[FWM] Start watching file: %s", filename)
 	for {
 		select {
 		case event := <-watcher.Events:
 			if event.Op&fsnotify.Write == fsnotify.Write {
-				log.Debugf("File watcher(%s) handling event  [%s]\n", event.Name, event.Op)
+				log.Debugf("[FWM] (%s) handling event  [%s]\n", event.Name, event.Op)
 				msgText := getClientConnectionListString()
 				log.Debug(msgText)
 				fileEventMsg <- msgText
 			} else {
-				log.Debugf("File watcher(%s) ignorning event [%s]\n", event.Name, event.Op)
+				log.Debugf("[FWM] (%s) ignorning event [%s]\n", event.Name, event.Op)
 			}
 		case err := <-watcher.Errors:
 			log.Errorln("File watcher error:", err)
-		case <-stopEvent:
-			log.Debugln("File watcher: Stop event recieved.")
-			return
+		case stop := <-stopEvent:
+			if stop {
+				log.Debugln("[FWM] Stop event recieved.")
+				break
+			}
 		}
 	}
 }
 
 // Create new telegram bot using the bot token passed on the cmd line
 func startTelegramBot(botwg *sync.WaitGroup) {
-	var watcherRunning bool = false
+	var watcherRunning = false
+
 	telegramBot, err := tgbotapi.NewBotAPI(config.BotToken)
 	if err != nil {
 		log.Panic(err)
 	}
+	defer log.Info("[BOT] Telegram Bot finished.")
 
 	monitorMsgEvent := make(chan string)
-	monitorStopEvent := make(chan bool)
+	defer close(monitorMsgEvent)
+	monitorStopEvent := make(chan bool, 1)
+	defer close(monitorStopEvent)
 
 	telegramBot.Debug = config.BotDebug
-	log.Infof("Telegram Bot connected and authorised on account %s", telegramBot.Self.UserName)
+	log.Infof("[BOT] Telegram Bot connected and authorised on account %s", telegramBot.Self.UserName)
 
 	u := tgbotapi.NewUpdate(0)
 	u.Timeout = 60
 	updates, err := telegramBot.GetUpdatesChan(u)
 	for update := range updates {
 		if update.Message == nil {
-			log.Warn("Ignoring empty message.")
+			log.Debug("[BOT] Ignoring empty message.")
 			continue
 		}
 
-		/*
-			config.ChatID = update.Message.Chat.ID
-			log.Debugf("Message recieved from ChatID: %v", config.ChatID)
-			msg := tgbotapi.NewMessage(config.ChatID, "")
-			msg.Text = "Hello. I'm up and running. Further updates will be provided in this chat session."
-			telegramBot.Send(msg)
-			break
-		*/
-
 		config.ChatID = update.Message.Chat.ID
-		log.Infof("Message recieved from ChatID: %v", config.ChatID)
+		log.Debugf("[BOT] Message recieved from ChatID: %v", config.ChatID)
 
 		if update.Message.IsCommand() {
 			msg := tgbotapi.NewMessage(update.Message.Chat.ID, "")
-			log.Debugf("Recieved Command: %s", update.Message.Command())
+			log.Debugf("[BOT] Recieved Command: %s", update.Message.Command())
 			switch update.Message.Command() {
 			case "help":
 				msg.Text = "type /about or /status or /chatid or /start or /stop."
@@ -221,6 +219,9 @@ func startTelegramBot(botwg *sync.WaitGroup) {
 			default:
 				msg.Text = "Sorry. I don't know that command."
 			}
+			log.Debugln("[BOT] Start Response]")
+			log.Debugln(msg.Text)
+			log.Debugln("[BOT] End Response]")
 			telegramBot.Send(msg)
 		}
 	}
