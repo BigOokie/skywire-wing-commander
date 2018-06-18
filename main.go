@@ -121,7 +121,7 @@ func chatSetup() bool {
 }
 
 // watchFile will watch the file specified by filename
-func watchFile(fileEventMsg chan string, stopEvent chan bool, filename string) {
+func watchFile(monitorMsgEvent chan<- string, monitorStopEvent <-chan bool, filename string) {
 	log.Debugf("[FWM] Seting up monitoring on file: %s", filename)
 	watcher, err := fsnotify.NewWatcher()
 	if err != nil {
@@ -143,17 +143,17 @@ func watchFile(fileEventMsg chan string, stopEvent chan bool, filename string) {
 				log.Debugf("[FWM] (%s) handling event  [%s]\n", event.Name, event.Op)
 				msgText := getClientConnectionListString()
 				log.Debugf("[FWM] %s\n", msgText)
-				fileEventMsg <- msgText
+				monitorMsgEvent <- msgText
 			} else {
 				log.Debugf("[FWM] (%s) ignorning event [%s]\n", event.Name, event.Op)
 			}
 		case err := <-watcher.Errors:
 			log.Errorln("[FWM] Error:", err)
-		case stop := <-stopEvent:
-			if stop {
-				log.Debugln("[FWM] Stop event recieved.")
-				break
-			}
+			//case stop := <-monitorStopEvent:
+			//	if stop {
+			//		log.Debugln("[FWM] Stop event recieved.")
+			//		break
+			//	}
 		}
 	}
 }
@@ -168,7 +168,7 @@ func startTelegramBot(botwg *sync.WaitGroup) {
 	}
 	defer log.Info("[BOT] Telegram Bot finished.")
 
-	monitorMsgEvent := make(chan string)
+	monitorMsgEvent := make(chan string, 50)
 	defer close(monitorMsgEvent)
 	monitorStopEvent := make(chan bool)
 	defer close(monitorStopEvent)
@@ -189,16 +189,16 @@ func startTelegramBot(botwg *sync.WaitGroup) {
 		}
 
 		config.ChatID = update.Message.Chat.ID
-		msg := tgbotapi.NewMessage(update.Message.Chat.ID, "")
+		msg := tgbotapi.NewMessage(config.ChatID, "")
 		log.Debugf("[BOT] Message recieved from ChatID: %v", config.ChatID)
 
 		select {
-		case filemsg := <-monitorMsgEvent:
+		case monitormsg := <-monitorMsgEvent:
 			log.Debugln("[BOT] Recieved message from File Monitor")
 			log.Debugln("[BOT] [FWM] Begin Message")
-			log.Debugln(filemsg)
+			log.Debugln(monitormsg)
 			log.Debugln("[BOT] [FWM] End Message")
-			msg.Text = filemsg
+			msg.Text = monitormsg
 
 		default:
 			if update.Message.IsCommand() {
@@ -206,7 +206,7 @@ func startTelegramBot(botwg *sync.WaitGroup) {
 				log.Debugf("[BOT] Recieved Command: %s", update.Message.Command())
 				switch update.Message.Command() {
 				case "help":
-					msg.Text = "type /about or /status or /chatid or /start or /stop."
+					msg.Text = "type /help or /about or /status or /chatid or /start or /stop."
 				case "about":
 					msg.Text = "Skywire Manager TelegraTelegram Monitoring Bot\n"
 					msg.Text = msg.Text + "By @BigOokie\n"
