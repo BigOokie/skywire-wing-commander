@@ -86,7 +86,7 @@ func getClientConnectionListString() string {
 			}
 		}
 	}
-	log.Debugln(clientsb.String())
+	//log.Debugln(clientsb.String())
 	// Return the built string
 	return clientsb.String()
 }
@@ -121,7 +121,7 @@ func chatSetup() bool {
 }
 
 // watchFile will watch the file specified by filename
-func watchFile(fileEventMsg chan<- string, stopEvent chan bool, filename string) {
+func watchFile(fileEventMsg chan string, stopEvent chan bool, filename string) {
 	log.Debugf("[FWM] Seting up monitoring on file: %s", filename)
 	watcher, err := fsnotify.NewWatcher()
 	if err != nil {
@@ -142,13 +142,13 @@ func watchFile(fileEventMsg chan<- string, stopEvent chan bool, filename string)
 			if event.Op&fsnotify.Write == fsnotify.Write {
 				log.Debugf("[FWM] (%s) handling event  [%s]\n", event.Name, event.Op)
 				msgText := getClientConnectionListString()
-				log.Debug(msgText)
+				log.Debugf("[FWM] %s\n", msgText)
 				fileEventMsg <- msgText
 			} else {
 				log.Debugf("[FWM] (%s) ignorning event [%s]\n", event.Name, event.Op)
 			}
 		case err := <-watcher.Errors:
-			log.Errorln("File watcher error:", err)
+			log.Errorln("[FWM] Error:", err)
 		case stop := <-stopEvent:
 			if stop {
 				log.Debugln("[FWM] Stop event recieved.")
@@ -170,10 +170,13 @@ func startTelegramBot(botwg *sync.WaitGroup) {
 
 	monitorMsgEvent := make(chan string)
 	defer close(monitorMsgEvent)
-	monitorStopEvent := make(chan bool, 1)
+	monitorStopEvent := make(chan bool)
 	defer close(monitorStopEvent)
 
-	telegramBot.Debug = config.BotDebug
+	// Signal the Bot has finished
+	defer botwg.Done()
+
+	telegramBot.Debug = false //config.BotDebug
 	log.Infof("[BOT] Telegram Bot connected and authorised on account %s", telegramBot.Self.UserName)
 
 	u := tgbotapi.NewUpdate(0)
@@ -186,47 +189,62 @@ func startTelegramBot(botwg *sync.WaitGroup) {
 		}
 
 		config.ChatID = update.Message.Chat.ID
+		msg := tgbotapi.NewMessage(update.Message.Chat.ID, "")
 		log.Debugf("[BOT] Message recieved from ChatID: %v", config.ChatID)
 
-		if update.Message.IsCommand() {
-			msg := tgbotapi.NewMessage(update.Message.Chat.ID, "")
-			log.Debugf("[BOT] Recieved Command: %s", update.Message.Command())
-			switch update.Message.Command() {
-			case "help":
-				msg.Text = "type /about or /status or /chatid or /start or /stop."
-			case "about":
-				msg.Text = "Skywire Manager TelegraTelegram Monitoring Bot\n"
-				msg.Text = msg.Text + "By @BigOokie\n"
-				msg.Text = msg.Text + "GitHub: https://github.com/BigOokie/skywire-telegram-notify-bot"
-			case "status":
-				msg.Text = "I'm fine. Still running :)"
-			case "chatid":
-				msg.Text = fmt.Sprintf("ChatID: %v", update.Message.Chat.ID)
-			case "start":
-				if watcherRunning {
-					msg.Text = "Monitor start has already been requested."
-					log.Debugln(msg.Text)
-				} else {
-					watcherRunning = true
-					msg.Text = "Monitor start requested."
-					// Start watching the Skywire Monitors clients.json file
-					go watchFile(monitorMsgEvent, monitorStopEvent, "./test.json")
+		select {
+		case filemsg := <-monitorMsgEvent:
+			log.Debugln("[BOT] Recieved message from File Monitor")
+			log.Debugln("[BOT] [FWM] Begin Message")
+			log.Debugln(filemsg)
+			log.Debugln("[BOT] [FWM] End Message")
+			msg.Text = filemsg
+
+		default:
+			if update.Message.IsCommand() {
+				//msg := tgbotapi.NewMessage(update.Message.Chat.ID, "")
+				log.Debugf("[BOT] Recieved Command: %s", update.Message.Command())
+				switch update.Message.Command() {
+				case "help":
+					msg.Text = "type /about or /status or /chatid or /start or /stop."
+				case "about":
+					msg.Text = "Skywire Manager TelegraTelegram Monitoring Bot\n"
+					msg.Text = msg.Text + "By @BigOokie\n"
+					msg.Text = msg.Text + "GitHub: https://github.com/BigOokie/skywire-telegram-notify-bot"
+				case "status":
+					msg.Text = "I'm fine. Still running :)"
+				case "chatid":
+					msg.Text = fmt.Sprintf("ChatID: %v", update.Message.Chat.ID)
+				case "start":
+					if watcherRunning {
+						msg.Text = "Monitor start has already been requested."
+						log.Debugln(msg.Text)
+					} else {
+						watcherRunning = true
+						msg.Text = "Monitor start requested."
+						// Start watching the Skywire Monitors clients.json file
+						go watchFile(monitorMsgEvent, monitorStopEvent, "./test.json")
+					}
+				case "stop":
+					msg.Text = "Monitor stop requested."
+					monitorStopEvent <- true
+					watcherRunning = false
+				default:
+					msg.Text = "Sorry. I don't know that command."
 				}
-			case "stop":
-				msg.Text = "Monitor stop requested."
-				monitorStopEvent <- true
-				watcherRunning = false
-			default:
-				msg.Text = "Sorry. I don't know that command."
+			} else {
+				msg.Text = "Sorry. I don't chat much.."
+				//log.Debugln("[BOT] Sorry. I don't chat much.."...")
 			}
-			log.Debugln("[BOT] Start Response]")
-			log.Debugln(msg.Text)
-			log.Debugln("[BOT] End Response]")
-			telegramBot.Send(msg)
+
+			if len(msg.Text) > 0 {
+				log.Debugln("[BOT] Start Response")
+				log.Debugln(msg.Text)
+				log.Debugln("[BOT] End Response")
+				telegramBot.Send(msg)
+			}
 		}
 	}
-	// Signal the Bot has finished
-	botwg.Done()
 }
 
 func main() {
