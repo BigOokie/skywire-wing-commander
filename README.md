@@ -64,3 +64,11 @@ Stop monitoring the Skyminer thay the Bot is running on.
 
 /status
 Request current status from the Bot
+
+
+If you found my tips useful, consider providing a tip of your own ;-)
+```
+Skycoin:    2aAprdFyxV3bqYB5yix2WsjsH1wqLKaoLhq
+
+BitCoin:    37rPeTNjosfydkB4nNNN1XKNrrxxfbLcMA
+```
