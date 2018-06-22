@@ -7,6 +7,8 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"path/filepath"
+	"runtime"
 	"strings"
 	"sync"
 	"time"
@@ -16,8 +18,28 @@ import (
 	"gopkg.in/telegram-bot-api.v4"
 )
 
-//var clientPath = filepath.Join(file.UserHome(), ".skywire", "manager", "clients.json")
-var clientPath = "./test.json"
+// UserHome returns the current user home path
+func userHome() string {
+	// os/user relies on cgo which is disabled when cross compiling
+	// use fallbacks for various OSes instead
+	// usr, err := user.Current()
+	// if err == nil {
+	// 	return usr.HomeDir
+	// }
+	if runtime.GOOS == "windows" {
+		home := os.Getenv("HOMEDRIVE") + os.Getenv("HOMEPATH")
+		if home == "" {
+			home = os.Getenv("USERPROFILE")
+		}
+		return home
+	}
+
+	return os.Getenv("HOME")
+}
+
+var clientPath = filepath.Join(userHome(), ".skywire", "manager", "clients.json")
+
+//var clientPath = "./test.json"
 
 // clientConnection is a structure that represents the JSON file structure
 // of the clients.json file (from Skywire project)
@@ -137,10 +159,10 @@ func watchFile(monitorMsgEvent chan<- string, monitorStopEvent <-chan bool, file
 		case event := <-watcher.Events:
 			if event.Op&fsnotify.Write == fsnotify.Write {
 				log.Debugf("[FWM] (%s) handling event  [%s]\n", event.Name, event.Op)
-				//msgText := getClientConnectionListString()
+				msgText := getClientConnectionListString()
 				//log.Debugf("[FWM] %s\n", msgText)
 				log.Debugln("[FWM] Sending monitor message event.")
-				monitorMsgEvent <- "Testing123" //msgText
+				monitorMsgEvent <- msgText
 				log.Debugln("[FWM] Sent monitor message event.")
 			} else {
 				log.Debugf("[FWM] (%s) ignorning event [%s]\n", event.Name, event.Op)
@@ -247,7 +269,7 @@ func startTelegramBot(botwg *sync.WaitGroup) {
 					msg.Text = "Monitor start requested."
 					go sendMonitorMsg(monitorMsgEvent)
 					// Start watching the Skywire Monitors clients.json file
-					go watchFile(monitorMsgEvent, monitorStopEvent, "./test.json")
+					go watchFile(monitorMsgEvent, monitorStopEvent, clientPath)
 				}
 			case "stop":
 				msg.Text = "Monitor stop requested."
