@@ -66,6 +66,7 @@ Stop monitoring the Skyminer thay the Bot is running on.
 Request current status from the Bot
 
 
+# Donation-ware
 If you found my tips useful, consider providing a tip of your own ;-)
 ```
 Skycoin:    2aAprdFyxV3bqYB5yix2WsjsH1wqLKaoLhq
