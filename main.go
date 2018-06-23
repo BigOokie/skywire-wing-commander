@@ -216,14 +216,14 @@ func startTelegramBot(botwg *sync.WaitGroup) {
 	defer log.Info("[BOT] Telegram Bot finished.")
 
 	monitorMsgEvent := make(chan string, 1)
-	//defer close(monitorMsgEvent)
+	defer close(monitorMsgEvent)
 	monitorStopEvent := make(chan bool)
-	//defer close(monitorStopEvent)
+	defer close(monitorStopEvent)
 
 	// Signal the Bot has finished
 	defer botwg.Done()
 
-	telegramBot.Debug = false //config.BotDebug
+	telegramBot.Debug = config.BotDebug
 	log.Infof("[BOT] Telegram Bot connected and authorised on account %s", telegramBot.Self.UserName)
 
 	u := tgbotapi.NewUpdate(0)
