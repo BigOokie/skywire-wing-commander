@@ -28,7 +28,7 @@ mkdir -p $GOPATH/src/github.com/BigOokie
 cd $GOPATH/src/github.com/BigOokie
 git clone https://github.com/BigOokie/skywire-telegram-notify-bot.git
 
-go install -v main.go
+go install -v ./...
 ```
 
 # Run the Bot
