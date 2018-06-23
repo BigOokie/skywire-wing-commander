@@ -18,6 +18,8 @@ import (
 	"gopkg.in/telegram-bot-api.v4"
 )
 
+var version = "0.0.1 (Alpha)"
+
 // UserHome returns the current user home path
 func userHome() string {
 	// os/user relies on cgo which is disabled when cross compiling
@@ -254,6 +256,7 @@ func startTelegramBot(botwg *sync.WaitGroup) {
 				msg.Text = "type /help or /about or /status or /chatid or /start or /stop."
 			case "about":
 				msg.Text = "Skywire Manager TelegraTelegram Monitoring Bot\n"
+				msg.Text = msg.Text + "v" + version + "\n"
 				msg.Text = msg.Text + "By @BigOokie\n"
 				msg.Text = msg.Text + "GitHub: https://github.com/BigOokie/skywire-telegram-notify-bot"
 			case "status":
