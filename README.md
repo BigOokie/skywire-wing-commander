@@ -34,7 +34,7 @@ go install -v ./...
 # Run the Bot
 To run the Bot you will need the have the auth key provided by the @BotFather. If you dont have this or dont know how to have this - please dont continue (this is for Alpha testers who know what to do!)
 
-Run the following cmd to get the Bot running on your Master Node
+Run the following cmd to get the Bot running on your Master Node - replacing `{BOTTOKEN_FROM_BOTFATHER}` with the token provided by the @BotFather 
 
 ```
 cd $GOPATH/bin
@@ -45,9 +45,21 @@ Once this is running, you should be able to start a private chat with your new B
 
 Once you are in a private chat with the bot you can make use for the commands to run it (see following section)
 
-## OpenDNS Note
+## OpenDNS Errors (Domain Blocked)
 If you are running OpenDNS or other DNS which protects and prevents access to certain domains, you may need to update the settings to ensure that the Telegram API domain (https://api.telegram.org) is not blocked.
 In OpenDNS this is blocked by the `Chat` and `Instant message` areas.
+
+Access to the Telegram API is being blocked if you get the following error when trying to run the Bot
+```
+PANI[0000] Post https://api.telegram.org/bot{BOTTOKEN_FROM_BOTFATHER}/getMe: x509: certificate signed by unknown authority 
+```
+
+You can verify this i using `curl`. Run the following cmd and if you get the error show, the Domain is being blocked. If the domain isnt blocked you should get a JSON response from Telegrams API
+```
+curl https://api.telegram.org/bot{BOTTOKEN_FROM_BOTFATHER}/getMe
+
+curl: (60) SSL certificate problem: unable to get local issuer certificate
+```
 
 # Supported Bot Commands
 This section is being used for design currently. These capabilities do not exist yet.
