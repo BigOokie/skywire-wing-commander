@@ -24,7 +24,7 @@ Initiate a Telegram discussion with @BotFather to create your new Bot. I wont co
 
 Remeber the access token provided by @BotFather as part of this process. You will need to pass it as a command line parameter to the Bot app.
 
-#Build the Bot
+# Install and build the Bot
 Get the code on your Skycoin Skywire Manager node. I have not tested this on other nodes and it is not expectred to work.
 
 It is expected that you have Go v1.10.x installed. I will leave this to you.
@@ -35,6 +35,15 @@ mkdir -p $GOPATH/src/github.com/BigOokie
 cd $GOPATH/src/github.com/BigOokie
 git clone https://github.com/BigOokie/skywire-telegram-notify-bot.git
 
+go install -v ./...
+```
+
+# Update and rebuild the bot
+To update and rebuild the Bot, use the following cmds:
+```
+
+cd $GOPATH/src/github.com/BigOokie/skywire-telegram-notify-bot
+git pull origin master 
 go install -v ./...
 ```
 
