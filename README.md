@@ -38,12 +38,16 @@ Run the following cmd to get the Bot running on your Master Node
 
 ```
 cd $GOPATH/bin
-./skywire-telegram-notify-bot -bottoken [TOKEN_FROM_BOTFATHER]
+./skywire-telegram-notify-bot -bottoken {BOTTOKEN_FROM_BOTFATHER}
 ```
 
 Once this is running, you should be able to start a private chat with your new Bot based on detailed provided by the @BotFather.
 
 Once you are in a private chat with the bot you can make use for the commands to run it (see following section)
+
+## OpenDNS Note
+If you are running OpenDNS or other DNS which protects and prevents access to certain domains, you may need to update the settings to ensure that the Telegram API domain (https://api.telegram.org) is not blocked.
+In OpenDNS this is blocked by the `Chat` and `Instant message` areas.
 
 # Supported Bot Commands
 This section is being used for design currently. These capabilities do not exist yet.
