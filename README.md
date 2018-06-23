@@ -10,6 +10,13 @@ The intention of this project is to have a specialised Telegram Bot application 
 
 Future plans may incorporate other capabilites - but these are out of scope for the time being.
 
+# Known Issues
+* Works for DIY builds only at the moment. Support for official is coming very soon.
+* DNS level blocking/filtering of telegram API domain on the Skywire nodes (or routers). More info below.
+* Raw dump of connection data when connection state changes. It is a "notification" but it could be more elegant.
+
+I have built and tested this on both RasPi DIY and OSX. It does build on Official Miner also, but there is a coding error that will prevent it from running.
+
 # Bot Setup
 This section is incomplete and requires further work. Alpha and Beta testers can follow and provide feedback.
 
@@ -54,7 +61,7 @@ Access to the Telegram API is being blocked if you get the following error when 
 PANI[0000] Post https://api.telegram.org/bot{BOTTOKEN_FROM_BOTFATHER}/getMe: x509: certificate signed by unknown authority 
 ```
 
-You can verify this i using `curl`. Run the following cmd and if you get the error show, the Domain is being blocked. If the domain isnt blocked you should get a JSON response from Telegrams API
+You can verify this i using `curl`. Run the following cmd and if you get the error show, the Domain is being blocked. If the domain isnt blocked you should get a JSON response from Telegrams API.
 ```
 curl https://api.telegram.org/bot{BOTTOKEN_FROM_BOTFATHER}/getMe
 
