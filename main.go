@@ -115,6 +115,7 @@ func readClientConnectionConfig() (cfs map[string]clientConnectionSlice, err err
 // file and return a formatted string for all Clients and their Nodes
 func getClientConnectionListString() string {
 	var clientsb strings.Builder
+	var condir string
 
 	// Read the Client Connection Config (JSON) into ccc
 	ccc, err := readClientConnectionConfig()
@@ -126,7 +127,17 @@ func getClientConnectionListString() string {
 			if clientsb.String() != "" {
 				clientsb.WriteString("\n")
 			}
-			clientsb.WriteString(fmt.Sprintf("ClientType: [%s]\n", k))
+
+			switch k {
+			case "socket":
+				condir = "Outbound"
+			case "socksc":
+				condir = "Inbound"
+			default:
+				condir = "??"
+			}
+
+			clientsb.WriteString(fmt.Sprintf("ClientType: [%s](%s)\n", k, condir))
 			// Iterate all Nodes in the current client type (ccc[k])
 			for _, b := range ccc[k] {
 				// Output the details for each node of this client type
@@ -135,6 +146,52 @@ func getClientConnectionListString() string {
 				clientsb.WriteString(fmt.Sprintf("AppKey:  %s\n", b.AppKey))
 				clientsb.WriteString("\n")
 			}
+		}
+	}
+	// Return the built string
+	return clientsb.String()
+}
+
+// getClientConnectionCountString will iterate over the ClientConnectionConfig JSON
+// file and return a formatted string containing the count of Clients connected
+// Both Outbound and Inbound
+func getClientConnectionCountString() string {
+	var clientsb strings.Builder
+	var condir string
+
+	// Read the Client Connection Config (JSON) into ccc
+	ccc, err := readClientConnectionConfig()
+	if err == nil {
+		// Iterate ccc reading the Keys (k)
+		for k := range ccc {
+			// Output to our string builder the current Client Type (from K)
+			// Add an newline if this isnt the first itteration
+			if clientsb.String() != "" {
+				clientsb.WriteString("\n")
+			}
+
+			switch k {
+			case "socket":
+				condir = "Outbound"
+			case "socksc":
+				condir = "Inbound"
+			default:
+				condir = "??"
+			}
+
+			clientsb.WriteString(fmt.Sprintf("ClientType: [%s](%s)  Count:%v\n", k, condir, len(ccc[k])))
+
+			/*
+
+				// Iterate all Nodes in the current client type (ccc[k])
+				for _, b := range ccc[k] {
+					// Output the details for each node of this client type
+					clientsb.WriteString(fmt.Sprintf("Label:   %s\n", b.Label))
+					clientsb.WriteString(fmt.Sprintf("NodeKey: %s\n", b.NodeKey))
+					clientsb.WriteString(fmt.Sprintf("AppKey:  %s\n", b.AppKey))
+					clientsb.WriteString("\n")
+				}
+			*/
 		}
 	}
 	// Return the built string
@@ -187,8 +244,8 @@ func watchFile(monitorMsgEvent chan<- string, monitorStopEvent <-chan bool, file
 		case event := <-watcher.Events:
 			if event.Op&fsnotify.Write == fsnotify.Write {
 				log.Debugf("[FWM] (%s) handling event  [%s]\n", event.Name, event.Op)
-				msgText := getClientConnectionListString()
-				//log.Debugf("[FWM] %s\n", msgText)
+				//msgText := getClientConnectionListString()
+				msgText := getClientConnectionCountString()
 				log.Debugln("[FWM] Sending monitor message event.")
 				monitorMsgEvent <- msgText
 				log.Debugln("[FWM] Sent monitor message event.")
@@ -200,7 +257,6 @@ func watchFile(monitorMsgEvent chan<- string, monitorStopEvent <-chan bool, file
 		case stop := <-monitorStopEvent:
 			if stop {
 				log.Debugln("[FWM] Stop event recieved.")
-				//break
 				return
 			}
 		default:
@@ -315,8 +371,8 @@ func startTelegramBot(botwg *sync.WaitGroup) {
 func main() {
 	log.SetFormatter(&log.TextFormatter{})
 	log.SetLevel(log.DebugLevel)
-	log.Infoln("Starting Skywire Telegram Notification Bot App.")
-	defer log.Infoln("Stopping Skywire Telegram Notification Bot App. Bye.")
+	log.Infoln("[MAIN] Starting Skywire Telegram Notification Bot App.")
+	defer log.Infoln("[MAIN] Stopping Skywire Telegram Notification Bot App. Bye.")
 	parseFlags()
 
 	config.ClientFile = selectClientFile()
