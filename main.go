@@ -18,7 +18,7 @@ import (
 	"gopkg.in/telegram-bot-api.v4"
 )
 
-var version = "0.0.1 (Alpha)"
+var version = "0.0.2-alpha"
 
 // UserHome returns the current user home path
 func userHome() string {
