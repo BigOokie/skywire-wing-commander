@@ -39,9 +39,36 @@ func userHome() string {
 	return os.Getenv("HOME")
 }
 
-var clientPath = filepath.Join(userHome(), ".skywire", "manager", "clients.json")
+func fileExists(filename string) bool {
+	if _, err := os.Stat(filename); os.IsNotExist(err) {
+		log.Warnf("File does not exist: %s", filename)
+		return false
+	} else {
+		log.Debugf("File exists: %s", filename)
+		return true
+	}
+}
 
-//var clientPath = "./test.json"
+func selectClientFile() string {
+	//	var clientPath = filepath.Join(userHome(), ".skywire", "manager", "clients.json")
+	// Default to the Users home folder - but lets check
+	clientfile := filepath.Join(userHome(), ".skywire", "manager", "clients.json")
+	log.Debugf("[selectClientFile] Checking if file exists: %s", clientfile)
+
+	// If we cant find the file in the users home folder - check the $GOPATH
+	if fileExists(clientfile) == false {
+		gopath := os.Getenv("GOPATH")
+		clientfile = filepath.Join(gopath, "bin", ".skywire", "manager", "clients.json")
+		log.Debugf("[selectClientFile] Checking if file exists: %s", clientfile)
+		// Can't find what we are looking for
+		if fileExists(clientfile) == false {
+			log.Panicln("Unable to detect location of client file.")
+		}
+	}
+
+	log.Debugf("[selectClientFile] Selected file: %s", clientfile)
+	return clientfile
+}
 
 // clientConnection is a structure that represents the JSON file structure
 // of the clients.json file (from Skywire project)
@@ -67,7 +94,7 @@ func (c clientConnectionSlice) Exist(rf clientConnection) bool {
 
 // Reads the physical Skywire Clients.JSON file into an in-memory structure
 func readClientConnectionConfig() (cfs map[string]clientConnectionSlice, err error) {
-	fb, err := ioutil.ReadFile(clientPath)
+	fb, err := ioutil.ReadFile(config.ClientFile)
 	if err != nil {
 		if os.IsNotExist(err) {
 			cfs = nil
@@ -119,10 +146,11 @@ func getClientConnectionListString() string {
 // The BotConfig struct is used to store run-time configuration
 // information for the bot application.
 type botConfig struct {
-	BotToken string `json:"bot_token"`
-	ChatID   int64  `json:"chat_id"`
-	Locked   bool   `json:"locked"`
-	BotDebug bool   `json:"botdebug"`
+	BotToken   string `json:"bot_token"`
+	ChatID     int64  `json:"chat_id"`
+	Locked     bool   `json:"locked"`
+	BotDebug   bool   `json:"botdebug"`
+	ClientFile string `json:"clientfile"`
 }
 
 var (
@@ -272,7 +300,7 @@ func startTelegramBot(botwg *sync.WaitGroup) {
 					msg.Text = "Monitor start requested."
 					go sendMonitorMsg(monitorMsgEvent)
 					// Start watching the Skywire Monitors clients.json file
-					go watchFile(monitorMsgEvent, monitorStopEvent, clientPath)
+					go watchFile(monitorMsgEvent, monitorStopEvent, config.ClientFile)
 				}
 			case "stop":
 				msg.Text = "Monitor stop requested."
@@ -302,6 +330,8 @@ func main() {
 	log.Infoln("Starting Skywire Telegram Notification Bot App.")
 	defer log.Infoln("Stopping Skywire Telegram Notification Bot App. Bye.")
 	parseFlags()
+
+	config.ClientFile = selectClientFile()
 
 	// Setup a waitgroup to sync and wait for the Telegram Bot to end.
 	var botwg sync.WaitGroup
