@@ -50,7 +50,6 @@ func fileExists(filename string) bool {
 }
 
 func selectClientFile() string {
-	//	var clientPath = filepath.Join(userHome(), ".skywire", "manager", "clients.json")
 	// Default to the Users home folder - but lets check
 	clientfile := filepath.Join(userHome(), ".skywire", "manager", "clients.json")
 	log.Debugf("[selectClientFile] Checking if file exists: %s", clientfile)
@@ -138,7 +137,6 @@ func getClientConnectionListString() string {
 			}
 		}
 	}
-	//log.Debugln(clientsb.String())
 	// Return the built string
 	return clientsb.String()
 }
@@ -267,15 +265,6 @@ func startTelegramBot(botwg *sync.WaitGroup) {
 		msg := tgbotapi.NewMessage(config.ChatID, "")
 		log.Debugf("[BOT] Message recieved from ChatID: %v", config.ChatID)
 
-		//select {
-		//case monitormsg := <-monitorMsgEvent:
-		//	log.Debugln("[BOT] Recieved message from File Monitor")
-		//	log.Debugln("[BOT] [FWM] Begin Message")
-		//	log.Debugln(monitormsg)
-		//	log.Debugln("[BOT] [FWM] End Message")
-		//	msg.Text = monitormsg
-
-		//default:
 		if update.Message.IsCommand() {
 			//msg := tgbotapi.NewMessage(update.Message.Chat.ID, "")
 			log.Debugf("[BOT] Recieved Command: %s", update.Message.Command())
@@ -311,7 +300,6 @@ func startTelegramBot(botwg *sync.WaitGroup) {
 			}
 		} else {
 			msg.Text = "Sorry. I don't chat much.."
-			//log.Debugln("[BOT] Sorry. I don't chat much.."...")
 		}
 
 		if len(msg.Text) > 0 {
@@ -339,63 +327,4 @@ func main() {
 	// Start the telegram bot
 	go startTelegramBot(&botwg)
 	botwg.Wait()
-
-	// Start watching the Skywire Monitors clients.json file
-	//go watchFile(msgChannel, "./test.json")
-
-	//for {
-	//	txt := <-msgChannel
-	//	log.Debugf("Event: %v", txt)
-	//}
-
-	/*
-		u := tgbotapi.NewUpdate(0)
-		u.Timeout = 60
-		updates, err := bot.GetUpdatesChan(u)
-		for update := range updates {
-			if update.Message == nil {
-				log.Warn("Ignoring empty message.")
-				continue
-			}
-
-			log.Infof("Message recieved from ChatID: %v", update.Message.Chat.ID)
-
-			if allowedToRespondToChat(update.Message.Chat.ID) {
-				// Allowed to respond to this Chat ID
-				if update.Message.IsCommand() {
-					msg := tgbotapi.NewMessage(update.Message.Chat.ID, "")
-					log.Debugf("Command: %s", update.Message.Command())
-					switch update.Message.Command() {
-					case "help":
-						msg.Text = "type /sayhi or /status or /chatid or /lock or /unlock."
-					case "sayhi":
-						msg.Text = "Hi :)"
-					case "status":
-						msg.Text = "I'm ok."
-					case "chatid":
-						msg.Text = fmt.Sprintf("ChatID: %v", update.Message.Chat.ID)
-					case "lock":
-						if config.ChatID == -1 {
-							config.ChatID = update.Message.Chat.ID
-							msg.Text = fmt.Sprintf("Locked to current ChatID [%v]", update.Message.Chat.ID)
-						} else {
-							msg.Text = "Already locked."
-						}
-					case "unlock":
-						if config.ChatID == -1 {
-							msg.Text = "Already unlocked."
-						} else {
-							config.ChatID = -1
-							msg.Text = "Unlocked."
-						}
-					default:
-						msg.Text = "Sorry. I don't know that command."
-					}
-					bot.Send(msg)
-				}
-			} else {
-				log.Warnf("Chat is locked to ID [%v]. Not allowed to respond to Chat ID [%v]", config.ChatID, update.Message.Chat.ID)
-			}
-		}
-	*/
 }
