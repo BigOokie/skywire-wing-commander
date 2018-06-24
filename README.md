@@ -110,24 +110,13 @@ Request current status from the Bot
 When the Bot has been started, if a Node connects to you (or if you connect to a Node) - you should be notified with something similar to the following (Note that Node and App Keys are not real and have been made up below):
 
 ```
-ClientType: [socket]
-Label:   
-NodeKey: 00000b44ca418401b2077123186aa78687a876a8876a8768768768768768768a8a
-AppKey:  0000057857baaccdefaf9f3b786872638746238764873264873264876328746837
-
-Label:   
-NodeKey: 000084e7d9c4e9879879878978979873927498237942394392879872983479832a
-AppKey:  00000f985098439090a809809a0a09890809890a809a098098a098098a0980a0a0
-
-ClientType: [socksc]
-Label:   
-NodeKey: 000000b4cb588620f7493984759837498237498732984792387498aa9879fff987
-AppKey:  00000ccb09907987459843759873984739287498237498237987cc98798c798c98
+ClientType: [socket](Outbound)  Count:2
+ClientType: [socksc](Inbound)  Count:1
 ```
 
-What you are interested in is the bottom section where the `ClientType [socksc]`. This tells you WHO has connected to YOU.
+What you are interested in is the bottom section where the `ClientType [socksc]`. This tells you WHO has connected to YOU (inbound).
 
-The top section `ClientType [socket]` tells you WHO YOU have connected to.
+The top section `ClientType [socket]` tells you WHO YOU have connected to (outbound).
 
 # Donation-ware
 If you found my tips useful, consider providing a tip of your own ;-)
