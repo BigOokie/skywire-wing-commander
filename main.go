@@ -19,11 +19,12 @@ import (
 // The BotConfig struct is used to store run-time configuration
 // information for the bot application.
 type botConfig struct {
-	BotToken   string `json:"bot_token"`
-	ChatID     int64  `json:"chat_id"`
-	Locked     bool   `json:"locked"`
-	BotDebug   bool   `json:"botdebug"`
-	ClientFile string `json:"clientfile"`
+	BotToken string `json:"bot_token"`
+	ChatID   int64  `json:"chat_id"`
+	//Locked     bool   `json:"locked"`
+	BotDebug       bool   `json:"botdebug"`
+	ClientFile     string `json:"clientfile"`
+	MonitorRunning bool   `json:"monitorrunning"`
 }
 
 // clientConnection is a structure that represents the JSON file structure
@@ -99,13 +100,19 @@ func sendBotStatusMessage(m *tgbotapi.Message) {
 
 // startMonitor sends the message responce for the /start cmd
 func startMonitor(m *tgbotapi.Message, monitorStopEvent <-chan bool) {
-	sendBotMsg(m, msgMonitorStart, false)
-	go watchFileLoop(selectClientFile(), monitorStopEvent)
+	if config.MonitorRunning {
+		sendBotMsg(m, msgMonitorAlreadyStarted, false)
+	} else {
+		config.MonitorRunning = true
+		sendBotMsg(m, msgMonitorStart, false)
+		go watchFileLoop(selectClientFile(), monitorStopEvent)
+	}
 }
 
 // stopMonitor sends the message responce for the /start cmd
 func stopMonitor(m *tgbotapi.Message, monitorStopEvent chan<- bool) {
 	sendBotMsg(m, msgMonitorStop, false)
+	config.MonitorRunning = false
 	monitorStopEvent <- true
 }
 
@@ -146,27 +153,27 @@ func handleBotMessage(m *tgbotapi.Message, monitorStopEvent chan bool) {
 	botcmd := m.Command()
 	switch botcmd {
 	case "start":
-		log.Debugln("[handleBotMessage] Hanling /start command")
+		log.Debugln("[handleBotMessage] Handling /start command")
 		startMonitor(m, monitorStopEvent)
 		break
 
 	case "stop":
-		log.Debugln("[handleBotMessage] Hanling /stop command")
+		log.Debugln("[handleBotMessage] Handling /stop command")
 		stopMonitor(m, monitorStopEvent)
 		break
 
 	case "help":
-		log.Debugln("[handleBotMessage] Hanling /help command")
+		log.Debugln("[handleBotMessage] Handling /help command")
 		sendBotHelpMessage(m)
 		break
 
 	case "about":
-		log.Debugln("[handleBotMessage] Hanling /about command")
+		log.Debugln("[handleBotMessage] Handling /about command")
 		sendBotAboutMessage(m)
 		break
 
 	case "status":
-		log.Debugln("[handleBotMessage] Hanling /status command")
+		log.Debugln("[handleBotMessage] Handling /status command")
 		sendBotStatusMessage(m)
 		break
 
