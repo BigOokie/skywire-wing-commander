@@ -18,7 +18,43 @@ import (
 	"gopkg.in/telegram-bot-api.v4"
 )
 
-var version = "0.0.2-alpha"
+// Define constants used by the application
+const (
+	version = "v0.0.3-alpha"
+
+	// Bot command messages:
+	// Help message
+	msgHelp = "I will notify you of connections made to or from your SkyMiner nodes.\n\n" +
+		"*Usage*\n" +
+		"- /about | show information and credits about my creator and any contributors\n" +
+		"- /help | show this message\n" +
+		"- /status | ask me how I'm going.. and if I'm still running\n" +
+		"- /chatid | tell me our current telegram chatid\n" +
+		"- /start | start me monitoring your Skyminer. Once started, I will start sending notifications\n" +
+		"- /stop | stop me monitoring your Skyminer. Once stopped, I won't send any more notifications\n" +
+		"\n" +
+		"\n" +
+		"Note that the Bot is bound to the _conversation_. This means it is between you and me (the bot)"
+
+	// About cmd message
+	msgAbout = "Skywire Manager Telegram Monitoring Bot (" + version + ")\n" +
+		"\n" +
+		"Created by @BigOokie 2018\n" +
+		"GitHub: https://github.com/BigOokie/skywire-telegram-notify-bot"
+
+	// Status cmd message
+	msgStatus = "I'm fine. Sill running 👍"
+
+	// Start cmd messages
+	msgMonitorAlreadyStarted = "The monitor has already been started"
+	msgMonitorStart          = "Monitor starting"
+
+	// Stop cmd message
+	msgMonitorStop = "Monitor stopping"
+
+	// Default cmd message (unhandled)
+	msgDefault = "Sorry. I don't know that command."
+)
 
 // UserHome returns the current user home path
 func userHome() string {
@@ -180,18 +216,6 @@ func getClientConnectionCountString() string {
 			}
 
 			clientsb.WriteString(fmt.Sprintf("ClientType: [%s](%s)  Count:%v\n", k, condir, len(ccc[k])))
-
-			/*
-
-				// Iterate all Nodes in the current client type (ccc[k])
-				for _, b := range ccc[k] {
-					// Output the details for each node of this client type
-					clientsb.WriteString(fmt.Sprintf("Label:   %s\n", b.Label))
-					clientsb.WriteString(fmt.Sprintf("NodeKey: %s\n", b.NodeKey))
-					clientsb.WriteString(fmt.Sprintf("AppKey:  %s\n", b.AppKey))
-					clientsb.WriteString("\n")
-				}
-			*/
 		}
 	}
 	// Return the built string
@@ -326,33 +350,30 @@ func startTelegramBot(botwg *sync.WaitGroup) {
 			log.Debugf("[BOT] Recieved Command: %s", update.Message.Command())
 			switch update.Message.Command() {
 			case "help":
-				msg.Text = "type /help or /about or /status or /chatid or /start or /stop."
+				msg.Text = msgHelp
 			case "about":
-				msg.Text = "Skywire Manager TelegraTelegram Monitoring Bot\n"
-				msg.Text = msg.Text + "v" + version + "\n"
-				msg.Text = msg.Text + "By @BigOokie\n"
-				msg.Text = msg.Text + "GitHub: https://github.com/BigOokie/skywire-telegram-notify-bot"
+				msg.Text = msgAbout
 			case "status":
-				msg.Text = "I'm fine. Still running :)"
+				msg.Text = msgStatus
 			case "chatid":
 				msg.Text = fmt.Sprintf("ChatID: %v", update.Message.Chat.ID)
 			case "start":
 				if watcherRunning {
-					msg.Text = "Monitor start has already been requested."
+					msg.Text = msgMonitorAlreadyStarted
 					log.Debugln(msg.Text)
 				} else {
 					watcherRunning = true
-					msg.Text = "Monitor start requested."
+					msg.Text = msgMonitorStart
 					go sendMonitorMsg(monitorMsgEvent)
 					// Start watching the Skywire Monitors clients.json file
 					go watchFile(monitorMsgEvent, monitorStopEvent, config.ClientFile)
 				}
 			case "stop":
-				msg.Text = "Monitor stop requested."
+				msg.Text = msgMonitorStop
 				monitorStopEvent <- true
 				watcherRunning = false
 			default:
-				msg.Text = "Sorry. I don't know that command."
+				msg.Text = msgDefault
 			}
 		} else {
 			msg.Text = "Sorry. I don't chat much.."
