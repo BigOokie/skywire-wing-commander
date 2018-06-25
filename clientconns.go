@@ -62,9 +62,8 @@ func readClientConnectionConfig() (cfs map[string]clientConnectionSlice, err err
 			cfs = nil
 			err = nil
 			return
-		} else {
-			return
 		}
+		return
 	}
 	cfs = make(map[string]clientConnectionSlice)
 	err = json.Unmarshal(fb, &cfs)

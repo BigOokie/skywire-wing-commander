@@ -25,8 +25,8 @@ func fileExists(filename string) bool {
 	if _, err := os.Stat(filename); os.IsNotExist(err) {
 		log.Warnf("File does not exist: %s", filename)
 		return false
-	} else {
-		log.Debugf("File exists: %s", filename)
-		return true
 	}
+
+	log.Debugf("File exists: %s", filename)
+	return true
 }
