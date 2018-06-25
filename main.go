@@ -46,7 +46,7 @@ func startMonitor(m *tgbotapi.Message, monitorStopEvent <-chan bool) {
 	} else {
 		config.MonitorRunning = true
 		sendBotMsg(m, msgMonitorStart, false)
-		go watchFileLoop(selectClientFile(), monitorStopEvent)
+		go watchFileLoop(m, selectClientFile(), monitorStopEvent)
 	}
 }
 
@@ -134,7 +134,7 @@ func parseFlags() {
 }
 
 // watchFile will watch the file specified by filename
-func watchFileLoop(filename string, monitorStopEvent <-chan bool) {
+func watchFileLoop(m *tgbotapi.Message, filename string, monitorStopEvent <-chan bool) {
 	log.Debugf("[WFL] Seting up monitoring on file: %s", filename)
 	watcher, err := fsnotify.NewWatcher()
 	if err != nil {
@@ -155,7 +155,8 @@ func watchFileLoop(filename string, monitorStopEvent <-chan bool) {
 			if event.Op&fsnotify.Write == fsnotify.Write {
 				log.Debugf("[WFL] (%s) handling event  [%s]\n", event.Name, event.Op)
 				msgText := getClientConnectionCountString()
-				sendBotMsgToChatID(config.ChatID, msgText)
+				sendBotMsg(m, msgText, false)
+				//sendBotMsgToChatID(config.ChatID, msgText)
 			} else {
 				log.Debugf("[WFL] (%s) ignorning event [%s]\n", event.Name, event.Op)
 			}
