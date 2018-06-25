@@ -10,8 +10,6 @@ import (
 	"path/filepath"
 	"runtime"
 	"strings"
-	"sync"
-	"time"
 
 	"github.com/fsnotify/fsnotify"
 	log "github.com/sirupsen/logrus"
@@ -25,13 +23,12 @@ const (
 	// Bot command messages:
 	// Help message
 	msgHelp = "I will notify you of connections made to or from your SkyMiner nodes.\n\n" +
-		"*Usage*\n" +
-		"- /about | show information and credits about my creator and any contributors\n" +
-		"- /help | show this message\n" +
-		"- /status | ask me how I'm going.. and if I'm still running\n" +
-		"- /chatid | tell me our current telegram chatid\n" +
-		"- /start | start me monitoring your Skyminer. Once started, I will start sending notifications\n" +
-		"- /stop | stop me monitoring your Skyminer. Once stopped, I won't send any more notifications\n" +
+		"*Usage:*\n" +
+		"- /about - show information and credits about my creator and any contributors\n" +
+		"- /help - show this message\n" +
+		"- /status - ask me how I'm going.. and if I'm still running\n" +
+		"- /start - start me monitoring your Skyminer. Once started, I will start sending notifications\n" +
+		"- /stop - stop me monitoring your Skyminer. Once stopped, I won't send any more notifications\n" +
 		"\n" +
 		"\n" +
 		"Note that the Bot is bound to the _conversation_. This means it is between you and me (the bot)"
@@ -40,7 +37,12 @@ const (
 	msgAbout = "Skywire Manager Telegram Monitoring Bot (" + version + ")\n" +
 		"\n" +
 		"Created by @BigOokie 2018\n" +
-		"GitHub: https://github.com/BigOokie/skywire-telegram-notify-bot"
+		"GitHub: https://github.com/BigOokie/skywire-telegram-notify-bot\n" +
+		"Twitter: https://twitter.com/BigOokie\n" +
+		"\n" +
+		"Donations most welcome 👍\n" +
+		"Skycoin: 2aAprdFyxV3bqYB5yix2WsjsH1wqLKaoLhq\n" +
+		"BitCoin: 37rPeTNjosfydkB4nNNN1XKNrrxxfbLcMA\n"
 
 	// Status cmd message
 	msgStatus = "I'm fine. Sill running 👍"
@@ -56,14 +58,106 @@ const (
 	msgDefault = "Sorry. I don't know that command."
 )
 
+var (
+	bot    *tgbotapi.BotAPI
+	config botConfig
+)
+
+// sendBotHelpMessage sends the message responce for the /help cmd
+func sendBotHelpMessage(m *tgbotapi.Message) {
+	sendBotMsg(m, msgHelp, false)
+}
+
+// sendBotAboutMessage sends the message responce for the /about cmd
+func sendBotAboutMessage(m *tgbotapi.Message) {
+	sendBotMsg(m, msgAbout, false)
+}
+
+// sendBotStatusMessage sends the message responce for the /status cmd
+func sendBotStatusMessage(m *tgbotapi.Message) {
+	sendBotMsg(m, msgStatus, false)
+}
+
+// startMonitor sends the message responce for the /start cmd
+func startMonitor(m *tgbotapi.Message, monitorStopEvent <-chan bool) {
+	sendBotMsg(m, msgMonitorStart, false)
+	go watchFileLoop(selectClientFile(), monitorStopEvent)
+}
+
+// stopMonitor sends the message responce for the /start cmd
+func stopMonitor(m *tgbotapi.Message, monitorStopEvent chan<- bool) {
+	sendBotMsg(m, msgMonitorStop, false)
+	monitorStopEvent <- true
+}
+
+// sendBotMsg sends messages from the Monitoring Bot
+func sendBotMsg(m *tgbotapi.Message, msgText string, reply bool) {
+	if reply {
+		sendBotReplyMsgToChatID(m.Chat.ID, msgText, m.MessageID)
+	} else {
+		sendBotMsgToChatID(m.Chat.ID, msgText)
+	}
+}
+
+// sendBotMsgToChatID sends messages from the Monitoring Bot
+func sendBotMsgToChatID(chatid int64, msgText string) {
+	msg := tgbotapi.NewMessage(chatid, msgText)
+	msg.ParseMode = tgbotapi.ModeMarkdown
+	log.Debugf("[sendBotMsgToChatID] %s", msgText)
+	bot.Send(msg)
+}
+
+// sendBotReplyMsgToChatID sends messages from the Monitoring Bot
+func sendBotReplyMsgToChatID(chatid int64, msgText string, replyMsgID int) {
+	msg := tgbotapi.NewMessage(chatid, msgText)
+	msg.ParseMode = tgbotapi.ModeMarkdown
+	msg.ReplyToMessageID = replyMsgID
+	log.Debugf("[sendBotReplyMsgToChatID] %s", msgText)
+	bot.Send(msg)
+}
+
+// handleBotMessages processes Telegram Bot commands and responds
+func handleBotMessage(m *tgbotapi.Message, monitorStopEvent chan bool) {
+	if !m.IsCommand() {
+		log.Debugf("[handleBotMessage] Message is not a command: %s", m.Text)
+		sendBotHelpMessage(m)
+		return
+	}
+
+	botcmd := m.Command()
+	switch botcmd {
+	case "start":
+		log.Debugln("[handleBotMessage] Hanling /start command")
+		startMonitor(m, monitorStopEvent)
+		break
+
+	case "stop":
+		log.Debugln("[handleBotMessage] Hanling /stop command")
+		stopMonitor(m, monitorStopEvent)
+		break
+
+	case "help":
+		log.Debugln("[handleBotMessage] Hanling /help command")
+		sendBotHelpMessage(m)
+		break
+
+	case "about":
+		log.Debugln("[handleBotMessage] Hanling /about command")
+		sendBotAboutMessage(m)
+		break
+
+	case "status":
+		log.Debugln("[handleBotMessage] Hanling /status command")
+		sendBotStatusMessage(m)
+		break
+
+	default:
+		log.Debugln("[handleBotMessage] Unhandled command recieved.")
+	}
+}
+
 // UserHome returns the current user home path
 func userHome() string {
-	// os/user relies on cgo which is disabled when cross compiling
-	// use fallbacks for various OSes instead
-	// usr, err := user.Current()
-	// if err == nil {
-	// 	return usr.HomeDir
-	// }
 	if runtime.GOOS == "windows" {
 		home := os.Getenv("HOMEDRIVE") + os.Getenv("HOMEPATH")
 		if home == "" {
@@ -232,11 +326,6 @@ type botConfig struct {
 	ClientFile string `json:"clientfile"`
 }
 
-var (
-	config      botConfig
-	telegramBot tgbotapi.BotAPI
-)
-
 // parseFlags parses command line flags and populates the run-time applicaton configuration
 func parseFlags() {
 	flag.StringVar(&config.BotToken, "bottoken", "", "telegram bot token (provided by the @BotFather")
@@ -248,160 +337,81 @@ func parseFlags() {
 }
 
 // watchFile will watch the file specified by filename
-func watchFile(monitorMsgEvent chan<- string, monitorStopEvent <-chan bool, filename string) {
-	log.Debugf("[FWM] Seting up monitoring on file: %s", filename)
+func watchFileLoop(filename string, monitorStopEvent <-chan bool) {
+	log.Debugf("[MFL] Seting up monitoring on file: %s", filename)
 	watcher, err := fsnotify.NewWatcher()
 	if err != nil {
 		log.Panic(err)
 	}
 	defer watcher.Close()
-	defer log.Infof("[FWM] Stop watching file: %s", filename)
+	defer log.Infof("[MFL] Stop watching file: %s", filename)
 
 	err = watcher.Add(filename)
 	if err != nil {
 		log.Panic(err)
 	}
 
-	log.Infof("[FWM] Start watching file: %s", filename)
+	log.Infof("[MFL] Start watching file: %s", filename)
 	for {
 		select {
 		case event := <-watcher.Events:
 			if event.Op&fsnotify.Write == fsnotify.Write {
-				log.Debugf("[FWM] (%s) handling event  [%s]\n", event.Name, event.Op)
-				//msgText := getClientConnectionListString()
+				log.Debugf("[MFL] (%s) handling event  [%s]\n", event.Name, event.Op)
 				msgText := getClientConnectionCountString()
-				log.Debugln("[FWM] Sending monitor message event.")
-				monitorMsgEvent <- msgText
-				log.Debugln("[FWM] Sent monitor message event.")
+				sendBotMsgToChatID(config.ChatID, msgText)
 			} else {
-				log.Debugf("[FWM] (%s) ignorning event [%s]\n", event.Name, event.Op)
+				log.Debugf("[MFL] (%s) ignorning event [%s]\n", event.Name, event.Op)
 			}
+
 		case err := <-watcher.Errors:
-			log.Errorln("[FWM] Error:", err)
+			log.Errorln("[MFL] Error:", err)
+
 		case stop := <-monitorStopEvent:
 			if stop {
-				log.Debugln("[FWM] Stop event recieved.")
+				log.Debugln("[MFL] Stop event recieved.")
 				return
 			}
+
 		default:
 			continue
 		}
 	}
-}
-
-func sendMonitorMsg(monitorMsgEvent <-chan string) {
-	telegramBot, err := tgbotapi.NewBotAPI(config.BotToken)
-	if err != nil {
-		log.Panic(err)
-	}
-	defer log.Info("[SENDER] Telegram Bot finished.")
-	msg := tgbotapi.NewMessage(config.ChatID, "")
-
-	for {
-		select {
-		case msg.Text = <-monitorMsgEvent:
-			log.Debugln("[SENDER] Recieved message from File Monitor")
-			log.Debugln("[SENDER] Begin Message")
-			log.Debugln(msg.Text)
-			log.Debugln("[SENDER] End Message")
-			telegramBot.Send(msg)
-		default:
-			time.Sleep(time.Second)
-		}
-	}
-}
-
-// Create new telegram bot using the bot token passed on the cmd line
-func startTelegramBot(botwg *sync.WaitGroup) {
-	var watcherRunning = false
-
-	telegramBot, err := tgbotapi.NewBotAPI(config.BotToken)
-	if err != nil {
-		log.Panic(err)
-	}
-	defer log.Info("[BOT] Telegram Bot finished.")
-
-	monitorMsgEvent := make(chan string, 1)
-	defer close(monitorMsgEvent)
-	monitorStopEvent := make(chan bool)
-	defer close(monitorStopEvent)
-
-	// Signal the Bot has finished
-	defer botwg.Done()
-
-	telegramBot.Debug = config.BotDebug
-	log.Infof("[BOT] Telegram Bot connected and authorised on account %s", telegramBot.Self.UserName)
-
-	u := tgbotapi.NewUpdate(0)
-	u.Timeout = 60
-	updates, err := telegramBot.GetUpdatesChan(u)
-	for update := range updates {
-		if update.Message == nil {
-			log.Debug("[BOT] Ignoring empty message.")
-			continue
-		}
-
-		config.ChatID = update.Message.Chat.ID
-		msg := tgbotapi.NewMessage(config.ChatID, "")
-		log.Debugf("[BOT] Message recieved from ChatID: %v", config.ChatID)
-
-		if update.Message.IsCommand() {
-			//msg := tgbotapi.NewMessage(update.Message.Chat.ID, "")
-			log.Debugf("[BOT] Recieved Command: %s", update.Message.Command())
-			switch update.Message.Command() {
-			case "help":
-				msg.Text = msgHelp
-			case "about":
-				msg.Text = msgAbout
-			case "status":
-				msg.Text = msgStatus
-			case "chatid":
-				msg.Text = fmt.Sprintf("ChatID: %v", update.Message.Chat.ID)
-			case "start":
-				if watcherRunning {
-					msg.Text = msgMonitorAlreadyStarted
-					log.Debugln(msg.Text)
-				} else {
-					watcherRunning = true
-					msg.Text = msgMonitorStart
-					go sendMonitorMsg(monitorMsgEvent)
-					// Start watching the Skywire Monitors clients.json file
-					go watchFile(monitorMsgEvent, monitorStopEvent, config.ClientFile)
-				}
-			case "stop":
-				msg.Text = msgMonitorStop
-				monitorStopEvent <- true
-				watcherRunning = false
-			default:
-				msg.Text = msgDefault
-			}
-		} else {
-			msg.Text = "Sorry. I don't chat much.."
-		}
-
-		if len(msg.Text) > 0 {
-			log.Debugln("[BOT] Start Response")
-			log.Debugln(msg.Text)
-			log.Debugln("[BOT] End Response")
-			telegramBot.Send(msg)
-		}
-	}
-	//}
 }
 
 func main() {
 	log.SetFormatter(&log.TextFormatter{})
 	log.SetLevel(log.DebugLevel)
-	log.Infoln("[MAIN] Starting Skywire Telegram Notification Bot App.")
-	defer log.Infoln("[MAIN] Stopping Skywire Telegram Notification Bot App. Bye.")
+	log.Infoln("[Starting Skywire Telegram Notification Bot App.")
+	defer log.Infoln("Stopping Skywire Telegram Notification Bot App. Bye.")
 	parseFlags()
 
 	config.ClientFile = selectClientFile()
 
-	// Setup a waitgroup to sync and wait for the Telegram Bot to end.
-	var botwg sync.WaitGroup
-	botwg.Add(1)
-	// Start the telegram bot
-	go startTelegramBot(&botwg)
-	botwg.Wait()
+	var err error
+	bot, err = tgbotapi.NewBotAPI(config.BotToken)
+	if err != nil {
+		log.WithFields(log.Fields{
+			"error": err,
+			"token": config.BotToken,
+		}).Fatal("Could not connect to telegram")
+	}
+
+	bot.Debug = config.BotDebug
+	log.Infof("Telegram Bot connected and authorised on account %s", bot.Self.UserName)
+
+	monitorStopEvent := make(chan bool)
+	defer close(monitorStopEvent)
+
+	u := tgbotapi.NewUpdate(0)
+	u.Timeout = 60
+
+	updates, err := bot.GetUpdatesChan(u)
+
+	for update := range updates {
+		if update.Message == nil {
+			continue
+		}
+
+		go handleBotMessage(update.Message, monitorStopEvent)
+	}
 }
