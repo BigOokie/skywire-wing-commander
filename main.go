@@ -16,6 +16,25 @@ import (
 	"gopkg.in/telegram-bot-api.v4"
 )
 
+// The BotConfig struct is used to store run-time configuration
+// information for the bot application.
+type botConfig struct {
+	BotToken   string `json:"bot_token"`
+	ChatID     int64  `json:"chat_id"`
+	Locked     bool   `json:"locked"`
+	BotDebug   bool   `json:"botdebug"`
+	ClientFile string `json:"clientfile"`
+}
+
+// clientConnection is a structure that represents the JSON file structure
+// of the clients.json file (from Skywire project)
+type clientConnection struct {
+	Label   string `json:"label"`
+	NodeKey string `json:"nodeKey"`
+	AppKey  string `json:"appKey"`
+	Count   int    `json:"count"`
+}
+
 // Define constants used by the application
 const (
 	version = "v0.0.3-alpha"
@@ -156,7 +175,7 @@ func handleBotMessage(m *tgbotapi.Message, monitorStopEvent chan bool) {
 	}
 }
 
-// UserHome returns the current user home path
+// userHome returns the current user home path
 func userHome() string {
 	if runtime.GOOS == "windows" {
 		home := os.Getenv("HOMEDRIVE") + os.Getenv("HOMEPATH")
@@ -169,6 +188,7 @@ func userHome() string {
 	return os.Getenv("HOME")
 }
 
+// fileExists checks if the provided file exists or not
 func fileExists(filename string) bool {
 	if _, err := os.Stat(filename); os.IsNotExist(err) {
 		log.Warnf("File does not exist: %s", filename)
@@ -179,6 +199,7 @@ func fileExists(filename string) bool {
 	}
 }
 
+// selectClientFile tests a number of known locations for the Client.json file
 func selectClientFile() string {
 	// Default to the Users home folder - but lets check
 	clientfile := filepath.Join(userHome(), ".skywire", "manager", "clients.json")
@@ -197,15 +218,6 @@ func selectClientFile() string {
 
 	log.Debugf("[selectClientFile] Selected file: %s", clientfile)
 	return clientfile
-}
-
-// clientConnection is a structure that represents the JSON file structure
-// of the clients.json file (from Skywire project)
-type clientConnection struct {
-	Label   string `json:"label"`
-	NodeKey string `json:"nodeKey"`
-	AppKey  string `json:"appKey"`
-	Count   int    `json:"count"`
 }
 
 // Defines an in-memory slice (dynamic array) based on the ClientConnection struct
@@ -316,16 +328,6 @@ func getClientConnectionCountString() string {
 	return clientsb.String()
 }
 
-// The BotConfig struct is used to store run-time configuration
-// information for the bot application.
-type botConfig struct {
-	BotToken   string `json:"bot_token"`
-	ChatID     int64  `json:"chat_id"`
-	Locked     bool   `json:"locked"`
-	BotDebug   bool   `json:"botdebug"`
-	ClientFile string `json:"clientfile"`
-}
-
 // parseFlags parses command line flags and populates the run-time applicaton configuration
 func parseFlags() {
 	flag.StringVar(&config.BotToken, "bottoken", "", "telegram bot token (provided by the @BotFather")
@@ -338,37 +340,37 @@ func parseFlags() {
 
 // watchFile will watch the file specified by filename
 func watchFileLoop(filename string, monitorStopEvent <-chan bool) {
-	log.Debugf("[MFL] Seting up monitoring on file: %s", filename)
+	log.Debugf("[WFL] Seting up monitoring on file: %s", filename)
 	watcher, err := fsnotify.NewWatcher()
 	if err != nil {
 		log.Panic(err)
 	}
 	defer watcher.Close()
-	defer log.Infof("[MFL] Stop watching file: %s", filename)
+	defer log.Infof("[WFL] Stop watching file: %s", filename)
 
 	err = watcher.Add(filename)
 	if err != nil {
 		log.Panic(err)
 	}
 
-	log.Infof("[MFL] Start watching file: %s", filename)
+	log.Infof("[WFL] Start watching file: %s", filename)
 	for {
 		select {
 		case event := <-watcher.Events:
 			if event.Op&fsnotify.Write == fsnotify.Write {
-				log.Debugf("[MFL] (%s) handling event  [%s]\n", event.Name, event.Op)
+				log.Debugf("[WFL] (%s) handling event  [%s]\n", event.Name, event.Op)
 				msgText := getClientConnectionCountString()
 				sendBotMsgToChatID(config.ChatID, msgText)
 			} else {
-				log.Debugf("[MFL] (%s) ignorning event [%s]\n", event.Name, event.Op)
+				log.Debugf("[WFL] (%s) ignorning event [%s]\n", event.Name, event.Op)
 			}
 
 		case err := <-watcher.Errors:
-			log.Errorln("[MFL] Error:", err)
+			log.Errorln("[WFL] Error:", err)
 
 		case stop := <-monitorStopEvent:
 			if stop {
-				log.Debugln("[MFL] Stop event recieved.")
+				log.Debugln("[WFL] Stop event recieved.")
 				return
 			}
 
@@ -381,7 +383,7 @@ func watchFileLoop(filename string, monitorStopEvent <-chan bool) {
 func main() {
 	log.SetFormatter(&log.TextFormatter{})
 	log.SetLevel(log.DebugLevel)
-	log.Infoln("[Starting Skywire Telegram Notification Bot App.")
+	log.Infoln("Starting Skywire Telegram Notification Bot App.")
 	defer log.Infoln("Stopping Skywire Telegram Notification Bot App. Bye.")
 	parseFlags()
 
