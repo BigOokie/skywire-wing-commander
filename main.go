@@ -8,19 +8,9 @@ import (
 	"gopkg.in/telegram-bot-api.v4"
 )
 
-// The botConfig struct is used to store run-time configuration
-// information for the bot application.
-type botConfig struct {
-	BotToken       string `json:"bot_token"`
-	ChatID         int64  `json:"chat_id"`
-	BotDebug       bool   `json:"botdebug"`
-	ClientFile     string `json:"clientfile"`
-	MonitorRunning bool   `json:"monitorrunning"`
-}
-
 var (
 	bot    *tgbotapi.BotAPI
-	config botConfig
+	config *BotConfig
 )
 
 // sendBotHelpMessage sends the message responce for the /help cmd
@@ -40,10 +30,10 @@ func sendBotStatusMessage(m *tgbotapi.Message) {
 
 // startMonitor sends the message responce for the /start cmd
 func startMonitor(m *tgbotapi.Message, monitorStopEvent <-chan bool) {
-	if config.MonitorRunning {
+	if config.ClientMonitor.MonitorRunning {
 		sendBotMsg(m, msgMonitorAlreadyStarted, false)
 	} else {
-		config.MonitorRunning = true
+		config.ClientMonitor.MonitorRunning = true
 		sendBotMsg(m, msgMonitorStart, false)
 		go watchFileLoop(m, selectClientFile(), monitorStopEvent)
 	}
@@ -52,7 +42,7 @@ func startMonitor(m *tgbotapi.Message, monitorStopEvent <-chan bool) {
 // stopMonitor sends the message responce for the /start cmd
 func stopMonitor(m *tgbotapi.Message, monitorStopEvent chan<- bool) {
 	sendBotMsg(m, msgMonitorStop, false)
-	config.MonitorRunning = false
+	config.ClientMonitor.MonitorRunning = false
 	monitorStopEvent <- true
 }
 
@@ -182,7 +172,7 @@ func main() {
 	defer log.Infoln("Stopping Skywire Telegram Notification Bot App. Bye.")
 	parseFlags()
 
-	config.ClientFile = selectClientFile()
+	config.ClientMonitor.ClientFile = selectClientFile()
 
 	var err error
 	bot, err = tgbotapi.NewBotAPI(config.BotToken)

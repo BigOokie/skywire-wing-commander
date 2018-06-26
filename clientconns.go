@@ -56,7 +56,7 @@ func (c clientConnectionSlice) Exist(rf clientConnection) bool {
 
 // Reads the physical Skywire Clients.JSON file into an in-memory structure
 func readClientConnectionConfig() (cfs map[string]clientConnectionSlice, err error) {
-	fb, err := ioutil.ReadFile(config.ClientFile)
+	fb, err := ioutil.ReadFile(config.ClientMonitor.ClientFile)
 	if err != nil {
 		if os.IsNotExist(err) {
 			cfs = nil
