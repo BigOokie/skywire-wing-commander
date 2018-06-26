@@ -10,7 +10,7 @@ import (
 
 var (
 	bot    *tgbotapi.BotAPI
-	config *BotConfig
+	config BotConfig
 )
 
 // sendBotHelpMessage sends the message responce for the /help cmd
@@ -30,10 +30,10 @@ func sendBotStatusMessage(m *tgbotapi.Message) {
 
 // startMonitor sends the message responce for the /start cmd
 func startMonitor(m *tgbotapi.Message, monitorStopEvent <-chan bool) {
-	if config.ClientMonitor.MonitorRunning {
+	if config.MonitorRunning {
 		sendBotMsg(m, msgMonitorAlreadyStarted, false)
 	} else {
-		config.ClientMonitor.MonitorRunning = true
+		config.MonitorRunning = true
 		sendBotMsg(m, msgMonitorStart, false)
 		go watchFileLoop(m, selectClientFile(), monitorStopEvent)
 	}
@@ -42,7 +42,7 @@ func startMonitor(m *tgbotapi.Message, monitorStopEvent <-chan bool) {
 // stopMonitor sends the message responce for the /start cmd
 func stopMonitor(m *tgbotapi.Message, monitorStopEvent chan<- bool) {
 	sendBotMsg(m, msgMonitorStop, false)
-	config.ClientMonitor.MonitorRunning = false
+	config.MonitorRunning = false
 	monitorStopEvent <- true
 }
 
@@ -172,7 +172,7 @@ func main() {
 	defer log.Infoln("Stopping Skywire Telegram Notification Bot App. Bye.")
 	parseFlags()
 
-	config.ClientMonitor.ClientFile = selectClientFile()
+	config.ClientFile = selectClientFile()
 
 	var err error
 	bot, err = tgbotapi.NewBotAPI(config.BotToken)
