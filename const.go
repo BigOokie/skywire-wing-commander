@@ -2,7 +2,7 @@ package main
 
 // Define constants used by the application
 const (
-	version = "v0.0.3-alpha"
+	version = "v0.0.4-alpha"
 
 	// Bot command messages:
 	// Help message
