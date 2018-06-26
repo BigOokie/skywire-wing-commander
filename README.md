@@ -121,7 +121,7 @@ The top section `ClientType [socket]` tells you WHO YOU have connected to (outbo
 # Donation-ware
 If you found my tips useful, consider providing a tip of your own ;-)
 ```
-Skycoin:    2aAprdFyxV3bqYB5yix2WsjsH1wqLKaoLhq
+Skycoin:    ES5LccJDhBCK275APmW9tmQNEgiYwTFKQF
 
 BitCoin:    37rPeTNjosfydkB4nNNN1XKNrrxxfbLcMA
 ```

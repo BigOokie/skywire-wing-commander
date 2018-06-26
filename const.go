@@ -25,7 +25,7 @@ const (
 		"Twitter: https://twitter.com/BigOokie\n" +
 		"\n" +
 		"Donations most welcome 👍\n" +
-		"Skycoin: 2aAprdFyxV3bqYB5yix2WsjsH1wqLKaoLhq\n" +
+		"Skycoin: ES5LccJDhBCK275APmW9tmQNEgiYwTFKQF\n" +
 		"BitCoin: 37rPeTNjosfydkB4nNNN1XKNrrxxfbLcMA\n"
 
 	// Status cmd message
