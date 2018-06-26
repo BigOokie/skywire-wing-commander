@@ -1,4 +1,3 @@
-// Telegram notification bot
 package main
 
 import (
