@@ -11,9 +11,7 @@ The intention of this project is to have a specialised Telegram Bot application 
 Future plans may incorporate other capabilites - but these are out of scope for the time being.
 
 # Known Issues
-* Works for DIY builds only at the moment. Support for official is coming very soon.
 * DNS level blocking/filtering of telegram API domain on the Skywire nodes (or routers). More info below.
-* Raw dump of connection data when connection state changes. It is a "notification" but it could be more elegant.
 
 I have built and tested this on both RasPi DIY and OSX. It does build on Official Miner also, but there is a coding error that will prevent it from running.
 
@@ -52,10 +50,18 @@ To run the Bot you will need the have the auth key provided by the @BotFather. I
 
 Run the following cmd to get the Bot running on your Master Node - replacing `{BOTTOKEN_FROM_BOTFATHER}` with the token provided by the @BotFather 
 
+To run as a background process (detached from the terminal):
 ```
 cd $GOPATH/bin
 
 nohup ./skywire-telegram-notify-bot -bottoken {BOTTOKEN_FROM_BOTFATHER} /dev/null 2>&1 & echo $! > skywire-bot.pid
+```
+
+To run as a forground process (debug info logged to the terminal):
+```
+cd $GOPATH/bin
+
+./skywire-telegram-notify-bot -bottoken {BOTTOKEN_FROM_BOTFATHER}
 ```
 
 Once this is running, you should be able to start a private chat with your new Bot based on detailed provided by the @BotFather.
