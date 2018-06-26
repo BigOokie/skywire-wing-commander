@@ -9,7 +9,7 @@ import (
 	"gopkg.in/telegram-bot-api.v4"
 )
 
-// The BotConfig struct is used to store run-time configuration
+// The botConfig struct is used to store run-time configuration
 // information for the bot application.
 type botConfig struct {
 	BotToken       string `json:"bot_token"`
