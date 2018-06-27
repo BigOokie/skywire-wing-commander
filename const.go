@@ -11,6 +11,7 @@ const (
 		"- /about - show information and credits about my creator and any contributors\n" +
 		"- /help - show this message\n" +
 		"- /status - ask me how I'm going.. and if I'm still running\n" +
+		"- /heartbeat - ask the bot to send a notification every 2hrs to let you know its still running\n" +
 		"- /start - start me monitoring your Skyminer. Once started, I will start sending notifications\n" +
 		"- /stop - stop me monitoring your Skyminer. Once stopped, I won't send any more notifications\n" +
 		"\n" +

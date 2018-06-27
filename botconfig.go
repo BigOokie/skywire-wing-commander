@@ -8,4 +8,5 @@ type BotConfig struct {
 	BotDebug       bool   `json:"botdebug"`
 	ClientFile     string `json:"clientfile"`
 	MonitorRunning bool   `json:"monitorrunning"`
+	HeartBeat      bool   `json:"heartbeat"`
 }

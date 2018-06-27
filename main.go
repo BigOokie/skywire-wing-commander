@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"time"
 
 	"github.com/fsnotify/fsnotify"
 	log "github.com/sirupsen/logrus"
@@ -36,6 +37,7 @@ func startMonitor(m *tgbotapi.Message, monitorStopEvent <-chan bool) {
 		config.MonitorRunning = true
 		sendBotMsg(m, msgMonitorStart, false)
 		go watchFileLoop(m, selectClientFile(), monitorStopEvent)
+		//go checkManagerNodesLoop(m, monitorStopEvent)
 	}
 }
 
@@ -107,6 +109,13 @@ func handleBotMessage(m *tgbotapi.Message, monitorStopEvent chan bool) {
 		sendBotStatusMessage(m)
 		break
 
+	case "heartbeat":
+		log.Debugln("[handleBotMessage] Handling /heartbeat command")
+		if !config.HeartBeat {
+			config.HeartBeat = true
+			go botHeartBeatLoop(m, monitorStopEvent, 2)
+		}
+
 	default:
 		log.Debugln("[handleBotMessage] Unhandled command recieved.")
 	}
@@ -165,12 +174,43 @@ func watchFileLoop(m *tgbotapi.Message, filename string, monitorStopEvent <-chan
 	}
 }
 
+// watchFile will watch the file specified by filename
+func checkManagerNodesLoop(m *tgbotapi.Message, monitorStopEvent <-chan bool) {
+	ticker := time.NewTicker(time.Second * 5)
+
+	for {
+		select {
+		case <-ticker.C:
+			msgText := getGetAllNodes()
+			sendBotMsg(m, msgText, false)
+		case <-monitorStopEvent:
+			return
+		}
+	}
+}
+
+// watchFile will watch the file specified by filename
+func botHeartBeatLoop(m *tgbotapi.Message, monitorStopEvent <-chan bool, interval time.Duration) {
+	ticker := time.NewTicker(time.Hour * interval)
+
+	for {
+		select {
+		case <-ticker.C:
+			sendBotMsg(m, msgStatus, false)
+		case <-monitorStopEvent:
+			return
+		}
+	}
+}
+
 func main() {
 	log.SetFormatter(&log.TextFormatter{})
 	log.SetLevel(log.DebugLevel)
 	log.Infoln("Starting Skywire Telegram Notification Bot App.")
 	defer log.Infoln("Stopping Skywire Telegram Notification Bot App. Bye.")
 	parseFlags()
+
+	log.Infoln(getGetAllNodes())
 
 	config.ClientFile = selectClientFile()
 

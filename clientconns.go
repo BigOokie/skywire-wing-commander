@@ -128,9 +128,9 @@ func getClientConnectionCountString() string {
 		for k := range ccc {
 			// Output to our string builder the current Client Type (from K)
 			// Add an newline if this isnt the first itteration
-			if clientsb.String() != "" {
-				clientsb.WriteString("\n")
-			}
+			//if clientsb.String() != "" {
+			//	clientsb.WriteString("\n")
+			//}
 
 			switch k {
 			case "socket":
