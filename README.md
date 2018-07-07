@@ -12,7 +12,9 @@ This document is currently being used to focus my design. Most of the below does
 # Overview
 The intention of this project is to have a specialised Telegram Bot application (written in Go) to run on a Skycoin Skywire (Skyminer) Manager Node and provide its owner with (near) realtime status updates based on certain events that occur within the Skyminer. Initially the focus is on incomming connections made to any of the Nodes managed by the Skyminer Manager.
 
-Future plans may incorporate other capabilites - but these are out of scope for the time being.
+High level design intention (WIP) is covered here:
+* [High Level Design](https://github.com/BigOokie/skywire-telegram-notify-bot/blob/Manager-Node-Connection-Monitoring/docs/DESIGN.md)
+
 
 # Known Issues
 * Works for DIY builds only at the moment. Support for official is coming very soon.
