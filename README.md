@@ -1,5 +1,5 @@
 # Skywire Wing Commander
-A Telegram Bot written in Go designed to help the Skyfleet community monitor and manage their SkyMiners and associated Nodes.
+Skywire Wing Commander is a Telegram Bot written in Go designed to help the Skyfleet community monitor and manage their SkyMiners and associated Nodes.
 
 This is currently a work in progress and has been released as an ealry alpha to select group members for testing and feedback. 
 
