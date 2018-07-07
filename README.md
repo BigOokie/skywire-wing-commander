@@ -1,4 +1,8 @@
 # skywire-telegram-notify-bot
+
+[![Build Status](https://travis-ci.org/BigOokie/skywire-telegram-notify-bot.svg?branch=master)](https://travis-ci.org/BigOokie/skywire-telegram-notify-bot)
+
+
 This is currently a work in progress and has been released as an ealry alpha to select group members for testing and feedback. 
 
 More details will be provided as the project progresses.
