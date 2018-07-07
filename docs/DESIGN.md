@@ -67,3 +67,5 @@ The Bot App will periodically poll the Manager and Node APIs  described above. W
 The following section outlines some conceptual ideas that should be possible.
 
 * Allow the user to enquire on the status of a specific Node. It should be possible for the user to ask for the status of a Node. The Bot should prompt the user to select one of the connected Nodes from a list. When the user selects a specific Node, an enquiry for that Node is then performed.
+
+* Support some form of 2FA (Google, etc) which can be configured by the owner of the Miner and the Monitoring Bot on the Server via the cmd line (i.e. setup offline). the Bot could them request 2FA for certain commands to confirm the owner is issuing them and the Bot session hasnt been hijacked in some way.
