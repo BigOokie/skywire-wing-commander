@@ -1,15 +1,23 @@
-# High level design: skywire-telegram-notify-bot
-This document provides the high-level design outline for the skywire-telegram-notify-bot application (written in Go).
-All key elements of the Bot application are covered within this document (or will be once completed - this is a work in progress).
+# High level design: Wing Commander - A SkyMiner Management Telegram
+Bot built for the Skyfleet community
+
+This document provides the high-level design outline for the _Wing Commander_ Telegram Bot (previously known as _skywire-telegram-notify-bot_) (written in Go).
+
+All key elements of the Bot are covered at high-level within this document (or will be once completed - this is a work in progress).
+
+# Disclaimer
+Please note that I am not part of the official SkyCoin or Skywire team. I am just an active and interested member of the Skyfleet community. Most of what I do is driven by self-education and scratching my own itches.
+
+All code for the Wing Commander Bot is open source and available for anyone to review - but comes with no warranty or liabilty. You assume all risk if you choose to use it.
 
 # Purpose
-The Bot is intended to run on a Skywire Manager Node and provide its owner with near real-time notifications about significant events that occur within the Skywire Nodes that are managed by the Skywire Manager (collectivley referred to as the SkyMiner).
+The Wing Commander Telegram Bot is intended to run on a Skywire Manager Node (Official or DIY) and provide its owner with the ability to interact with and manage the SkyMiner in real-time. This includes the ability to request status of Nodes that are connected to and managed by the Skywire Manager. The Bot will also send notifications about significant events that occur within the Nodes.
 
 # Key Features
-The following key features are to be supported by the Bot applications. Those denoted with an `!` are not yet implemented and are roadmap concepts currently - however consideration has been given to these (at some level) within the overall design of the Bot application.
+The following key features are intended to be supported by the Wing Commander Bot. Items denoted with an `!` are not yet implemented and are roadmap concepts currently - however consideration has been given to these (at some level) within the overall design of the Bot application.
 
 ## Automated notifications
-* **Heartbeat** notifications. Used to notify the owner of the Bot that the Bot application is still alive and running. Can be turned on or off (default).
+*  ! **Heartbeat** notifications. Used to notify the owner of the Bot that the Bot application is still alive and running. Can be turned on or off (default).
 * Skywire Node **inbound** and **outbound** **connection events**. Monitoring of the Skywire Nodes can be turned on and off (default). When enabled, the Bot will send an alert to the associated Telegram chat session (managed by Telegram API ChatID). A summary of the changes will be shown.
 
 ## Ad-hoc (manual) interaction
@@ -19,7 +27,7 @@ The following key features are to be supported by the Bot applications. Those de
 
 # Design
 ## Overview
-The Bot application is designed with a single main command and control processing loop which is responsible for management and co-ordination of all other parts of the Bot application.
+The Wing Commander Telegram Bot application is written in Go and designed with a single main command and control processing loop which is responsible for management and co-ordination of all other parts of the Bot application.
 
 Once the main processing loop is initiated, it monitors for Telegram chat messages. Any message that is not a pre-defined command known to the Bot is discarded and ignored.
 
@@ -30,12 +38,12 @@ Generally speaking, ad-hock commands are managed interactivly within the scope o
 ## Skywire Node Monitoring
 This section describes the high level approach to monitoring Skywire Nodes from the Manager Node.
 
-The early releases of the Bot (`v0.0.1-alpha` thru `v0.0.4-alpha`) utilises OS level file monitoring events to observe changes made to the `clients.json` file. While this did provide some degree of alerting for connection changes - it was not sufficient, and later versions utilise the inbuilt API provided within the Skywire Manager and Nodes.
+The early releases of the Bot (`v0.0.1-alpha` thru `v0.0.4-alpha`) utilises OS level file monitoring events to observe changes made to the `clients.json` file. While this did provide some degree of alerting for connection changes - it was not sufficient, and later versions will utilise the inbuilt API provided within the (official) Skywire Manager and Node applications.
 
 The following discusses the planned approach for versions of the Bot App starting with `v0.0.5-alpha`. Some of this remains as conceptual design and may not yet be implemented.
 
 ### Manager and Node API Usage
-The following APIs provided by the Skywire Manager and Node applications are utilised.
+The following APIs provided by the official Skywire Manager and Node applications will be utilised:
 * **Manager**:
     * `getToken`
     * `login`
