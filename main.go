@@ -206,8 +206,8 @@ func botHeartBeatLoop(m *tgbotapi.Message, monitorStopEvent <-chan bool, interva
 func main() {
 	log.SetFormatter(&log.TextFormatter{})
 	log.SetLevel(log.DebugLevel)
-	log.Infoln("Starting Skywire Telegram Notification Bot App.")
-	defer log.Infoln("Stopping Skywire Telegram Notification Bot App. Bye.")
+	log.Infoln("Starting Skywire Wing Commander (Telegram Bot). Ready for duty.")
+	defer log.Infoln("Stopping Skywire Wing Commander (Telegram Bot). Signing off.")
 	parseFlags()
 
 	log.Infoln(getGetAllNodes())
