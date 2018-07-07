@@ -6,23 +6,23 @@ const (
 
 	// Bot command messages:
 	// Help message
-	msgHelp = "I will notify you of connections made to or from your SkyMiner nodes.\n\n" +
+	msgHelp = "Wing Commander here. I will help you to manage and control your SkyMiner and its Nodes.\n\n" +
 		"*Usage:*\n" +
 		"- /about - show information and credits about my creator and any contributors\n" +
 		"- /help - show this message\n" +
 		"- /status - ask me how I'm going.. and if I'm still running\n" +
-		"- /heartbeat - ask the bot to send a notification every 2hrs to let you know its still running\n" +
-		"- /start - start me monitoring your Skyminer. Once started, I will start sending notifications\n" +
-		"- /stop - stop me monitoring your Skyminer. Once stopped, I won't send any more notifications\n" +
+		"- /heartbeat - ask me to send you a notification every 2hrs to let you know I’m still running\n" +
+		"- /start - start me activly monitoring your SkyMiner. Once started, I will send notifications to you for events that occur\n" +
+		"- /stop - stop me monitoring your SkyMiner. Once stopped, I won't send any more notifications\n" +
 		"\n" +
 		"\n" +
-		"Note that the Bot is bound to the _conversation_. This means it is between you and me (the bot)"
+		"Note: I am bound to this _conversation_."
 
 	// About cmd message
-	msgAbout = "Skywire Manager Telegram Monitoring Bot (" + version + ")\n" +
+	msgAbout = "Skywire Wing Commander: A Telegram Bot written in Go designed to help the Skyfleet community monitor and manage their SkyMiners and associated Nodes. (" + version + ")\n" +
 		"\n" +
 		"Created by @BigOokie 2018\n" +
-		"GitHub: https://github.com/BigOokie/skywire-telegram-notify-bot\n" +
+		"GitHub: https://github.com/BigOokie/skywire-wing-commander\n" +
 		"Twitter: https://twitter.com/BigOokie\n" +
 		"\n" +
 		"Donations most welcome 👍\n" +
@@ -30,14 +30,14 @@ const (
 		"BitCoin: 37rPeTNjosfydkB4nNNN1XKNrrxxfbLcMA\n"
 
 	// Status cmd message
-	msgStatus = "I'm fine. Sill running 👍"
+	msgStatus = "Wing Commander reporting and ready for duty 👍"
 
 	// Start cmd messages
-	msgMonitorAlreadyStarted = "The monitor has already been started"
-	msgMonitorStart          = "Monitor starting"
+	msgMonitorAlreadyStarted = "Wing Commander Active Monitoring has already been started."
+	msgMonitorStart          = "Wing Commander Acrove Monitoring starting..."
 
 	// Stop cmd message
-	msgMonitorStop = "Monitor stopping"
+	msgMonitorStop = "Wing Commander Active Monitoring stopping..."
 
 	// Default cmd message (unhandled)
 	msgDefault = "Sorry. I don't know that command."
