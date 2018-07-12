@@ -1,8 +1,9 @@
 package main
 
 import (
-	"flag"
 	"time"
+
+	"github.com/BurntSushi/toml"
 
 	"github.com/fsnotify/fsnotify"
 	log "github.com/sirupsen/logrus"
@@ -10,8 +11,9 @@ import (
 )
 
 var (
-	bot    *tgbotapi.BotAPI
-	config BotConfig
+	bot       *tgbotapi.BotAPI
+	config    swwcConfig
+	oldconfig BotConfig
 )
 
 // sendBotHelpMessage sends the message responce for the /help cmd
@@ -31,10 +33,10 @@ func sendBotStatusMessage(m *tgbotapi.Message) {
 
 // startMonitor sends the message responce for the /start cmd
 func startMonitor(m *tgbotapi.Message, monitorStopEvent <-chan bool) {
-	if config.MonitorRunning {
+	if oldconfig.MonitorRunning {
 		sendBotMsg(m, msgMonitorAlreadyStarted, false)
 	} else {
-		config.MonitorRunning = true
+		oldconfig.MonitorRunning = true
 		sendBotMsg(m, msgMonitorStart, false)
 		go watchFileLoop(m, selectClientFile(), monitorStopEvent)
 		//go checkManagerNodesLoop(m, monitorStopEvent)
@@ -44,7 +46,7 @@ func startMonitor(m *tgbotapi.Message, monitorStopEvent <-chan bool) {
 // stopMonitor sends the message responce for the /start cmd
 func stopMonitor(m *tgbotapi.Message, monitorStopEvent chan<- bool) {
 	sendBotMsg(m, msgMonitorStop, false)
-	config.MonitorRunning = false
+	oldconfig.MonitorRunning = false
 	monitorStopEvent <- true
 }
 
@@ -111,8 +113,8 @@ func handleBotMessage(m *tgbotapi.Message, monitorStopEvent chan bool) {
 
 	case "heartbeat":
 		log.Debugln("[handleBotMessage] Handling /heartbeat command")
-		if !config.HeartBeat {
-			config.HeartBeat = true
+		if !oldconfig.HeartBeat {
+			oldconfig.HeartBeat = true
 			go botHeartBeatLoop(m, monitorStopEvent, 2)
 		}
 
@@ -121,6 +123,7 @@ func handleBotMessage(m *tgbotapi.Message, monitorStopEvent chan bool) {
 	}
 }
 
+/*
 // parseFlags parses command line flags and populates the run-time applicaton configuration
 func parseFlags() {
 	flag.StringVar(&config.BotToken, "bottoken", "", "telegram bot token (provided by the @BotFather")
@@ -130,6 +133,7 @@ func parseFlags() {
 	log.Debugf("Parameter: bottoken = %s", config.BotToken)
 	log.Debugf("Parameter: botdebug = %v", config.BotDebug)
 }
+*/
 
 // watchFile will watch the file specified by filename
 func watchFileLoop(m *tgbotapi.Message, filename string, monitorStopEvent <-chan bool) {
@@ -174,7 +178,6 @@ func watchFileLoop(m *tgbotapi.Message, filename string, monitorStopEvent <-chan
 	}
 }
 
-// watchFile will watch the file specified by filename
 func checkManagerNodesLoop(m *tgbotapi.Message, monitorStopEvent <-chan bool) {
 	ticker := time.NewTicker(time.Second * 5)
 
@@ -189,7 +192,6 @@ func checkManagerNodesLoop(m *tgbotapi.Message, monitorStopEvent <-chan bool) {
 	}
 }
 
-// watchFile will watch the file specified by filename
 func botHeartBeatLoop(m *tgbotapi.Message, monitorStopEvent <-chan bool, interval time.Duration) {
 	ticker := time.NewTicker(time.Hour * interval)
 
@@ -203,28 +205,38 @@ func botHeartBeatLoop(m *tgbotapi.Message, monitorStopEvent <-chan bool, interva
 	}
 }
 
+func loadConfig() {
+	if _, err := toml.DecodeFile("swwc.toml", &config); err != nil {
+		log.Panic(err)
+	}
+
+	log.Debugf("Parameter: token = %s", config.Bot.Token)
+	log.Debugf("Parameter: debug = %v", config.Bot.Debug)
+}
+
 func main() {
 	log.SetFormatter(&log.TextFormatter{})
 	log.SetLevel(log.DebugLevel)
-	log.Infoln("Starting Skywire Wing Commander (Telegram Bot). Ready for duty.")
-	defer log.Infoln("Stopping Skywire Wing Commander (Telegram Bot). Signing off.")
-	parseFlags()
+	log.Infoln("Starting Skywire Wing Commander Telegram Bot. Ready for duty.")
+	defer log.Infoln("Stopping Skywire Wing Commander Telegram Bot. Signing off.")
+	//parseFlags()
+	loadConfig()
 
-	log.Infoln(getGetAllNodes())
+	//log.Infoln(getGetAllNodes())
 
-	config.ClientFile = selectClientFile()
+	//oldconfig.ClientFile = selectClientFile()
 
 	var err error
-	bot, err = tgbotapi.NewBotAPI(config.BotToken)
+	bot, err = tgbotapi.NewBotAPI(config.Bot.Token)
 	if err != nil {
 		log.WithFields(log.Fields{
 			"error": err,
-			"token": config.BotToken,
-		}).Fatal("Could not connect to telegram")
+			"token": config.Bot.Token,
+		}).Fatal("Could not connect to Telegram")
 	}
 
-	bot.Debug = config.BotDebug
-	log.Infof("Telegram Bot connected and authorised on account %s", bot.Self.UserName)
+	bot.Debug = config.Bot.Debug
+	log.Infof("Skywire Wing Commander Telegram Bot connected and authorised on account %s", bot.Self.UserName)
 
 	monitorStopEvent := make(chan bool)
 	defer close(monitorStopEvent)

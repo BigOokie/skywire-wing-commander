@@ -10,3 +10,14 @@ type BotConfig struct {
 	MonitorRunning bool   `json:"monitorrunning"`
 	HeartBeat      bool   `json:"heartbeat"`
 }
+
+// TOML Config
+type swwcConfig struct {
+	Title string
+	Bot   botConfig
+}
+
+type botConfig struct {
+	Token string
+	Debug bool
+}

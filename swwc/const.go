@@ -16,7 +16,7 @@ const (
 		"- /stop - stop me monitoring your SkyMiner. Once stopped, I won't send any more notifications\n" +
 		"\n" +
 		"\n" +
-		"Note: I am bound to this _conversation_."
+		"Note: I am bound to _this_ conversation."
 
 	// About cmd message
 	msgAbout = "Skywire Wing Commander: A Telegram Bot written in Go designed to help the Skyfleet community monitor and manage their SkyMiners and associated Nodes. (" + version + ")\n" +
