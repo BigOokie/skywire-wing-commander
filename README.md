@@ -1,27 +1,29 @@
-# skywire-telegram-notify-bot
-
+# Skywire Wing Commander
 [![Build Status](https://travis-ci.org/BigOokie/skywire-telegram-notify-bot.svg?branch=master)](https://travis-ci.org/BigOokie/skywire-telegram-notify-bot)
-
+Skywire Wing Commander is a Telegram Bot written in Go designed to help the Skyfleet community monitor and manage their SkyMiners and associated Nodes.
+>>>>>>> master
 
 This is currently a work in progress and has been released as an ealry alpha to select group members for testing and feedback. 
 
 More details will be provided as the project progresses.
 
-This document is currently being used to focus my design. Most of the below does not exist or work yet. Bare with me... lol
+This is not an official SkyCoin or Skywire project. If you have issues or questions - please do not bother the official team - raise them with me or log an issue in GitHub. 
+
+This document is currently being used to focus my design. Some of the below may not exist or work yet. Bare with me... lol
 
 # Overview
-The intention of this project is to have a specialised Telegram Bot application (written in Go) to run on a Skycoin Skywire (Skyminer) Manager Node and provide its owner with (near) realtime status updates based on certain events that occur within the Skyminer. Initially the focus is on incomming connections made to any of the Nodes managed by the Skyminer Manager.
+The intention of this project is to have a specialised Telegram Bot application (written in Go) to run on a Skycoin Skywire (Skyminer) Manager Node and provide its owner with realtime management and monitoring capabilities.
 
 High level design intention (WIP) is covered here:
 * [High Level Design](https://github.com/BigOokie/skywire-telegram-notify-bot/blob/Manager-Node-Connection-Monitoring/docs/DESIGN.md)
 
 
 # Known Issues
-* Works for DIY builds only at the moment. Support for official is coming very soon.
 * DNS level blocking/filtering of telegram API domain on the Skywire nodes (or routers). More info below.
-* Raw dump of connection data when connection state changes. It is a "notification" but it could be more elegant.
 
-I have built and tested this on both RasPi DIY and OSX. It does build on Official Miner also, but there is a coding error that will prevent it from running.
+* Repository Renamed. The Repository has recently been renamed. it was previously skywire-telegram-notify-bot. It is now called Skywire-Wing-Commander. Please make sure you update any references to the new repo name.
+
+I have built and tested this on a DIY Miner (RasPi), Official SkyMiner and OSX.
 
 # Bot Setup
 This section is incomplete and requires further work. Alpha and Beta testers can follow and provide feedback.
@@ -39,7 +41,7 @@ To get and build the code use the following cmds:
 ```
 mkdir -p $GOPATH/src/github.com/BigOokie
 cd $GOPATH/src/github.com/BigOokie
-git clone https://github.com/BigOokie/skywire-telegram-notify-bot.git
+git clone https://github.com/BigOokie/skywire-wing-commander.git
 
 go install -v ./...
 ```
@@ -48,7 +50,7 @@ go install -v ./...
 To update and rebuild the Bot, use the following cmds:
 ```
 
-cd $GOPATH/src/github.com/BigOokie/skywire-telegram-notify-bot
+cd $GOPATH/src/github.com/BigOokie/skywire-wing-commander
 git pull origin master 
 go install -v ./...
 ```
@@ -58,10 +60,18 @@ To run the Bot you will need the have the auth key provided by the @BotFather. I
 
 Run the following cmd to get the Bot running on your Master Node - replacing `{BOTTOKEN_FROM_BOTFATHER}` with the token provided by the @BotFather 
 
+To run as a background process (detached from the terminal):
 ```
 cd $GOPATH/bin
 
-nohup ./skywire-telegram-notify-bot -bottoken {BOTTOKEN_FROM_BOTFATHER} /dev/null 2>&1 & echo $! > skywire-bot.pid
+nohup ./skywire-wing-commander -bottoken {BOTTOKEN_FROM_BOTFATHER} /dev/null 2>&1 & echo $! > swc.pid
+```
+
+To run as a forground process (debug info logged to the terminal):
+```
+cd $GOPATH/bin
+
+./skywire-wing-commander -bottoken {BOTTOKEN_FROM_BOTFATHER}
 ```
 
 Once this is running, you should be able to start a private chat with your new Bot based on detailed provided by the @BotFather.
@@ -72,7 +82,7 @@ Once you are in a private chat with the bot you can make use for the commands to
 ```
 cd $GOPATH/bin
 
-pkill -F skywire-bot.pid
+pkill -F swc.pid
 ```
 
 ## OpenDNS Errors (Domain Blocked)
@@ -124,8 +134,8 @@ What you are interested in is the bottom section where the `ClientType [socksc]`
 
 The top section `ClientType [socket]` tells you WHO YOU have connected to (outbound).
 
-# Donation-ware
-If you found my tips useful, consider providing a tip of your own ;-)
+# Donations most welcome
+If you found my work useful, consider helping me continue the work ;-)
 ```
 Skycoin:    ES5LccJDhBCK275APmW9tmQNEgiYwTFKQF
 
