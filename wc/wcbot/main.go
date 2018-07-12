@@ -1,18 +1,14 @@
 package main
 
 import (
-	"time"
-
+	wingcommander "github.com/BigOokie/Skywire-Wing-Commander/wc"
 	"github.com/BurntSushi/toml"
-
-	"github.com/fsnotify/fsnotify"
 	log "github.com/sirupsen/logrus"
-	"gopkg.in/telegram-bot-api.v4"
 )
 
+/*
 var (
 	bot       *tgbotapi.BotAPI
-	config    swwcConfig
 	oldconfig BotConfig
 )
 
@@ -123,7 +119,7 @@ func handleBotMessage(m *tgbotapi.Message, monitorStopEvent chan bool) {
 	}
 }
 
-/*
+
 // parseFlags parses command line flags and populates the run-time applicaton configuration
 func parseFlags() {
 	flag.StringVar(&config.BotToken, "bottoken", "", "telegram bot token (provided by the @BotFather")
@@ -133,7 +129,7 @@ func parseFlags() {
 	log.Debugf("Parameter: bottoken = %s", config.BotToken)
 	log.Debugf("Parameter: botdebug = %v", config.BotDebug)
 }
-*/
+
 
 // watchFile will watch the file specified by filename
 func watchFileLoop(m *tgbotapi.Message, filename string, monitorStopEvent <-chan bool) {
@@ -204,10 +200,11 @@ func botHeartBeatLoop(m *tgbotapi.Message, monitorStopEvent <-chan bool, interva
 		}
 	}
 }
+*/
 
 // loadConfig will load configuration from the swwc.toml file
 // An example config file is provided in the repo.
-func loadConfig() {
+func loadConfig(config *wingcommander.Config) {
 	if _, err := toml.DecodeFile("wc.toml", &config); err != nil {
 		log.Panic(err)
 	}
@@ -222,37 +219,42 @@ func main() {
 	log.Infoln("Starting Skywire Wing Commander Telegram Bot. Ready for duty.")
 	defer log.Infoln("Stopping Skywire Wing Commander Telegram Bot. Signing off.")
 	//parseFlags()
-	loadConfig()
+
+	var config wingcommander.Config
+	loadConfig(&config)
+
+	bot, err := wingcommander.NewBot(config)
 
 	//log.Infoln(getGetAllNodes())
 
 	//oldconfig.ClientFile = selectClientFile()
 
-	var err error
-	bot, err = tgbotapi.NewBotAPI(config.Bot.Token)
-	if err != nil {
-		log.WithFields(log.Fields{
-			"error": err,
-			"token": config.Bot.Token,
-		}).Fatal("Could not connect to Telegram")
-	}
-
-	bot.Debug = config.Bot.Debug
-	log.Infof("Skywire Wing Commander Telegram Bot connected and authorised on account %s", bot.Self.UserName)
-
-	monitorStopEvent := make(chan bool)
-	defer close(monitorStopEvent)
-
-	u := tgbotapi.NewUpdate(0)
-	u.Timeout = 60
-
-	updates, err := bot.GetUpdatesChan(u)
-
-	for update := range updates {
-		if update.Message == nil {
-			continue
+	/*
+		bot, err = tgbotapi.NewBotAPI(config.Bot.Token)
+		if err != nil {
+			log.WithFields(log.Fields{
+				"error": err,
+				"token": config.Bot.Token,
+			}).Fatal("Could not connect to Telegram")
 		}
 
-		go handleBotMessage(update.Message, monitorStopEvent)
-	}
+		bot.Debug = config.Bot.Debug
+		log.Infof("Skywire Wing Commander Telegram Bot connected and authorised on account %s", bot.Self.UserName)
+
+		monitorStopEvent := make(chan bool)
+		defer close(monitorStopEvent)
+
+		u := tgbotapi.NewUpdate(0)
+		u.Timeout = 60
+
+		updates, err := bot.GetUpdatesChan(u)
+
+		for update := range updates {
+			if update.Message == nil {
+				continue
+			}
+
+			go handleBotMessage(update.Message, monitorStopEvent)
+		}
+	*/
 }

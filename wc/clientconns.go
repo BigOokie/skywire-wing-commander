@@ -1,15 +1,4 @@
-package main
-
-import (
-	"encoding/json"
-	"fmt"
-	"io/ioutil"
-	"os"
-	"path/filepath"
-	"strings"
-
-	log "github.com/sirupsen/logrus"
-)
+package wingcommander
 
 // clientConnection is a structure that represents the JSON file structure
 // of the clients.json file (from Skywire project)
@@ -20,6 +9,10 @@ type clientConnection struct {
 	Count   int    `json:"count"`
 }
 
+// Defines an in-memory slice (dynamic array) based on the ClientConnection struct
+type clientConnectionSlice []clientConnection
+
+/*
 // selectClientFile tests a number of known locations for the Client.json file
 func selectClientFile() string {
 	// Default to the Users home folder - but lets check
@@ -40,9 +33,6 @@ func selectClientFile() string {
 	log.Debugf("[selectClientFile] Selected file: %s", clientfile)
 	return clientfile
 }
-
-// Defines an in-memory slice (dynamic array) based on the ClientConnection struct
-type clientConnectionSlice []clientConnection
 
 // Determines if the specified ClientConnection exists within the clientConnectionSlice
 func (c clientConnectionSlice) Exist(rf clientConnection) bool {
@@ -147,3 +137,4 @@ func getClientConnectionCountString() string {
 	// Return the built string
 	return clientsb.String()
 }
+*/

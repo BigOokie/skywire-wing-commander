@@ -1,4 +1,4 @@
-package main
+package wingcommander
 
 // BotConfig struct is used to store run-time configuration
 // information for the bot application.
@@ -12,9 +12,10 @@ type BotConfig struct {
 }
 
 // TOML Config
-type swwcConfig struct {
-	Title string
-	Bot   botConfig
+type Config struct {
+	Title  string
+	Bot    botConfig
+	ChatID int64
 }
 
 type botConfig struct {

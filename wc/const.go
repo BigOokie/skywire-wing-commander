@@ -1,4 +1,4 @@
-package main
+package wingcommander
 
 // Define constants used by the application
 const (
