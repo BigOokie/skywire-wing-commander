@@ -205,8 +205,10 @@ func botHeartBeatLoop(m *tgbotapi.Message, monitorStopEvent <-chan bool, interva
 	}
 }
 
+// loadConfig will load configuration from the swwc.toml file
+// An example config file is provided in the repo.
 func loadConfig() {
-	if _, err := toml.DecodeFile("swwc.toml", &config); err != nil {
+	if _, err := toml.DecodeFile("wc.toml", &config); err != nil {
 		log.Panic(err)
 	}
 
