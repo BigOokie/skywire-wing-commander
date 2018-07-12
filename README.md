@@ -1,41 +1,46 @@
 # Skywire Wing Commander
-[![Build Status](https://travis-ci.org/BigOokie/skywire-telegram-notify-bot.svg?branch=master)](https://travis-ci.org/BigOokie/skywire-telegram-notify-bot)
-Skywire Wing Commander is a Telegram Bot written in Go designed to help the Skyfleet community monitor and manage their SkyMiners and associated Nodes.
->>>>>>> master
+**Build Status**
 
-This is currently a work in progress and has been released as an ealry alpha to select group members for testing and feedback. 
+**Master** 
 
-More details will be provided as the project progresses.
+[![Build Status](https://travis-ci.org/BigOokie/Skywire-Wing-Commander.svg?branch=master)](https://travis-ci.org/BigOokie/Skywire-Wing-Commander)
 
-This is not an official SkyCoin or Skywire project. If you have issues or questions - please do not bother the official team - raise them with me or log an issue in GitHub. 
+**Dev**
 
-This document is currently being used to focus my design. Some of the below may not exist or work yet. Bare with me... lol
+[![Build Status](https://travis-ci.org/BigOokie/Skywire-Wing-Commander.svg?branch=dev)](https://travis-ci.org/BigOokie/Skywire-Wing-Commander)
 
-# Overview
+## Overview
+Skywire Wing Commander is a Telegram Bot written in Go designed to help the [Skyfleet](https://skycoin.net) community monitor and manage their SkyMiners and associated Nodes.
+
+This is currently a Work In Progress (WIP) and has been released as an ealry alpha to select group members for testing and feedback. More details will be provided as the project progresses.
+
+Please note that this is not an official [SkyCoin](https://skycoin.net) project. If you have issues or questions - please do not bother the official team - raise them with me by logging an issue in GitHub. Also note that this is not my job - I am doing this as an active member of the Skyfleet community and will endevor to get back to you or resolve issues when I can. So please have patience and bare with me.
+
 The intention of this project is to have a specialised Telegram Bot application (written in Go) to run on a Skycoin Skywire (Skyminer) Manager Node and provide its owner with realtime management and monitoring capabilities.
 
 High level design intention (WIP) is covered here:
-* [High Level Design](https://github.com/BigOokie/skywire-telegram-notify-bot/blob/Manager-Node-Connection-Monitoring/docs/DESIGN.md)
+* [Wing Commander - High Level Design](https://github.com/BigOokie/skywire-telegram-notify-bot/blob/Manager-Node-Connection-Monitoring/docs/DESIGN.md)
 
 
 # Known Issues
+The following section outlines some known issues that need to be taken into consideration by anyone running this software:
 * DNS level blocking/filtering of telegram API domain on the Skywire nodes (or routers). More info below.
 
 * Repository Renamed. The Repository has recently been renamed. it was previously skywire-telegram-notify-bot. It is now called Skywire-Wing-Commander. Please make sure you update any references to the new repo name.
 
 I have built and tested this on a DIY Miner (RasPi), Official SkyMiner and OSX.
 
-# Bot Setup
+# Wing Comamander Bot Setup
 This section is incomplete and requires further work. Alpha and Beta testers can follow and provide feedback.
 
 Initiate a Telegram discussion with @BotFather to create your new Bot. I wont cover specifics here - possibly this wil be covered later, but there are many articles out there on Google. 
 
 Remeber the access token provided by @BotFather as part of this process. You will need to pass it as a command line parameter to the Bot app.
 
-# Install and build the Bot
-Get the code on your Skycoin Skywire Manager node. I have not tested this on other nodes and it is not expectred to work.
+# Install and build the Wing Commander Bot
+The Wing Commander Bot is designed to operate on your Manager Node - it is not expected to function on a subordinate node that does not run the Skywire Manager.
 
-It is expected that you have Go v1.10.x installed. I will leave this to you.
+It is expected that you have Go v1.10.x installed. I will leave the installation of this to you.
 
 To get and build the code use the following cmds:
 ```
@@ -46,8 +51,8 @@ git clone https://github.com/BigOokie/skywire-wing-commander.git
 go install -v ./...
 ```
 
-# Update and rebuild the bot
-To update and rebuild the Bot, use the following cmds:
+# Update and rebuild
+To update and rebuild, use the following cmds:
 ```
 
 cd $GOPATH/src/github.com/BigOokie/skywire-wing-commander
@@ -64,14 +69,14 @@ To run as a background process (detached from the terminal):
 ```
 cd $GOPATH/bin
 
-nohup ./skywire-wing-commander -bottoken {BOTTOKEN_FROM_BOTFATHER} /dev/null 2>&1 & echo $! > swc.pid
+nohup ./swwc -bottoken {BOTTOKEN_FROM_BOTFATHER} /dev/null 2>&1 & echo $! > swwc.pid
 ```
 
 To run as a forground process (debug info logged to the terminal):
 ```
 cd $GOPATH/bin
 
-./skywire-wing-commander -bottoken {BOTTOKEN_FROM_BOTFATHER}
+./swwc -bottoken {BOTTOKEN_FROM_BOTFATHER}
 ```
 
 Once this is running, you should be able to start a private chat with your new Bot based on detailed provided by the @BotFather.
@@ -82,7 +87,7 @@ Once you are in a private chat with the bot you can make use for the commands to
 ```
 cd $GOPATH/bin
 
-pkill -F swc.pid
+pkill -F swwc.pid
 ```
 
 ## OpenDNS Errors (Domain Blocked)
@@ -104,38 +109,39 @@ curl: (60) SSL certificate problem: unable to get local issuer certificate
 # Supported Bot Commands
 This section is being used for design currently. These capabilities do not exist yet.
 
-/hello
-Used to ensure the Bot app is running. Like a ping command. The Bot should always respond with “Hi”.
+`/help`
 
-/chatid
-The Bot will respond with the ID of the current Telegram chat.
-The Bot is intended to run in private chat only. For security reasons, the Bot will be designed to not accept or respond to any user who is not part of the chatid.
+Provides the user with information on the  commands supported by Wing Commander (those listed here).
 
-/start
-Start monitoring the Skyminer that the Bot is running on.
-Once started, near real-time updates will be provided by the Bot when specific states on the Miner or its Nodes change.
+`/about`
 
-/stop
-Stop monitoring the Skyminer thay the Bot is running on.
+Shows information and credits about the creator of the Wing Commander and any key contributors.
 
-/status
-Request current status from the Bot
+`/status`
+
+Manually request current status of the Wing Commander Bot.
+
+`/heartbeat`
+
+Start an automated heatbeat - the Wing Commander Bot will notify you that it is still running every 2 hours.
+
+`/start`
+
+Wing Commander will start monitoring the Skyminer that it is running on.
+Once started, near real-time updates will be provided when specific states on the Miner or its Nodes change.
+
+`/stop`
+
+Wing Commander will stop monitoring the Skyminer that it is running on.
 
 
-# Bot Output
-When the Bot has been started, if a Node connects to you (or if you connect to a Node) - you should be notified with something similar to the following (Note that Node and App Keys are not real and have been made up below):
+# Wing Commander Output
+Wing Commander will monitor your SkyMiner and the Node that connect to it. Periodically Wing Commander will provide you with status updates about your Nodes and their connection status with the SkyMiner Manager. Additionally, Wing Commander will also monitor and notify you of changes to connection status with external (3rd party Nodes).
 
-```
-ClientType: [socket](Outbound)  Count:2
-ClientType: [socksc](Inbound)  Count:1
-```
-
-What you are interested in is the bottom section where the `ClientType [socksc]`. This tells you WHO has connected to YOU (inbound).
-
-The top section `ClientType [socket]` tells you WHO YOU have connected to (outbound).
+This can help you to manage the up-time of your own Nodes as well as monitor when external parties (Nodes) are connecting to your Miner over the the Skywire network.
 
 # Donations most welcome
-If you found my work useful, consider helping me continue the work ;-)
+This is not my job, but I enjoy building things for the Skyfleet community. If you find my work useful, please consider donating to support it.
 ```
 Skycoin:    ES5LccJDhBCK275APmW9tmQNEgiYwTFKQF
 
