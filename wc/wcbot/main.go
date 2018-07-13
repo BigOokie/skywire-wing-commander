@@ -7,25 +7,6 @@ import (
 )
 
 /*
-var (
-	bot       *tgbotapi.BotAPI
-	oldconfig BotConfig
-)
-
-// sendBotHelpMessage sends the message responce for the /help cmd
-func sendBotHelpMessage(m *tgbotapi.Message) {
-	sendBotMsg(m, msgHelp, false)
-}
-
-// sendBotAboutMessage sends the message responce for the /about cmd
-func sendBotAboutMessage(m *tgbotapi.Message) {
-	sendBotMsg(m, msgAbout, false)
-}
-
-// sendBotStatusMessage sends the message responce for the /status cmd
-func sendBotStatusMessage(m *tgbotapi.Message) {
-	sendBotMsg(m, msgStatus, false)
-}
 
 // startMonitor sends the message responce for the /start cmd
 func startMonitor(m *tgbotapi.Message, monitorStopEvent <-chan bool) {
@@ -45,80 +26,6 @@ func stopMonitor(m *tgbotapi.Message, monitorStopEvent chan<- bool) {
 	oldconfig.MonitorRunning = false
 	monitorStopEvent <- true
 }
-
-// sendBotMsg sends messages from the Monitoring Bot
-func sendBotMsg(m *tgbotapi.Message, msgText string, reply bool) {
-	if reply {
-		sendBotReplyMsgToChatID(m.Chat.ID, msgText, m.MessageID)
-	} else {
-		sendBotMsgToChatID(m.Chat.ID, msgText)
-	}
-}
-
-// sendBotMsgToChatID sends messages from the Monitoring Bot
-func sendBotMsgToChatID(chatid int64, msgText string) {
-	msg := tgbotapi.NewMessage(chatid, msgText)
-	msg.ParseMode = tgbotapi.ModeMarkdown
-	log.Debugf("[sendBotMsgToChatID] %s", msgText)
-	bot.Send(msg)
-}
-
-// sendBotReplyMsgToChatID sends messages from the Monitoring Bot
-func sendBotReplyMsgToChatID(chatid int64, msgText string, replyMsgID int) {
-	msg := tgbotapi.NewMessage(chatid, msgText)
-	msg.ParseMode = tgbotapi.ModeMarkdown
-	msg.ReplyToMessageID = replyMsgID
-	log.Debugf("[sendBotReplyMsgToChatID] %s", msgText)
-	bot.Send(msg)
-}
-
-// handleBotMessages processes Telegram Bot commands and responds
-func handleBotMessage(m *tgbotapi.Message, monitorStopEvent chan bool) {
-	if !m.IsCommand() {
-		log.Debugf("[handleBotMessage] Message is not a command: %s", m.Text)
-		sendBotHelpMessage(m)
-		return
-	}
-
-	botcmd := m.Command()
-	switch botcmd {
-	case "start":
-		log.Debugln("[handleBotMessage] Handling /start command")
-		startMonitor(m, monitorStopEvent)
-		break
-
-	case "stop":
-		log.Debugln("[handleBotMessage] Handling /stop command")
-		stopMonitor(m, monitorStopEvent)
-		break
-
-	case "help":
-		log.Debugln("[handleBotMessage] Handling /help command")
-		sendBotHelpMessage(m)
-		break
-
-	case "about":
-		log.Debugln("[handleBotMessage] Handling /about command")
-		sendBotAboutMessage(m)
-		break
-
-	case "status":
-		log.Debugln("[handleBotMessage] Handling /status command")
-		sendBotStatusMessage(m)
-		break
-
-	case "heartbeat":
-		log.Debugln("[handleBotMessage] Handling /heartbeat command")
-		if !oldconfig.HeartBeat {
-			oldconfig.HeartBeat = true
-			go botHeartBeatLoop(m, monitorStopEvent, 2)
-		}
-
-	default:
-		log.Debugln("[handleBotMessage] Unhandled command recieved.")
-	}
-}
-
 
 // parseFlags parses command line flags and populates the run-time applicaton configuration
 func parseFlags() {

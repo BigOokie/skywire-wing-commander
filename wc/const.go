@@ -30,7 +30,7 @@ const (
 		"BitCoin: 37rPeTNjosfydkB4nNNN1XKNrrxxfbLcMA\n"
 
 	// Status cmd message
-	msgStatus = "Wing Commander reporting and ready for duty 👍"
+	msgStatus = "*Wing Commander* reporting and ready for duty 👍"
 
 	// Start cmd messages
 	msgMonitorAlreadyStarted = "Wing Commander Active Monitoring has already been started."

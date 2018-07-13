@@ -1,6 +1,8 @@
 package wingcommander
 
 import (
+	"time"
+
 	log "github.com/sirupsen/logrus"
 )
 
@@ -31,12 +33,13 @@ func (bot *Bot) handleCommandStop(ctx *Context, command, args string) error {
 // Handler for status command
 func (bot *Bot) handleCommandStatus(ctx *Context, command, args string) error {
 	log.Debug("Handle command /status")
-	return nil
+	return bot.Send(ctx, "whisper", "markdown", msgStatus)
 }
 
 // Handler for heartbeat command
 func (bot *Bot) handleCommandHeartBeat(ctx *Context, command, args string) error {
 	log.Debug("Handle command /heartbeat")
+	go botHeartBeatLoop(bot, ctx)
 	return nil
 }
 
@@ -51,4 +54,15 @@ func (bot *Bot) AddPrivateMessageHandler(handler MessageHandler) {
 
 func (bot *Bot) AddGroupMessageHandler(handler MessageHandler) {
 	bot.groupMessageHandlers = append(bot.groupMessageHandlers, handler)
+}
+
+func botHeartBeatLoop(bot *Bot, ctx *Context) { //(m *tgbotapi.Message, monitorStopEvent <-chan bool, interval time.Duration) {
+	ticker := time.NewTicker(time.Hour * 1)
+
+	for {
+		select {
+		case <-ticker.C:
+			bot.Send(ctx, "whisper", "markdown", msgStatus)
+		}
+	}
 }
