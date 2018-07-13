@@ -284,7 +284,7 @@ func (bot *Bot) Send(ctx *Context, mode, format, text string) error {
 		msg = tgbotapi.NewMessage(ctx.message.Chat.ID, text)
 		msg.ReplyToMessageID = ctx.message.MessageID
 	case "yell":
-		msg = tgbotapi.NewMessage(bot.config.ChatID, text)
+		msg = tgbotapi.NewMessage(bot.config.Bot.ChatID, text)
 	default:
 		return fmt.Errorf("unsupported message mode: %s", mode)
 	}
@@ -326,7 +326,7 @@ func (bot *Bot) Reply(ctx *Context, text string) error {
 }
 
 func (bot *Bot) handleMessage(ctx *Context) error {
-	if (ctx.message.Chat.IsGroup() || ctx.message.Chat.IsSuperGroup()) && ctx.message.Chat.ID == bot.config.ChatID {
+	if (ctx.message.Chat.IsGroup() || ctx.message.Chat.IsSuperGroup()) && ctx.message.Chat.ID == bot.config.Bot.ChatID {
 		return bot.handleGroupMessage(ctx)
 	} else if ctx.message.Chat.IsPrivate() {
 		return bot.handlePrivateMessage(ctx)
@@ -345,21 +345,22 @@ func NewBot(config Config) (*Bot, error) {
 	var err error
 
 	if bot.telegram, err = tgbotapi.NewBotAPI(config.Bot.Token); err != nil {
-		return nil, fmt.Errorf("failed to initialize telegram api: %v", err)
+		return nil, fmt.Errorf("Failed to initialize Telegram API: %v", err)
 	}
 
 	bot.telegram.Debug = config.Bot.Debug
 
-	chat, err := bot.telegram.GetChat(tgbotapi.ChatConfig{config.ChatID, ""})
+	chat, err := bot.telegram.GetChat(tgbotapi.ChatConfig{config.Bot.ChatID, ""})
 	if err != nil {
-		return nil, fmt.Errorf("failed to get chat info from telegram: %v", err)
-	}
-	if !chat.IsGroup() && !chat.IsSuperGroup() {
-		return nil, fmt.Errorf("only group and supergroups are supported")
+		return nil, fmt.Errorf("Failed to get chat info from Telegram: %v", err)
 	}
 
-	log.Printf("user: %d %s", bot.telegram.Self.ID, bot.telegram.Self.UserName)
-	log.Printf("chat: %s %d %s", chat.Type, chat.ID, chat.Title)
+	if !chat.IsPrivate() {
+		return nil, fmt.Errorf("Only private chats are supported")
+	}
+
+	log.Printf("Bot User: %d %s", bot.telegram.Self.ID, bot.telegram.Self.UserName)
+	log.Printf("Bot Chat: %s %d %s", chat.Type, chat.ID, chat.Title)
 
 	bot.setCommandHandlers()
 
@@ -391,16 +392,16 @@ func (bot *Bot) Start() error {
 
 	updates, err := bot.telegram.GetUpdatesChan(u)
 	if err != nil {
-		return fmt.Errorf("failed to create telegram updates channel: %v", err)
+		return fmt.Errorf("Failed to create Telegram updates channel: %v", err)
 	}
 
 	//go bot.maintain()
 
 	for update := range updates {
 		if err := bot.handleUpdate(&update); err != nil {
-			log.Printf("error: %v", err)
+			log.Errorf("Error: %v", err)
 		}
 	}
-	log.Printf("stopped")
+	log.Infof("Bot stopped")
 	return nil
 }

@@ -1,5 +1,6 @@
 package wingcommander
 
+/*
 // BotConfig struct is used to store run-time configuration
 // information for the bot application.
 type BotConfig struct {
@@ -10,15 +11,16 @@ type BotConfig struct {
 	MonitorRunning bool   `json:"monitorrunning"`
 	HeartBeat      bool   `json:"heartbeat"`
 }
+*/
 
 // TOML Config
 type Config struct {
-	Title  string
-	Bot    botConfig
-	ChatID int64
+	Title string
+	Bot   botConfig
 }
 
 type botConfig struct {
-	Token string
-	Debug bool
+	Token  string
+	ChatID int64
+	Debug  bool
 }

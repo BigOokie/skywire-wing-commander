@@ -10,7 +10,6 @@ type Commands []Command
 
 func (bot *Bot) setCommandHandlers() {
 	for _, command := range commands {
-		//bot.SetCommandHandler(command.Admin, command.Command, command.Handlerfunc)
 		if command.Admin {
 			bot.adminCommandHandlers[command.Command] = command.Handlerfunc
 		} else {
@@ -39,17 +38,17 @@ var commands = Commands{
 		(*Bot).handleCommandStart,
 	},
 	Command{
-		true,
+		false,
 		"stop",
 		(*Bot).handleCommandStop,
 	},
 	Command{
-		true,
+		false,
 		"status",
 		(*Bot).handleCommandStatus,
 	},
 	Command{
-		true,
+		false,
 		"heartbeat",
 		(*Bot).handleCommandHeartBeat,
 	},

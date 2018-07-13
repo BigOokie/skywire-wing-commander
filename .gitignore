@@ -1,4 +1,4 @@
 test.json
 *.pdf
-wc/wc
-wc/wc.toml
+wc/wcbot/wcbot
+wc/wcbot/wc.toml
