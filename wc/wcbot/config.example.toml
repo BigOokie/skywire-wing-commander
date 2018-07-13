@@ -1,0 +1,6 @@
+# Skywire Wing Commander example configuration file
+[telegram]
+apikey = "Your API-Key"
+admin = "Your Telegram nickname"
+chatid = your chatid (integer)
+debug = true

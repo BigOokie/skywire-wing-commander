@@ -1,7 +1,0 @@
-# Example Skywire Wing Commander (swwc) configuration file
-
-title = "Skywire Wing Commander Configuration"
-
-[swwc-bot]
-token = "BotFater-Bot-Token"
-debug = false

@@ -1,26 +1,36 @@
 package wingcommander
 
-/*
-// BotConfig struct is used to store run-time configuration
-// information for the bot application.
-type BotConfig struct {
-	BotToken       string `json:"bot_token"`
-	ChatID         int64  `json:"chat_id"`
-	BotDebug       bool   `json:"botdebug"`
-	ClientFile     string `json:"clientfile"`
-	MonitorRunning bool   `json:"monitorrunning"`
-	HeartBeat      bool   `json:"heartbeat"`
-}
-*/
+import (
+	"github.com/BurntSushi/toml"
+	log "github.com/sirupsen/logrus"
+)
 
 // TOML Config
 type Config struct {
-	Title string
-	Bot   botConfig
+	WingCommander struct {
+		MonitorRunning bool
+		Heartbeat      bool
+	}
+	Telegram struct {
+		APIKey string
+		ChatID int64
+		Admin  string
+		Debug  bool
+	}
 }
 
-type botConfig struct {
-	Token  string
-	ChatID int64
-	Debug  bool
+// ReadConfig will read configuration from the provided TOML config file
+func ReadConfig(filename string) (*Config, error) {
+	var conf Config
+	_, err := toml.DecodeFile(filename, &conf)
+	if err != nil {
+		return nil, err
+	}
+	log.Debugln("ReadConfig:")
+	log.Debugf("apikey = %s", conf.Telegram.APIKey)
+	log.Debugf("chatid = %v", conf.Telegram.ChatID)
+	log.Debugf("admin  = %s", conf.Telegram.Admin)
+	log.Debugf("debug  = %v", conf.Telegram.Debug)
+
+	return &conf, nil
 }

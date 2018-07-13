@@ -1,8 +1,9 @@
 package main
 
 import (
+	"flag"
+
 	"github.com/BigOokie/Skywire-Wing-Commander/wc"
-	"github.com/BurntSushi/toml"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -95,31 +96,6 @@ func checkManagerNodesLoop(m *tgbotapi.Message, monitorStopEvent <-chan bool) {
 	}
 }
 
-func botHeartBeatLoop(m *tgbotapi.Message, monitorStopEvent <-chan bool, interval time.Duration) {
-	ticker := time.NewTicker(time.Hour * interval)
-
-	for {
-		select {
-		case <-ticker.C:
-			sendBotMsg(m, msgStatus, false)
-		case <-monitorStopEvent:
-			return
-		}
-	}
-}
-*/
-
-/*
-// loadConfig will load configuration from the swwc.toml file
-// An example config file is provided in the repo.
-func loadConfig(config wingcommander.Config) {
-	if _, err := toml.DecodeFile("wc.toml", &config); err != nil {
-		log.Panic(err)
-	}
-
-	log.Debugf("Parameter: token = %s", config.Bot.Token)
-	log.Debugf("Parameter: debug = %v", config.Bot.Debug)
-}
 */
 
 func main() {
@@ -128,14 +104,11 @@ func main() {
 	log.Infoln("Skywire Wing Commander Telegram Bot - Starting.")
 	defer log.Infoln("Skywire Wing Commander Telegram Bot - Stopped.")
 
-	var config wingcommander.Config
-	if _, err := toml.DecodeFile("wc.toml", &config); err != nil {
+	configPath := flag.String("config", "config.toml", "Path to the Wing Commander config file")
+	config, err := wingcommander.ReadConfig(*configPath)
+	if err != nil {
 		log.Panic(err)
 	}
-
-	log.Debugf("Parameter: token  = %s", config.Bot.Token)
-	log.Debugf("Parameter: chatid = %v", config.Bot.ChatID)
-	log.Debugf("Parameter: debug  = %v", config.Bot.Debug)
 
 	bot, err := wingcommander.NewBot(config)
 	if err != nil {

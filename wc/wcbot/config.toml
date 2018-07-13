@@ -1,0 +1,6 @@
+# Skywire Wing Commander configuration file
+[telegram]
+apikey = "575938715:AAFA2DLeRe-4iULHYIJvvDUE602pp7_pi8U"
+chatid = 501290519
+admin = "@BigOokie"
+debug = false

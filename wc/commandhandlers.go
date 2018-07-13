@@ -39,7 +39,7 @@ func (bot *Bot) handleCommandStatus(ctx *Context, command, args string) error {
 // Handler for heartbeat command
 func (bot *Bot) handleCommandHeartBeat(ctx *Context, command, args string) error {
 	log.Debug("Handle command /heartbeat")
-	go botHeartBeatLoop(bot, ctx)
+	go botHeartbeatLoop(bot, ctx)
 	return nil
 }
 
@@ -56,7 +56,8 @@ func (bot *Bot) AddGroupMessageHandler(handler MessageHandler) {
 	bot.groupMessageHandlers = append(bot.groupMessageHandlers, handler)
 }
 
-func botHeartBeatLoop(bot *Bot, ctx *Context) { //(m *tgbotapi.Message, monitorStopEvent <-chan bool, interval time.Duration) {
+// Bot Heartbeat Loop
+func botHeartbeatLoop(bot *Bot, ctx *Context) {
 	ticker := time.NewTicker(time.Hour * 1)
 
 	for {

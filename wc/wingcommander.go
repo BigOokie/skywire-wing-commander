@@ -284,7 +284,7 @@ func (bot *Bot) Send(ctx *Context, mode, format, text string) error {
 		msg = tgbotapi.NewMessage(ctx.message.Chat.ID, text)
 		msg.ReplyToMessageID = ctx.message.MessageID
 	case "yell":
-		msg = tgbotapi.NewMessage(bot.config.Bot.ChatID, text)
+		msg = tgbotapi.NewMessage(bot.config.Telegram.ChatID, text)
 	default:
 		return fmt.Errorf("unsupported message mode: %s", mode)
 	}
@@ -326,7 +326,7 @@ func (bot *Bot) Reply(ctx *Context, text string) error {
 }
 
 func (bot *Bot) handleMessage(ctx *Context) error {
-	if (ctx.message.Chat.IsGroup() || ctx.message.Chat.IsSuperGroup()) && ctx.message.Chat.ID == bot.config.Bot.ChatID {
+	if (ctx.message.Chat.IsGroup() || ctx.message.Chat.IsSuperGroup()) && ctx.message.Chat.ID == bot.config.Telegram.ChatID {
 		return bot.handleGroupMessage(ctx)
 	} else if ctx.message.Chat.IsPrivate() {
 		return bot.handlePrivateMessage(ctx)
@@ -336,21 +336,21 @@ func (bot *Bot) handleMessage(ctx *Context) error {
 	}
 }
 
-func NewBot(config Config) (*Bot, error) {
+func NewBot(config *Config) (*Bot, error) {
 	var bot = Bot{
-		config:               &config,
+		config:               config,
 		commandHandlers:      make(map[string]CommandHandler),
 		adminCommandHandlers: make(map[string]CommandHandler),
 	}
 	var err error
 
-	if bot.telegram, err = tgbotapi.NewBotAPI(config.Bot.Token); err != nil {
+	if bot.telegram, err = tgbotapi.NewBotAPI(config.Telegram.APIKey); err != nil {
 		return nil, fmt.Errorf("Failed to initialize Telegram API: %v", err)
 	}
 
-	bot.telegram.Debug = config.Bot.Debug
+	bot.telegram.Debug = config.Telegram.Debug
 
-	chat, err := bot.telegram.GetChat(tgbotapi.ChatConfig{config.Bot.ChatID, ""})
+	chat, err := bot.telegram.GetChat(tgbotapi.ChatConfig{config.Telegram.ChatID, ""})
 	if err != nil {
 		return nil, fmt.Errorf("Failed to get chat info from Telegram: %v", err)
 	}
