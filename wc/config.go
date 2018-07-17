@@ -5,17 +5,24 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-// TOML Config
+// Config structure models the TOML configuration file
 type Config struct {
 	WingCommander struct {
-		MonitorRunning bool
-		Heartbeat      bool
+		MonitorRunning   bool
+		Heartbeat        bool
+		TwoFactorEnabled bool
 	}
 	Telegram struct {
 		APIKey string
 		ChatID int64
 		Admin  string
 		Debug  bool
+	}
+	Monitor struct {
+		Interval       int
+		MaxParallel    uint
+		Timeout        int
+		TimeoutRetries int
 	}
 }
 
@@ -26,11 +33,27 @@ func ReadConfig(filename string) (*Config, error) {
 	if err != nil {
 		return nil, err
 	}
-	log.Debugln("ReadConfig:")
+	log.Debugln("ReadConfig")
+	DebugLogConfig(&conf)
+	return &conf, nil
+}
+
+// DebugLogConfig will log debug information for the passed Config structure
+func DebugLogConfig(conf *Config) {
+	log.Debugln("WingCommander Configs:")
+	log.Debugf("monitorrunning = %v", conf.WingCommander.MonitorRunning)
+	log.Debugf("heartbeat = %v", conf.WingCommander.Heartbeat)
+	log.Debugf("twofactorenabled = %v", conf.WingCommander.TwoFactorEnabled)
+
+	log.Debugln("Telegram Configs:")
 	log.Debugf("apikey = %s", conf.Telegram.APIKey)
 	log.Debugf("chatid = %v", conf.Telegram.ChatID)
 	log.Debugf("admin  = %s", conf.Telegram.Admin)
 	log.Debugf("debug  = %v", conf.Telegram.Debug)
 
-	return &conf, nil
+	log.Debugln("Monitor Configs:")
+	log.Debugf("apikey = %s", conf.Telegram.APIKey)
+	log.Debugf("chatid = %v", conf.Telegram.ChatID)
+	log.Debugf("admin  = %s", conf.Telegram.Admin)
+	log.Debugf("debug  = %v", conf.Telegram.Debug)
 }
