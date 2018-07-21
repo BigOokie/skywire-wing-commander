@@ -21,23 +21,23 @@ const (
 	// About cmd message
 	msgAbout = "*Wing Commander*: A Telegram Bot written in _Go_ designed to help the _Skyfleet_ community monitor and manage their _SkyMiners_ and associated _Nodes_. (" + version + ")\n" +
 		"\n" +
-		"Created by @BigOokie 2018\n" +
-		"GitHub: https://github.com/BigOokie/skywire-wing-commander\n" +
-		"Twitter: https://twitter.com/BigOokie\n" +
+		"*Created by:* @BigOokie 2018\n" +
+		"*GitHub:* https://github.com/BigOokie/skywire-wing-commander\n" +
+		"*Twitter:* https://twitter.com/BigOokie\n" +
 		"\n" +
-		"Donations most welcome 👍\n" +
-		"Skycoin: ES5LccJDhBCK275APmW9tmQNEgiYwTFKQF\n" +
-		"BitCoin: 37rPeTNjosfydkB4nNNN1XKNrrxxfbLcMA\n"
+		"*Donations most welcome* 👍\n" +
+		"*Skycoin:* ES5LccJDhBCK275APmW9tmQNEgiYwTFKQF\n" +
+		"*BitCoin:* 37rPeTNjosfydkB4nNNN1XKNrrxxfbLcMA\n"
 
 	// Status cmd message
 	msgStatus = "*Wing Commander* reporting and ready for duty 👍"
 
 	// Start cmd messages
-	msgMonitorAlreadyStarted = "Wing Commander Active Monitoring has already been started."
-	msgMonitorStart          = "Wing Commander Acrove Monitoring starting..."
+	msgMonitorAlreadyStarted = "*Wing Commander* Active Monitoring has already been started."
+	msgMonitorStart          = "*Wing Commander* Acrove Monitoring starting..."
 
 	// Stop cmd message
-	msgMonitorStop = "Wing Commander Active Monitoring stopping..."
+	msgMonitorStop = "*Wing Commander* Active Monitoring stopping..."
 
 	// Default cmd message (unhandled)
 	msgDefault = "Sorry. I don't know that command."

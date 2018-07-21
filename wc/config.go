@@ -12,6 +12,10 @@ type Config struct {
 		Heartbeat        bool
 		TwoFactorEnabled bool
 	}
+	NodeManager struct {
+		IP   string
+		Port string
+	}
 	Telegram struct {
 		APIKey string
 		ChatID int64
@@ -19,10 +23,7 @@ type Config struct {
 		Debug  bool
 	}
 	Monitor struct {
-		Interval       int
-		MaxParallel    uint
-		Timeout        int
-		TimeoutRetries int
+		Interval int
 	}
 }
 
@@ -33,6 +34,7 @@ func ReadConfig(filename string) (*Config, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	log.Debugln("ReadConfig")
 	DebugLogConfig(&conf)
 	return &conf, nil
@@ -41,19 +43,20 @@ func ReadConfig(filename string) (*Config, error) {
 // DebugLogConfig will log debug information for the passed Config structure
 func DebugLogConfig(conf *Config) {
 	log.Debugln("WingCommander Configs:")
-	log.Debugf("monitorrunning = %v", conf.WingCommander.MonitorRunning)
-	log.Debugf("heartbeat = %v", conf.WingCommander.Heartbeat)
-	log.Debugf("twofactorenabled = %v", conf.WingCommander.TwoFactorEnabled)
+	log.Debugf("  monitorrunning = %v", conf.WingCommander.MonitorRunning)
+	log.Debugf("  heartbeat = %v", conf.WingCommander.Heartbeat)
+	log.Debugf("  twofactorenabled = %v", conf.WingCommander.TwoFactorEnabled)
+
+	log.Debugln("Node Manager Configs:")
+	log.Debugf("  ip = %s", conf.NodeManager.IP)
+	log.Debugf("  port = %s", conf.NodeManager.Port)
 
 	log.Debugln("Telegram Configs:")
-	log.Debugf("apikey = %s", conf.Telegram.APIKey)
-	log.Debugf("chatid = %v", conf.Telegram.ChatID)
-	log.Debugf("admin  = %s", conf.Telegram.Admin)
-	log.Debugf("debug  = %v", conf.Telegram.Debug)
+	log.Debugf("  apikey = %s", conf.Telegram.APIKey)
+	log.Debugf("  chatid = %v", conf.Telegram.ChatID)
+	log.Debugf("  admin  = %s", conf.Telegram.Admin)
+	log.Debugf("  debug  = %v", conf.Telegram.Debug)
 
 	log.Debugln("Monitor Configs:")
-	log.Debugf("apikey = %s", conf.Telegram.APIKey)
-	log.Debugf("chatid = %v", conf.Telegram.ChatID)
-	log.Debugf("admin  = %s", conf.Telegram.Admin)
-	log.Debugf("debug  = %v", conf.Telegram.Debug)
+	log.Debugf("  interval = %v", conf.Monitor.Interval)
 }
