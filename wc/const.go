@@ -37,7 +37,8 @@ const (
 	msgMonitorStart          = "*Wing Commander* Monitoring starting..."
 
 	// Stop cmd message
-	msgMonitorStop = "*Wing Commander* Active Monitoring stopping..."
+	msgMonitorStop       = "*Wing Commander* Active Monitoring stopping..."
+	msgMonitorNotRunning = "*Wing Commander* Active Monitoring is not running..."
 
 	// Default cmd message (unhandled)
 	msgDefault = "Sorry. I don't know that command."
