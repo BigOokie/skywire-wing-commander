@@ -8,6 +8,5 @@ debug = false
 [monitor]
 interval = 5
 
-[nodemanager]
-ip="127.0.0.1"
-port="8000"
+[skymanager]
+address="127.0.0.1:8000"

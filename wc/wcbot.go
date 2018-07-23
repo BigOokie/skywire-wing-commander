@@ -12,6 +12,7 @@ import (
 type Bot struct {
 	config                 *Config
 	telegram               *tgbotapi.BotAPI
+	skyMgrMonitor          *SkyManagerMonitor
 	commandHandlers        map[string]CommandHandler
 	adminCommandHandlers   map[string]CommandHandler
 	privateMessageHandlers []MessageHandler
@@ -343,6 +344,8 @@ func NewBot(config *Config) (*Bot, error) {
 		adminCommandHandlers: make(map[string]CommandHandler),
 	}
 	var err error
+
+	bot.skyMgrMonitor.ManagerAddress = config.SkyManager.Address
 
 	if bot.telegram, err = tgbotapi.NewBotAPI(config.Telegram.APIKey); err != nil {
 		return nil, fmt.Errorf("Failed to initialize Telegram API: %v", err)

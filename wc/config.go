@@ -12,9 +12,8 @@ type Config struct {
 		Heartbeat        bool
 		TwoFactorEnabled bool
 	}
-	NodeManager struct {
-		IP   string
-		Port string
+	SkyManager struct {
+		Address string
 	}
 	Telegram struct {
 		APIKey string
@@ -48,8 +47,7 @@ func DebugLogConfig(conf *Config) {
 	log.Debugf("  twofactorenabled = %v", conf.WingCommander.TwoFactorEnabled)
 
 	log.Debugln("Node Manager Configs:")
-	log.Debugf("  ip = %s", conf.NodeManager.IP)
-	log.Debugf("  port = %s", conf.NodeManager.Port)
+	log.Debugf("  address = %s", conf.SkyManager.Address)
 
 	log.Debugln("Telegram Configs:")
 	log.Debugf("  apikey = %s", conf.Telegram.APIKey)

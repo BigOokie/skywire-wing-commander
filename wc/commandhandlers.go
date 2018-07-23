@@ -21,6 +21,7 @@ func (bot *Bot) handleCommandAbout(ctx *Context, command, args string) error {
 // Handler for start command
 func (bot *Bot) handleCommandStart(ctx *Context, command, args string) error {
 	log.Debug("Handle command /start")
+
 	return nil
 }
 
