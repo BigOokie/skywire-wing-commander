@@ -8,7 +8,7 @@ import (
 // Config structure models the TOML configuration file
 type Config struct {
 	WingCommander struct {
-		MonitorRunning   bool
+		//MonitorRunning   bool
 		Heartbeat        bool
 		TwoFactorEnabled bool
 	}
@@ -42,7 +42,7 @@ func ReadConfig(filename string) (*Config, error) {
 // DebugLogConfig will log debug information for the passed Config structure
 func DebugLogConfig(conf *Config) {
 	log.Debugln("WingCommander Configs:")
-	log.Debugf("  monitorrunning = %v", conf.WingCommander.MonitorRunning)
+	//log.Debugf("  monitorrunning = %v", conf.WingCommander.MonitorRunning)
 	log.Debugf("  heartbeat = %v", conf.WingCommander.Heartbeat)
 	log.Debugf("  twofactorenabled = %v", conf.WingCommander.TwoFactorEnabled)
 

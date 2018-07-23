@@ -22,7 +22,14 @@ func (bot *Bot) handleCommandAbout(ctx *Context, command, args string) error {
 func (bot *Bot) handleCommandStart(ctx *Context, command, args string) error {
 	log.Debug("Handle command /start")
 
-	return nil
+	if bot.skyMgrMonitor.Running {
+		log.Debug(msgMonitorAlreadyStarted)
+		return bot.Send(ctx, "whisper", "markdown", msgMonitorAlreadyStarted)
+	} else {
+		log.Debug(msgMonitorStart)
+		//go bot.skyMgrMonitor.Run(ctx.ctx)
+		return bot.Send(ctx, "whisper", "markdown", msgMonitorStart)
+	}
 }
 
 // Handler for stop command

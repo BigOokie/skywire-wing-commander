@@ -1,6 +1,7 @@
 package wingcommander
 
 import (
+	"context"
 	"fmt"
 	"strconv"
 	"strings"
@@ -22,6 +23,7 @@ type Bot struct {
 type Context struct {
 	message *tgbotapi.Message
 	User    *User
+	ctx     *context.Context
 }
 
 type CommandHandler func(*Bot, *Context, string, string) error

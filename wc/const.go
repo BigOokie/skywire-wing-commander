@@ -34,7 +34,7 @@ const (
 
 	// Start cmd messages
 	msgMonitorAlreadyStarted = "*Wing Commander* Active Monitoring has already been started."
-	msgMonitorStart          = "*Wing Commander* Acrove Monitoring starting..."
+	msgMonitorStart          = "*Wing Commander* Monitoring starting..."
 
 	// Stop cmd message
 	msgMonitorStop = "*Wing Commander* Active Monitoring stopping..."

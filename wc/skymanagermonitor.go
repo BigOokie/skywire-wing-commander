@@ -19,12 +19,14 @@ const (
 // main process when specific events are detected.
 type SkyManagerMonitor struct {
 	ManagerAddress string
+	Running        bool
 }
 
 // NewMonitor creates a SkyManagerMonitor which will monitor the provided managerip.
 func NewMonitor(manageraddress string) *SkyManagerMonitor {
 	return &SkyManagerMonitor{
 		ManagerAddress: manageraddress,
+		Running:        false,
 	}
 }
 
