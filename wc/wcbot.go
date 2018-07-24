@@ -1,7 +1,6 @@
 package wingcommander
 
 import (
-	"context"
 	"fmt"
 	"strconv"
 	"strings"
@@ -10,6 +9,7 @@ import (
 	"gopkg.in/telegram-bot-api.v4"
 )
 
+// Bot provides management of the interface to the Telegram Bot
 type Bot struct {
 	config                 *Config
 	telegram               *tgbotapi.BotAPI
@@ -20,15 +20,19 @@ type Bot struct {
 	groupMessageHandlers   []MessageHandler
 }
 
-type Context struct {
+// BotContext provides context for Bot Messages
+type BotContext struct {
 	message *tgbotapi.Message
 	User    *User
-	ctx     *context.Context
 }
 
-type CommandHandler func(*Bot, *Context, string, string) error
-type MessageHandler func(*Bot, *Context, string) (bool, error)
+// CommandHandler provides an interface specification for command handlers
+type CommandHandler func(*Bot, *BotContext, string, string) error
 
+// MessageHandler provides an interface specification for message handlers
+type MessageHandler func(*Bot, *BotContext, string) (bool, error)
+
+// User is a structure to model the Telegram Bot user that is being interacted with
 type User struct {
 	ID        int    `json:"id"`
 	UserName  string `db:"username" json:"username,omitempty"`
@@ -117,7 +121,7 @@ func (bot *Bot) handleForwardedMessageFrom(ctx *Context, id int) error {
 }
 */
 
-func (bot *Bot) handleCommand(ctx *Context, command, args string) error {
+func (bot *Bot) handleCommand(ctx *BotContext, command, args string) error {
 	if !ctx.User.Banned {
 		handler, found := bot.commandHandlers[command]
 		if found {
@@ -135,7 +139,7 @@ func (bot *Bot) handleCommand(ctx *Context, command, args string) error {
 	return fmt.Errorf("command not found: %s", command)
 }
 
-func (bot *Bot) handlePrivateMessage(ctx *Context) error {
+func (bot *Bot) handlePrivateMessage(ctx *BotContext) error {
 	/*
 		if ctx.User.Admin {
 			// let admin force add users by forwarding their messages
@@ -230,7 +234,7 @@ func (bot *Bot) removeMyName(text string) (string, bool) {
 	return strings.Join(words, " "), removed
 }
 
-func (bot *Bot) isReplyToMe(ctx *Context) bool {
+func (bot *Bot) isReplyToMe(ctx *BotContext) bool {
 	if re := ctx.message.ReplyToMessage; re != nil {
 		if u := re.From; u != nil {
 			if u.ID == bot.telegram.Self.ID {
@@ -241,7 +245,7 @@ func (bot *Bot) isReplyToMe(ctx *Context) bool {
 	return false
 }
 
-func (bot *Bot) handleGroupMessage(ctx *Context) error {
+func (bot *Bot) handleGroupMessage(ctx *BotContext) error {
 	var gerr error
 	/*
 		if u := ctx.message.NewChatMembers; u != nil {
@@ -278,7 +282,7 @@ func (bot *Bot) handleGroupMessage(ctx *Context) error {
 	return gerr
 }
 
-func (bot *Bot) Send(ctx *Context, mode, format, text string) error {
+func (bot *Bot) Send(ctx *BotContext, mode, format, text string) error {
 	var msg tgbotapi.MessageConfig
 	switch mode {
 	case "whisper":
@@ -313,7 +317,7 @@ func (bot *Bot) ReplyAboutEvent(ctx *Context, text string, event *Event) error {
 }
 */
 
-func (bot *Bot) Ask(ctx *Context, text string) error {
+func (bot *Bot) Ask(ctx *BotContext, text string) error {
 	msg := tgbotapi.NewMessage(ctx.message.Chat.ID, text)
 	msg.ReplyMarkup = tgbotapi.ForceReply{
 		ForceReply: true,
@@ -324,11 +328,11 @@ func (bot *Bot) Ask(ctx *Context, text string) error {
 	return err
 }
 
-func (bot *Bot) Reply(ctx *Context, text string) error {
+func (bot *Bot) Reply(ctx *BotContext, text string) error {
 	return bot.Send(ctx, "reply", "text", text)
 }
 
-func (bot *Bot) handleMessage(ctx *Context) error {
+func (bot *Bot) handleMessage(ctx *BotContext) error {
 	if (ctx.message.Chat.IsGroup() || ctx.message.Chat.IsSuperGroup()) && ctx.message.Chat.ID == bot.config.Telegram.ChatID {
 		return bot.handleGroupMessage(ctx)
 	} else if ctx.message.Chat.IsPrivate() {
@@ -347,7 +351,7 @@ func NewBot(config *Config) (*Bot, error) {
 	}
 	var err error
 
-	bot.skyMgrMonitor.ManagerAddress = config.SkyManager.Address
+	bot.skyMgrMonitor = NewMonitor(config.SkyManager.Address)
 
 	if bot.telegram, err = tgbotapi.NewBotAPI(config.Telegram.APIKey); err != nil {
 		return nil, fmt.Errorf("Failed to initialize Telegram API: %v", err)
@@ -377,7 +381,7 @@ func (bot *Bot) handleUpdate(update *tgbotapi.Update) error {
 		return nil
 	}
 
-	ctx := Context{message: update.Message}
+	ctx := BotContext{message: update.Message}
 
 	if u := ctx.message.From; u != nil {
 		ctx.User = &User{

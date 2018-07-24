@@ -1,57 +1,69 @@
 package wingcommander
 
 import (
+	"context"
 	"time"
 
 	log "github.com/sirupsen/logrus"
 )
 
 // Handler for help command
-func (bot *Bot) handleCommandHelp(ctx *Context, command, args string) error {
+func (bot *Bot) handleCommandHelp(ctx *BotContext, command, args string) error {
 	log.Debug("Handle command /help")
 	return bot.Send(ctx, "whisper", "markdown", msgHelp)
 }
 
 // Handler for about command
-func (bot *Bot) handleCommandAbout(ctx *Context, command, args string) error {
+func (bot *Bot) handleCommandAbout(ctx *BotContext, command, args string) error {
 	log.Debug("Handle command /about")
 	return bot.Send(ctx, "whisper", "markdown", msgAbout)
 }
 
 // Handler for start command
-func (bot *Bot) handleCommandStart(ctx *Context, command, args string) error {
+func (bot *Bot) handleCommandStart(ctx *BotContext, command, args string) error {
 	log.Debug("Handle command /start")
 
-	if bot.skyMgrMonitor.Running {
+	//if bot.skyMgrMonitor.Running {
+	if bot.skyMgrMonitor.cancelFunc != nil {
 		log.Debug(msgMonitorAlreadyStarted)
 		return bot.Send(ctx, "whisper", "markdown", msgMonitorAlreadyStarted)
 	} else {
 		log.Debug(msgMonitorStart)
-		//go bot.skyMgrMonitor.Run(ctx.ctx)
+		cancelContext, cancelFunc := context.WithCancel(context.Background())
+		bot.skyMgrMonitor.cancelFunc = cancelFunc
+		go bot.skyMgrMonitor.Run(cancelContext)
 		return bot.Send(ctx, "whisper", "markdown", msgMonitorStart)
 	}
 }
 
 // Handler for stop command
-func (bot *Bot) handleCommandStop(ctx *Context, command, args string) error {
+func (bot *Bot) handleCommandStop(ctx *BotContext, command, args string) error {
 	log.Debug("Handle command /stop")
-	return nil
+	//if bot.skyMgrMonitor.Running {
+	if bot.skyMgrMonitor.cancelFunc != nil {
+		log.Debug(msgMonitorAlreadyStarted)
+		return bot.Send(ctx, "whisper", "markdown", msgMonitorStop)
+	} else {
+		log.Debug(msgMonitorStart)
+		bot.skyMgrMonitor.cancelFunc()
+		return bot.Send(ctx, "whisper", "markdown", msgMonitorNotRunning)
+	}
 }
 
 // Handler for status command
-func (bot *Bot) handleCommandStatus(ctx *Context, command, args string) error {
+func (bot *Bot) handleCommandStatus(ctx *BotContext, command, args string) error {
 	log.Debug("Handle command /status")
 	return bot.Send(ctx, "whisper", "markdown", msgStatus)
 }
 
 // Handler for heartbeat command
-func (bot *Bot) handleCommandHeartBeat(ctx *Context, command, args string) error {
+func (bot *Bot) handleCommandHeartBeat(ctx *BotContext, command, args string) error {
 	log.Debug("Handle command /heartbeat")
 	go botHeartbeatLoop(bot, ctx)
 	return nil
 }
 
-func (bot *Bot) handleDirectMessageFallback(ctx *Context, text string) (bool, error) {
+func (bot *Bot) handleDirectMessageFallback(ctx *BotContext, text string) (bool, error) {
 	log.Debug("Ignoring unknown command: %s", text)
 	return true, bot.Reply(ctx, "Unknown command.")
 }
@@ -65,7 +77,7 @@ func (bot *Bot) AddGroupMessageHandler(handler MessageHandler) {
 }
 
 // Bot Heartbeat Loop
-func botHeartbeatLoop(bot *Bot, ctx *Context) {
+func botHeartbeatLoop(bot *Bot, ctx *BotContext) {
 	ticker := time.NewTicker(time.Hour * 1)
 
 	for {
