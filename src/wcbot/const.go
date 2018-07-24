@@ -1,4 +1,4 @@
-package wingcommander
+package main
 
 // Define constants used by the application
 const (
@@ -19,16 +19,17 @@ const (
 		"Note: I am bound to _this_ chat."
 
 	// About cmd message
-	msgAbout = "*Wing Commander*: A Telegram Bot written in *Go* designed to help the *Skyfleet* community monitor and manage their *SkyMiners*. (" + version + ")\n" +
+	msgAbout = "*Wing Commander (" + version + ")*\n" +
+		"A Telegram Bot written in *Go* designed to help the *Skyfleet* community monitor and manage their *SkyMiners*.\n" +
 		"\n" +
 		"*Created by:* @BigOokie 2018\n" +
 		"*GitHub:* https://github.com/BigOokie/skywire-wing-commander\n" +
 		"*Twitter:* https://twitter.com/BigOokie\n" +
 		"\n" +
-		"This is an OpenSource, community project.\n" +
-		"This is not an *Official SkyCoin* project.\n" +
+		"Issues and feature requests must be logged on GitHub.\n" +
+		"https://github.com/BigOokie/Skywire-Wing-Commander/issues\n" +
 		"\n" +
-		"Please log support issues with the *Wing Commander* project on GitHub.\n" +
+		"*SkyCoin*: https://www.skycoin.net/\n" +
 		"\n" +
 		"*Donations most welcome* 👍\n" +
 		"*Skycoin:* ES5LccJDhBCK275APmW9tmQNEgiYwTFKQF\n" +
@@ -45,6 +46,9 @@ const (
 	msgMonitorStop       = "*Wing Commander* Sky Manager Monitoring stopping..."
 	msgMonitorStopped    = "*Wing Commander* Sky Manager Monitoring stopped..."
 	msgMonitorNotRunning = "*Wing Commander* Sky Manager Monitoring is not running..."
+
+	// Heartbeat cmd messages
+	msgHeartBeatStarted = "*Wing Commander* Heatbeat notifications started. Interval %v"
 
 	// Default cmd message (unhandled)
 	msgDefault = "Sorry. I don't know that command."
