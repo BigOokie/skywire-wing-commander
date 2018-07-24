@@ -45,6 +45,7 @@ func (m *SkyManagerMonitor) Run(runctx context.Context, pollInt time.Duration) {
 	for {
 		select {
 		case <-ticker.C:
+			newresp = m.getAllNodes()
 			if newresp != oldresp {
 				log.Debugln(newresp)
 				oldresp = newresp
@@ -79,7 +80,7 @@ type connectedNode struct {
 
 func (m *SkyManagerMonitor) getAllNodes() string {
 	var respstr string
-	log.Debugln("SkyManagerMonitor.getAllNodes")
+	//log.Debugln("SkyManagerMonitor.getAllNodes")
 	apiURL := fmt.Sprintf("http://%s/%s", m.ManagerAddress, managerAPIGetAllConnectedNodes)
 	resp, err := http.Get(apiURL)
 	if err != nil {
