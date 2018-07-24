@@ -1,5 +1,6 @@
 ## Binary
-wcbot
+src/wcbot/wcbot
 
 ## Local config
 config.toml
+
