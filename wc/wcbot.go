@@ -396,10 +396,10 @@ func (bot *Bot) handleUpdate(update *tgbotapi.Update) error {
 }
 
 func (bot *Bot) Start() error {
-	u := tgbotapi.NewUpdate(0)
-	u.Timeout = 60
+	update := tgbotapi.NewUpdate(0)
+	update.Timeout = 60
 
-	updates, err := bot.telegram.GetUpdatesChan(u)
+	updates, err := bot.telegram.GetUpdatesChan(update)
 	if err != nil {
 		return fmt.Errorf("Failed to create Telegram updates channel: %v", err)
 	}

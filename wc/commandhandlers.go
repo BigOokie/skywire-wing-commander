@@ -23,15 +23,14 @@ func (bot *Bot) handleCommandAbout(ctx *BotContext, command, args string) error 
 func (bot *Bot) handleCommandStart(ctx *BotContext, command, args string) error {
 	log.Debug("Handle command /start")
 
-	//if bot.skyMgrMonitor.Running {
-	if bot.skyMgrMonitor.cancelFunc != nil {
+	if bot.skyMgrMonitor.IsRunning() {
 		log.Debug(msgMonitorAlreadyStarted)
 		return bot.Send(ctx, "whisper", "markdown", msgMonitorAlreadyStarted)
 	} else {
 		log.Debug(msgMonitorStart)
 		cancelContext, cancelFunc := context.WithCancel(context.Background())
-		bot.skyMgrMonitor.cancelFunc = cancelFunc
-		go bot.skyMgrMonitor.Run(cancelContext)
+		bot.skyMgrMonitor.CancelFunc = cancelFunc
+		go bot.skyMgrMonitor.Run(cancelContext, bot.config.Monitor.IntervalSec)
 		return bot.Send(ctx, "whisper", "markdown", msgMonitorStart)
 	}
 }
@@ -39,13 +38,15 @@ func (bot *Bot) handleCommandStart(ctx *BotContext, command, args string) error 
 // Handler for stop command
 func (bot *Bot) handleCommandStop(ctx *BotContext, command, args string) error {
 	log.Debug("Handle command /stop")
-	//if bot.skyMgrMonitor.Running {
-	if bot.skyMgrMonitor.cancelFunc != nil {
-		log.Debug(msgMonitorAlreadyStarted)
+
+	if bot.skyMgrMonitor.IsRunning() {
+		log.Debug(msgMonitorStop)
+		bot.skyMgrMonitor.CancelFunc()
+		bot.skyMgrMonitor.CancelFunc = nil
+		log.Debug(msgMonitorStopped)
 		return bot.Send(ctx, "whisper", "markdown", msgMonitorStop)
 	} else {
-		log.Debug(msgMonitorStart)
-		bot.skyMgrMonitor.cancelFunc()
+		log.Debug(msgMonitorNotRunning)
 		return bot.Send(ctx, "whisper", "markdown", msgMonitorNotRunning)
 	}
 }
@@ -78,7 +79,7 @@ func (bot *Bot) AddGroupMessageHandler(handler MessageHandler) {
 
 // Bot Heartbeat Loop
 func botHeartbeatLoop(bot *Bot, ctx *BotContext) {
-	ticker := time.NewTicker(time.Hour * 1)
+	ticker := time.NewTicker(time.Minute * bot.config.Monitor.HeartbeatIntMin)
 
 	for {
 		select {

@@ -1,4 +1,4 @@
-test.json
 *.pdf
 wc/wcbot/wcbot
 wc/wcbot/wc.toml
+wc/wcbot/config.toml

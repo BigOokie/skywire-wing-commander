@@ -6,7 +6,8 @@ admin = "@BigOokie"
 debug = false
 
 [monitor]
-interval = 5
+intervalsec = 2
+heatbeatintmin = 60
 
 [skymanager]
 address="127.0.0.1:8000"

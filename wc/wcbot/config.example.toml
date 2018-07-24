@@ -6,7 +6,8 @@ admin = "YOUR TELEGRAM USERID HERE"
 debug = false
 
 [monitor]
-interval = 2
+intervalsec = 2
+heatbeatintmin = 60
 
 [skymanager]
 address="127.0.0.1:8000"

@@ -1,6 +1,8 @@
 package wingcommander
 
 import (
+	"time"
+
 	"github.com/BurntSushi/toml"
 	log "github.com/sirupsen/logrus"
 )
@@ -8,8 +10,6 @@ import (
 // Config structure models the TOML configuration file
 type Config struct {
 	WingCommander struct {
-		//MonitorRunning   bool
-		Heartbeat        bool
 		TwoFactorEnabled bool
 	}
 	SkyManager struct {
@@ -22,7 +22,8 @@ type Config struct {
 		Debug  bool
 	}
 	Monitor struct {
-		Interval int
+		IntervalSec     time.Duration
+		HeartbeatIntMin time.Duration
 	}
 }
 
@@ -42,8 +43,6 @@ func ReadConfig(filename string) (*Config, error) {
 // DebugLogConfig will log debug information for the passed Config structure
 func DebugLogConfig(conf *Config) {
 	log.Debugln("WingCommander Configs:")
-	//log.Debugf("  monitorrunning = %v", conf.WingCommander.MonitorRunning)
-	log.Debugf("  heartbeat = %v", conf.WingCommander.Heartbeat)
 	log.Debugf("  twofactorenabled = %v", conf.WingCommander.TwoFactorEnabled)
 
 	log.Debugln("Node Manager Configs:")
@@ -56,5 +55,6 @@ func DebugLogConfig(conf *Config) {
 	log.Debugf("  debug  = %v", conf.Telegram.Debug)
 
 	log.Debugln("Monitor Configs:")
-	log.Debugf("  interval = %v", conf.Monitor.Interval)
+	log.Debugf("  intervalsec = %v", time.Second*conf.Monitor.IntervalSec)
+	log.Debugf("  heartbeatintmin = %v", time.Minute*conf.Monitor.HeartbeatIntMin)
 }
