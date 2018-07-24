@@ -1,4 +1,5 @@
-*.pdf
-wc/wcbot/wcbot
-wc/wcbot/wc.toml
-wc/wcbot/config.toml
+## Binary
+wcbot
+
+## Local config
+config.toml
