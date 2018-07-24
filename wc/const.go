@@ -30,15 +30,15 @@ const (
 		"*BitCoin:* 37rPeTNjosfydkB4nNNN1XKNrrxxfbLcMA\n"
 
 	// Status cmd message
-	msgStatus = "*Wing Commander* reporting and ready for duty 👍"
+	msgStatus = "*Wing Commander* Ready and reporting for duty 👍"
 
 	// Start cmd messages
-	msgMonitorAlreadyStarted = "*Wing Commander* Active Monitoring has already been started."
-	msgMonitorStart          = "*Wing Commander* Monitoring starting..."
+	msgMonitorAlreadyStarted = "*Wing Commander* Sky Manager Monitoring has already been started."
+	msgMonitorStart          = "*Wing Commander* Sky Manager Monitoring starting..."
 
 	// Stop cmd message
-	msgMonitorStop       = "*Wing Commander* Active Monitoring stopping..."
-	msgMonitorNotRunning = "*Wing Commander* Active Monitoring is not running..."
+	msgMonitorStop       = "*Wing Commander* Sky Manager Monitoring stopping..."
+	msgMonitorNotRunning = "*Wing Commander* Sky Manager Monitoring is not running..."
 
 	// Default cmd message (unhandled)
 	msgDefault = "Sorry. I don't know that command."
