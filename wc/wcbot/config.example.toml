@@ -1,6 +1,12 @@
 # Skywire Wing Commander example configuration file
 [telegram]
-apikey = "Your API-Key"
-admin = "Your Telegram nickname"
-chatid = your chatid (integer)
-debug = true
+apikey = "YOUR-BOT-API-KEY-HERE"
+chatid = "YOUR-PRIVATE-BOT-CHATID-HERE"
+admin = "YOUR TELEGRAM USERID HERE"
+debug = false
+
+[monitor]
+interval = 2
+
+[skymanager]
+address="127.0.0.1:8000"
