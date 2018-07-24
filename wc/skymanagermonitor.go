@@ -19,24 +19,24 @@ const (
 // main process when specific events are detected.
 type SkyManagerMonitor struct {
 	ManagerAddress string
-	Running        bool
+	cancelFunc     func()
 }
 
 // NewMonitor creates a SkyManagerMonitor which will monitor the provided managerip.
 func NewMonitor(manageraddress string) *SkyManagerMonitor {
 	return &SkyManagerMonitor{
 		ManagerAddress: manageraddress,
-		Running:        false,
+		cancelFunc:     nil,
 	}
 }
 
 // Run starts the SkyManagerMonitor.
 // If `ctx` is not nil, the monitor will listen to ctx.Done() and stop monitoring
 // when it recieves the signal.
-func (m *SkyManagerMonitor) Run(ctx context.Context) {
+func (m *SkyManagerMonitor) Run(runctx context.Context) {
 	var done <-chan struct{}
-	if ctx != nil {
-		done = ctx.Done()
+	if runctx != nil {
+		done = runctx.Done()
 	}
 
 	ticker := time.NewTicker(time.Second * 10)
@@ -44,10 +44,12 @@ func (m *SkyManagerMonitor) Run(ctx context.Context) {
 	for {
 		select {
 		case <-ticker.C:
+			//m.getGetAllNodesList(cns, err)
 			//msgText := m.getGetAllNodes()
 			//sendBotMsg(m, msgText, false)
 			return
 		case <-done:
+			//m.Running = false
 			return
 		}
 	}
