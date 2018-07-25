@@ -66,8 +66,9 @@ func (bot *Bot) handleCommandHeartBeat(ctx *BotContext, command, args string) er
 }
 
 func (bot *Bot) handleDirectMessageFallback(ctx *BotContext, text string) (bool, error) {
-	log.Debug("Ignoring unknown command: %s", text)
-	return true, bot.Reply(ctx, "Unknown command.")
+	errmsg := fmt.Sprintf("Sorry, I do not chat - I only take commands. %s is not a command.\n\n%s", text, msgHelpShort)
+	log.Debugf(errmsg)
+	return true, bot.Reply(ctx, "markdown", errmsg)
 }
 
 func (bot *Bot) AddPrivateMessageHandler(handler MessageHandler) {

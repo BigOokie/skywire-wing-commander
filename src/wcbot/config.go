@@ -35,12 +35,13 @@ func ReadConfig(filename string) (*Config, error) {
 		return nil, err
 	}
 
-	log.Debugln("ReadConfig")
-	DebugLogConfig(&conf)
+	log.Debugln("Reading config.")
 
 	// Adjust time durations for interval configurations
 	conf.Monitor.IntervalSec = time.Second * conf.Monitor.IntervalSec
 	conf.Monitor.HeartbeatIntMin = time.Minute * conf.Monitor.HeartbeatIntMin
+
+	DebugLogConfig(&conf)
 
 	return &conf, nil
 }

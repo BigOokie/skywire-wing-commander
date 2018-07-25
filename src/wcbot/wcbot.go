@@ -136,7 +136,7 @@ func (bot *Bot) handleCommand(ctx *BotContext, command, args string) error {
 		}
 	}
 
-	return fmt.Errorf("command not found: %s", command)
+	return fmt.Errorf("Command not found: %s", command)
 }
 
 func (bot *Bot) handlePrivateMessage(ctx *BotContext) error {
@@ -155,8 +155,8 @@ func (bot *Bot) handlePrivateMessage(ctx *BotContext) error {
 		cmd, args := ctx.message.Command(), ctx.message.CommandArguments()
 		err := bot.handleCommand(ctx, cmd, args)
 		if err != nil {
-			log.Printf("command '/%s %s' failed: %v", cmd, args, err)
-			return bot.Reply(ctx, fmt.Sprintf("command failed: %v", err))
+			log.Debugf("Command: '/%s %s' failed: %v", cmd, args, err)
+			return bot.Reply(ctx, "markdown", fmt.Sprintf("Command failed: %v", err))
 		}
 		return nil
 	}
@@ -328,8 +328,8 @@ func (bot *Bot) Ask(ctx *BotContext, text string) error {
 	return err
 }
 
-func (bot *Bot) Reply(ctx *BotContext, text string) error {
-	return bot.Send(ctx, "reply", "text", text)
+func (bot *Bot) Reply(ctx *BotContext, format, text string) error {
+	return bot.Send(ctx, "reply", format, text)
 }
 
 func (bot *Bot) handleMessage(ctx *BotContext) error {

@@ -18,6 +18,14 @@ const (
 		"\n" +
 		"Note: I am bound to _this_ chat."
 
+	msgHelpShort = "*Usage:*\n" +
+		"- /help - show this message\n" +
+		"- /about - show information and credits about my creator and any contributors\n" +
+		"- /status - ask me how I'm going.. and if I'm still running\n" +
+		"- /heartbeat - ask me to send you a notification every 2hrs to let you know I’m still running\n" +
+		"- /start - start me activly monitoring your SkyMiner. Once started, I will send notifications to you for events that occur\n" +
+		"- /stop - stop me monitoring your SkyMiner. Once stopped, I won't send any more notifications\n"
+
 	// About cmd message
 	msgAbout = "*Wing Commander (" + version + ")*\n" +
 		"A Telegram Bot written in *Go* designed to help the *Skyfleet* community monitor and manage their *SkyMiners*.\n" +
