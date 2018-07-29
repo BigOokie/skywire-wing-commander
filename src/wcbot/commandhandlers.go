@@ -65,8 +65,14 @@ func (bot *Bot) handleCommandHeartBeat(ctx *BotContext, command, args string) er
 	return bot.Send(ctx, "whisper", "markdown", fmt.Sprintf(msgHeartBeatStarted, bot.config.Monitor.HeartbeatIntMin))
 }
 
+// Handler for licences command
+func (bot *Bot) handleCommandLicences(ctx *BotContext, command, args string) error {
+	log.Debug("Handle command /licences")
+	return bot.Send(ctx, "whisper", "markdown", msgHandleLicences)
+}
+
 func (bot *Bot) handleDirectMessageFallback(ctx *BotContext, text string) (bool, error) {
-	errmsg := fmt.Sprintf("Sorry, I do not chat - I only take commands. %s is not a command.\n\n%s", text, msgHelpShort)
+	errmsg := fmt.Sprintf("Sorry, I only take commands. '%s' is not a command.\n\n%s", text, msgHelpShort)
 	log.Debugf(errmsg)
 	return true, bot.Reply(ctx, "markdown", errmsg)
 }

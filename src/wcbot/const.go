@@ -34,8 +34,7 @@ const (
 		"*GitHub:* https://github.com/BigOokie/skywire-wing-commander\n" +
 		"*Twitter:* https://twitter.com/BigOokie\n" +
 		"\n" +
-		"Issues and feature requests must be logged on GitHub.\n" +
-		"https://github.com/BigOokie/Skywire-Wing-Commander/issues\n" +
+		"Issues and feature requests must be logged as issues on [GitHub](https://github.com/BigOokie/Skywire-Wing-Commander/issues)\n" +
 		"\n" +
 		"*SkyCoin*: https://www.skycoin.net/\n" +
 		"\n" +
@@ -57,6 +56,13 @@ const (
 
 	// Heartbeat cmd messages
 	msgHeartBeatStarted = "*Wing Commander* Heatbeat notifications started. Interval %v"
+
+	// Licences cmd messages
+	msgHandleLicences = "*Wing Commander* Licence Attribution\n" +
+		"\n" +
+		"**Images and Icons**\n" +
+		"- 'Skycoin-Cloud-White@1x.png' by the [SkyCoin Project](https://skycoin.net)\n" +
+		"- 'Military Rank' by Ilsur Aptukov from the [Noun Project](https://thenounproject.com/term/military-rank/19966)\n"
 
 	// Default cmd message (unhandled)
 	msgDefault = "Sorry. I don't know that command."
