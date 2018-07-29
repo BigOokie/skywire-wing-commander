@@ -9,6 +9,12 @@
 
 [![Build Status](https://travis-ci.org/BigOokie/Skywire-Wing-Commander.svg?branch=dev)](https://travis-ci.org/BigOokie/Skywire-Wing-Commander)
 
+## Credits
+Credits and attributions can be found [here](CREDITS.md).
+
+## Change Log
+A full list of all changes can be found [here](CHANGELOG.md)
+
 ## Overview
 Skywire Wing Commander is a Telegram Bot written in Go designed to help the [Skyfleet](https://skycoin.net) community monitor and manage their SkyMiners and associated Nodes.
 
