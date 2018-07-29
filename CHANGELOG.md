@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - TOML based configuration. A valid `config.toml` file is required for the application to start. An example reference configuration file is provided (`config.toml.example`)
 - Added a formal changelog (based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)), and document version history.
+- Added `/licences` command to allow users to query the Bot for licence attributions.
 
 ### Changed
 - Changed versioning. This project now adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html). Note that versions prior to this do not follow formal Semantic Versioning.
