@@ -4,5 +4,3 @@ src/wcbot/wcbot
 ## Local config
 config.toml
 
-## Ignore local assets folder
-assets/*
