@@ -35,6 +35,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Support for Official Sky Miner (running the official OrangePi images). The Official Miner uses different file locations for `Manager` configuration files (when compared to DIY Miners). Specifically the app was monitoring for changes in the `clients.json` file.
 - Telegram status notifications now include count of connections by type (and directions - incomming or outgoing).
+### Changed
+- Major refactor of code base to redesign approach.
 
 ### Deprecated
 ### Removed
