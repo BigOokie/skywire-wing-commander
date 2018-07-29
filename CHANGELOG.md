@@ -49,6 +49,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Support `botdebug` command line parameter. Allows debugging of the Telegram Bot API interface to be enabled (off by default).
 - Support for `Manager` connection status monitoring (via `clients.json` file) on SkyCoin Miners running the non-official DIY platforms (such as Raspberry Pi). Official Miners are not supported at this stage.
 - Bot will send raw JSON dump of the `clients.json` file from the SkyMiner `Manager` when ever this file changes.
+- Added `CREDITS.md` to record licencing and attribution for licenced and derivative works.
+- Added Icon: `SKY_RANK_WingCommander.png` (not currently used). Credit Noun Project for derivative work.
+- Added Icon: `WingCommanderLogo.png`. Credit SkyCoin project for derivative work.
 
 ### Changed
 ### Deprecated
