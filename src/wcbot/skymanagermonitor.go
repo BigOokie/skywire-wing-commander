@@ -15,6 +15,16 @@ const (
 	managerAPIGetAllConnectedNodes = "/conn/getAll"
 )
 
+// connectedNode structure stores of JSON response from /conn/getAll API
+type connectedNode struct {
+	Key         string `json:"key"`
+	Conntype    string `json:"type"`
+	SendBytes   int    `json:"send_bytes"`
+	RecvBytes   int    `json:"recv_bytes"`
+	LastAckTime int    `json:"last_ack_time"`
+	StartTime   int    `json:"start_time"`
+}
+
 // Defines an in-memory slice (dynamic array) based on the connectedNode struct
 type connectedNodeSlice []connectedNode
 
@@ -42,18 +52,35 @@ func (m *SkyManagerMonitor) Run(runctx context.Context, pollInt time.Duration) {
 
 	ticker := time.NewTicker(pollInt)
 
-	var oldresp, newresp string
+	//var oldresp, newresp string
+	var oldcns connectedNodeSlice
 
 	for {
 		select {
 		case <-ticker.C:
-			newresp = m.getAllNodes()
-			if newresp != oldresp {
-				log.Debugln(newresp)
-				oldresp = newresp
-			} else {
-				log.Debugln("SkyManagerMonitor: No change.")
+
+			newcns, err := m.getAllNodesList()
+			if err != nil {
+				log.Debugln(err)
 			}
+
+			if len(newcns) != len(oldcns) {
+				log.Debugf("SkyManagerMonitor: Connected Node List Changed (Old: %v, New: %v)", len(oldcns), len(newcns))
+				log.Debugln(newcns)
+				oldcns = newcns
+			} else {
+				log.Debugln("SkyManagerMonitor: Connected Node List Unchanged.")
+			}
+
+			/*
+				newresp = m.getAllNodesStr()
+				if newresp != oldresp {
+					log.Debugln(newresp)
+					oldresp = newresp
+				} else {
+					log.Debugln("SkyManagerMonitor: No change.")
+				}
+			*/
 		case <-runctx.Done():
 			log.Debugln("SkyManagerMonitor - Done Event.")
 			return
@@ -67,19 +94,10 @@ func (m *SkyManagerMonitor) IsRunning() bool {
 	return m.CancelFunc != nil
 }
 
-// connectedNode structure stores JSON response from /conn/getAll API
-type connectedNode struct {
-	Key         string `json:"key"`
-	Conntype    string `json:"type"`
-	SendBytes   int    `json:"send_bytes"`
-	RecvBytes   int    `json:"recv_bytes"`
-	LastAckTime int    `json:"last_ack_time"`
-	StartTime   int    `json:"start_time"`
-}
-
-func (m *SkyManagerMonitor) getAllNodes() string {
+// getAllNodesStr requests the list of connected Nodes from the Manager and returns the raw JSON response as a string
+func (m *SkyManagerMonitor) getAllNodesStr() string {
 	var respstr string
-	//log.Debugln("SkyManagerMonitor.getAllNodes")
+	log.Debugln("SkyManagerMonitor.getAllNodesStr")
 	apiURL := fmt.Sprintf("http://%s/%s", m.ManagerAddress, managerAPIGetAllConnectedNodes)
 	resp, err := http.Get(apiURL)
 	if err != nil {
@@ -95,28 +113,19 @@ func (m *SkyManagerMonitor) getAllNodes() string {
 	return respstr
 }
 
-func (m *SkyManagerMonitor) getAllNodesList() (cns map[string]connectedNodeSlice, err error) {
+func (m *SkyManagerMonitor) getAllNodesList() (cns connectedNodeSlice, err error) {
 	log.Debugln("SkyManagerMonitor.getAllNodesList")
 	apiURL := fmt.Sprintf("http://%s/%s", m.ManagerAddress, managerAPIGetAllConnectedNodes)
+	//apiURL := fmt.Sprintf("http://%s/%s", "discovery.skycoin.net:8001", managerAPIGetAllConnectedNodes)
 	resp, err := http.Get(apiURL)
-	if err != nil {
-		cns = nil
-		log.Error(err)
-		return
-	}
 
 	defer resp.Body.Close()
+
 	respbuf, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		cns = nil
-		log.Error(err)
 		return
 	}
 
-	cns = make(map[string]connectedNodeSlice)
 	err = json.Unmarshal(respbuf, &cns)
-	if err != nil {
-		return
-	}
 	return
 }
