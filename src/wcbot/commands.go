@@ -52,9 +52,11 @@ var commands = Commands{
 		"heartbeat",
 		(*Bot).handleCommandHeartBeat,
 	},
-	Command{
-		false,
-		"licences",
-		(*Bot).handleCommandLicences,
-	},
+	/*
+		Command{
+			false,
+			"licences",
+			(*Bot).handleCommandLicences,
+		},
+	*/
 }

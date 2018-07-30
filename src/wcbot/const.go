@@ -10,6 +10,7 @@ const (
 		"*Usage:*\n" +
 		"- /help - show this message\n" +
 		"- /about - show information and credits about my creator and any contributors\n" +
+		//"- /licences - show licences attribution for original and derived works used by this project\n" +
 		"- /status - ask me how I'm going.. and if I'm still running\n" +
 		"- /heartbeat - ask me to send you a notification every 2hrs to let you know I’m still running\n" +
 		"- /start - start me activly monitoring your SkyMiner. Once started, I will send notifications to you for events that occur\n" +
@@ -21,6 +22,7 @@ const (
 	msgHelpShort = "*Usage:*\n" +
 		"- /help - show this message\n" +
 		"- /about - show information and credits about my creator and any contributors\n" +
+		//"- /licences - show licences attribution for original and derived works used by this project\n" +
 		"- /status - ask me how I'm going.. and if I'm still running\n" +
 		"- /heartbeat - ask me to send you a notification every 2hrs to let you know I’m still running\n" +
 		"- /start - start me activly monitoring your SkyMiner. Once started, I will send notifications to you for events that occur\n" +
@@ -57,12 +59,14 @@ const (
 	// Heartbeat cmd messages
 	msgHeartBeatStarted = "*Wing Commander* Heatbeat notifications started. Interval %v"
 
-	// Licences cmd messages
-	msgHandleLicences = "*Wing Commander* Licence Attribution\n" +
-		"\n" +
-		"**Images and Icons**\n" +
-		"- 'Skycoin-Cloud-White@1x.png' by the [SkyCoin Project](https://skycoin.net)\n" +
-		"- 'Military Rank' by Ilsur Aptukov from the [Noun Project](https://thenounproject.com/term/military-rank/19966)\n"
+	/*
+		// Licences cmd messages
+		msgHandleLicences = "*Wing Commander* Licence Attribution\n" +
+			"\n" +
+			"**Images and Icons**\n" +
+			"- 'Skycoin-Cloud-White@1x.png' by the [SkyCoin Project](https://skycoin.net)\n" +
+			"- 'Military Rank' by Ilsur Aptukov from the [Noun Project](https://thenounproject.com/term/military-rank/19966)\n"
+	*/
 
 	// Default cmd message (unhandled)
 	msgDefault = "Sorry. I don't know that command."
