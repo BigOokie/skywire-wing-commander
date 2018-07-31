@@ -43,6 +43,21 @@ func NewMonitor(manageraddress string) *SkyManagerMonitor {
 	}
 }
 
+// ConnectedNodeSliceEqual determines if two connectedNodeSlices (a and b) are equal - on the basis that
+// they contain the same list of Nodes (based on Node Keys).
+func connectedNodeSliceEqual(a, b connectedNodeSlice) bool {
+	if len(a) != len(b) {
+		return false
+	}
+
+	for i, v := range a {
+		if v.Key != b[i].Key {
+			return false
+		}
+	}
+	return true
+}
+
 // Run starts the SkyManagerMonitor.
 // If `ctx` is not nil, the monitor will listen to ctx.Done() and stop monitoring
 // when it recieves the signal.
@@ -52,35 +67,25 @@ func (m *SkyManagerMonitor) Run(runctx context.Context, pollInt time.Duration) {
 
 	ticker := time.NewTicker(pollInt)
 
-	//var oldresp, newresp string
 	var oldcns connectedNodeSlice
 
 	for {
 		select {
 		case <-ticker.C:
-
 			newcns, err := m.getAllNodesList()
 			if err != nil {
 				log.Debugln(err)
 			}
 
-			if len(newcns) != len(oldcns) {
-				log.Debugf("SkyManagerMonitor: Connected Node List Changed (Old: %v, New: %v)", len(oldcns), len(newcns))
+			// Check if the connected Node list has changed
+			if connectedNodeSliceEqual(oldcns, newcns) {
+				log.Debugln("SkyManagerMonitor: Node list unchanged.")
+			} else {
+				log.Debugf("SkyManagerMonitor:  Node list changed (Old: %v, New: %v)", len(oldcns), len(newcns))
 				log.Debugln(newcns)
 				oldcns = newcns
-			} else {
-				log.Debugln("SkyManagerMonitor: Connected Node List Unchanged.")
 			}
 
-			/*
-				newresp = m.getAllNodesStr()
-				if newresp != oldresp {
-					log.Debugln(newresp)
-					oldresp = newresp
-				} else {
-					log.Debugln("SkyManagerMonitor: No change.")
-				}
-			*/
 		case <-runctx.Done():
 			log.Debugln("SkyManagerMonitor - Done Event.")
 			return
@@ -113,6 +118,7 @@ func (m *SkyManagerMonitor) getAllNodesStr() string {
 	return respstr
 }
 
+// getAllNodesList requests the list of connected Nodes from the Manager and returns an array (slice) of connectedNode
 func (m *SkyManagerMonitor) getAllNodesList() (cns connectedNodeSlice, err error) {
 	log.Debugln("SkyManagerMonitor.getAllNodesList")
 	apiURL := fmt.Sprintf("http://%s/%s", m.ManagerAddress, managerAPIGetAllConnectedNodes)
