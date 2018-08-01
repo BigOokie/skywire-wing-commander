@@ -22,7 +22,6 @@
 - [Known Issues](#known-issues)
 - [Donations](#Donations)
 
-
 ## Overview
 Wing Commander is a Telegram Bot written in `Go` designed to help the [Skyfleet](https://skycoin.net) community monitor and manage their SkyMiners and associated Nodes.
 
