@@ -8,12 +8,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - TOML based configuration. A valid `config.toml` file is required for the application to start. An example reference configuration file is provided (`config.toml.example`)
 - Added a formal changelog (based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)), and document version history.
-- Added `/licences` command to allow users to query the Bot for licence attributions.
+
 
 ### Changed
 - Changed versioning. This project now adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html). Note that versions prior to this do not follow formal Semantic Versioning.
 - Renamed application and project to Skywire-Wing-Commander (from skywire-telegram-notify-bot).
 - Restructured repository layout (folders).
+- Notifications for Node `connect` and `disconnect` events are sent via Telegram. Monitoring is initiated by the `/start` command, and terminated using the `/stop` command. Monitoring interval (seconds) is set within the `config.toml`. Each time a connect or disconnect notification is provided, the Bot will also provide a count of the number of Nodes currently connected to the Manager.
 
 ### Deprecated
 ### Removed
