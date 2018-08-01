@@ -9,7 +9,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - TOML based configuration. A valid `config.toml` file is required for the application to start. An example reference configuration file is provided (`config.toml.example`)
 - Added a formal changelog (based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)), and document version history.
 
-
 ### Changed
 - Changed versioning. This project now adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html). Note that versions prior to this do not follow formal Semantic Versioning.
 - Renamed application and project to Skywire-Wing-Commander (from skywire-telegram-notify-bot).
