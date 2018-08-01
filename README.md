@@ -66,42 +66,45 @@ go install -v ./...
 ```
 
 ## Run Wing Commander
-To run the Wing Commander Bot you will need the have the auth key provided by the @BotFather. If you dont have this or dont know how to have this - please dont continue (this is for Alpha testers who know what to do!)
+To run the Wing Commander Bot you will need the have the auth key provided by the @BotFather as well as your Bots ChatID. If you don't have this or dont know how to have this - please dont continue (this is for Alpha testers who know what to do!)
 
-Run the following cmd to get the Bot running on your Master Node - replacing `{BOTTOKEN_FROM_BOTFATHER}` with the token provided by the @BotFather 
+To get your ChatID use the following URL:
+```
+https://api.telegram.org/bot<YourBOTToken>/getUpdates
+```
+Make sure you have a valid `config.toml` file in the same folder that the `wcbot` app is located. There is an example configuration file provided with the source (`config.example.toml`). Easiest way to start is to copy this and replace the required values.
 
 To run as a background process (detached from the terminal):
 ```
 cd $GOPATH/bin
 
-nohup ./swwc -bottoken {BOTTOKEN_FROM_BOTFATHER} /dev/null 2>&1 & echo $! > swwc.pid
+nohup ./wcbot /dev/null 2>&1 & echo $! > wcbot.pid
 ```
 
 To run as a forground process (debug info logged to the terminal):
 ```
 cd $GOPATH/bin
 
-./swwc -bottoken {BOTTOKEN_FROM_BOTFATHER}
+./wcbot
 ```
 
-Once this is running, you should be able to start a private chat with your new Bot based on detailed provided by the @BotFather.
+Once the Bot is running, you should be able to start a private chat with your new Bot based on detailed provided by the @BotFather.
 
-Once you are in a private chat with the bot you can make use for the commands to run it (see following section)
+Once you are in a private chat with the Bot you can make use for the commands to run it (see following section)
 
 ## Stop Wing Commander 
 ```
 cd $GOPATH/bin
 
-pkill -F swwc.pid
+pkill -F wcbot.pid
 ```
 
-Alternativly, if you are running Wing Commander interactivly from the command line, you can pres `CTRL+C` to shut it down gracefully.
+Alternativly, if you are running *Wing Commander* interactivly from the command line, you can pres `CTRL+C` to shut it down gracefully.
 
 ## Wing Commander Bot Commands
 This section outlines the Telegram Bot commands that are currently supported by Wing Commander:
 - [Help](#help)
 - [About](#about)
-- [Licences](#licences)
 - [Status](#status)
 - [Heartbeat](#heartbeat)
 - [Start](#start)
@@ -116,11 +119,6 @@ Provides the user with information on the  commands supported by Wing Commander 
 `/about`
 
 Shows information and credits about the creator of the Wing Commander and any key contributors.
-
-### Licences
-`/licences`
-
-Shows attribution and credit for any licenced works used within the project (original or derivative).
 
 ### Status
 `/status`
@@ -144,20 +142,22 @@ Once started, near real-time updates will be provided when specific states on th
 Wing Commander will stop monitoring the Skyminer that it is running on.
 
 ## Wing Commander Output
-Wing Commander will monitor your SkyMiner and the Node that connect to it. Periodically Wing Commander will provide you with status updates about your Nodes and their connection status with the SkyMiner Manager. Additionally, Wing Commander will also monitor and notify you of changes to connection status with external (3rd party Nodes).
+**Wing Commander** will monitor your SkyMiner and (your) Nodes that connect to it.  *Wing Commander* will monitor and notify you of changes to connection status of your Nodes. Future capabilities may provide for monitoring of connections by external 3rd party Nodes.
 
-This can help you to manage the up-time of your own Nodes as well as monitor when external parties (Nodes) are connecting to your Miner over the the Skywire network.
+This can help you to manage the up-time of your own Nodes.
 
 ## Known Issues
 The following section outlines some known issues that need to be taken into consideration by anyone running this software:
 - DNS level blocking/filtering of telegram API domain on the Skywire nodes (or routers). [More detail provided below](#opendns-errors).
 
-- Repository Renamed. The Repository has recently been renamed. it was previously skywire-telegram-notify-bot. It is now called Skywire-Wing-Commander. Please make sure you update any references to the new repo name.
+- Repository Renamed. The Repository has recently been renamed. It was previously skywire-telegram-notify-bot. It is now called Skywire-Wing-Commander (not this appears to be case sensative). Please make sure you update any references to the new repo name.
 
-I have built and tested this on the following setups: 
+I have built and tested this on the following setups - but please note it is still considered *ALPHA*: 
 - DIY Raspberry Pi Miner
 - Official SkyMiner (using official OrangePi images)
 - DIY on MacOS.
+
+**YOU TAKE FULL RESPONSIBILITY**
 
 ### OpenDNS Errors
 If you are running OpenDNS or other DNS which protects and prevents access to certain domains, you may need to update the settings to ensure that the Telegram API domain (`https://api.telegram.org`) is not blocked.
