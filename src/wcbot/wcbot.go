@@ -155,8 +155,12 @@ func (bot *Bot) handlePrivateMessage(ctx *BotContext) error {
 		cmd, args := ctx.message.Command(), ctx.message.CommandArguments()
 		err := bot.handleCommand(ctx, cmd, args)
 		if err != nil {
-			log.Debugf("Command: '/%s %s' failed: %v", cmd, args, err)
-			return bot.Reply(ctx, "markdown", fmt.Sprintf("Command failed: %v", err))
+			errmsg := fmt.Sprintf("Sorry,'/%s' is an unknown command.\n\n%s", cmd, msgHelpShort)
+
+			//log.Debugf("Command: '/%s %s' failed: %v", cmd, args, err)
+			log.Debugf(errmsg)
+			//return bot.Reply(ctx, "markdown", fmt.Sprintf("Command failed: %v", err))
+			return bot.Reply(ctx, "markdown", errmsg)
 		}
 		return nil
 	}
@@ -399,6 +403,10 @@ func (bot *Bot) Start() error {
 	log.Infoln("BOT: Starting.")
 	update := tgbotapi.NewUpdate(0)
 	update.Timeout = 60
+
+	// Start the Bot Running (in the background)
+	log.Infoln("Skywire Wing Commander Telegram Bot - Ready for duty.")
+	defer log.Infoln("Skywire Wing Commander Telegram Bot - Signing off.")
 
 	updates, err := bot.telegram.GetUpdatesChan(update)
 	if err != nil {
