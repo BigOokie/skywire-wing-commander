@@ -36,7 +36,7 @@ const (
 		"*GitHub:* https://github.com/BigOokie/skywire-wing-commander\n" +
 		"*Twitter:* https://twitter.com/BigOokie\n" +
 		"\n" +
-		"Issues and feature requests must be logged as issues on [GitHub](https://github.com/BigOokie/Skywire-Wing-Commander/issues)\n" +
+		"Issues and feature requests must be logged via [GitHub](https://github.com/BigOokie/Skywire-Wing-Commander/issues)\n" +
 		"\n" +
 		"*SkyCoin*: https://www.skycoin.net/\n" +
 		"\n" +
