@@ -31,9 +31,12 @@ func (bot *Bot) handleCommandStart(ctx *BotContext, command, args string) error 
 		log.Debug(msgMonitorStart)
 		cancelContext, cancelFunc := context.WithCancel(context.Background())
 		bot.skyMgrMonitor.CancelFunc = cancelFunc
+		bot.skyMgrMonitor.monitorStatusMsgChan = make(chan string)
 
-		// Start the monitor
-		go bot.skyMgrMonitor.Run(cancelContext, bot.config.Monitor.IntervalSec)
+		// Start the Event Monitor - provide cancelContext
+		go bot.monitorEventLoop(cancelContext, ctx, bot.skyMgrMonitor.monitorStatusMsgChan)
+		// Start the monitor - provide cancelContext
+		go bot.skyMgrMonitor.Run(cancelContext, bot.skyMgrMonitor.monitorStatusMsgChan, bot.config.Monitor.IntervalSec)
 
 		return bot.Send(ctx, "whisper", "markdown", msgMonitorStart)
 	}
@@ -47,6 +50,8 @@ func (bot *Bot) handleCommandStop(ctx *BotContext, command, args string) error {
 		log.Debug(msgMonitorStop)
 		bot.skyMgrMonitor.CancelFunc()
 		bot.skyMgrMonitor.CancelFunc = nil
+		close(bot.skyMgrMonitor.monitorStatusMsgChan)
+		bot.skyMgrMonitor.monitorStatusMsgChan = nil
 		log.Debug(msgMonitorStopped)
 		return bot.Send(ctx, "whisper", "markdown", msgMonitorStop)
 	} else {
@@ -64,17 +69,9 @@ func (bot *Bot) handleCommandStatus(ctx *BotContext, command, args string) error
 // Handler for heartbeat command
 func (bot *Bot) handleCommandHeartBeat(ctx *BotContext, command, args string) error {
 	log.Debug("Handle command /heartbeat")
-	go botHeartbeatLoop(bot, ctx)
+	go bot.botHeartbeatLoop(ctx)
 	return bot.Send(ctx, "whisper", "markdown", fmt.Sprintf(msgHeartBeatStarted, bot.config.Monitor.HeartbeatIntMin))
 }
-
-/*
-// Handler for licences command
-func (bot *Bot) handleCommandLicences(ctx *BotContext, command, args string) error {
-	log.Debug("Handle command /licences")
-	return bot.Send(ctx, "whisper", "markdown", msgHandleLicences)
-}
-*/
 
 func (bot *Bot) handleDirectMessageFallback(ctx *BotContext, text string) (bool, error) {
 	errmsg := fmt.Sprintf("Sorry, I only take commands. '%s' is not a command.\n\n%s", text, msgHelpShort)
@@ -82,22 +79,38 @@ func (bot *Bot) handleDirectMessageFallback(ctx *BotContext, text string) (bool,
 	return true, bot.Reply(ctx, "markdown", errmsg)
 }
 
+// AddPrivateMessageHandler adds a private MessageHandler to the Bot
 func (bot *Bot) AddPrivateMessageHandler(handler MessageHandler) {
 	bot.privateMessageHandlers = append(bot.privateMessageHandlers, handler)
 }
 
+// AddGroupMessageHandler adds a group MessageHandler to the Bot
 func (bot *Bot) AddGroupMessageHandler(handler MessageHandler) {
 	bot.groupMessageHandlers = append(bot.groupMessageHandlers, handler)
 }
 
 // Bot Heartbeat Loop
-func botHeartbeatLoop(bot *Bot, ctx *BotContext) {
+func (bot *Bot) botHeartbeatLoop(ctx *BotContext) {
 	ticker := time.NewTicker(time.Minute * bot.config.Monitor.HeartbeatIntMin)
 
 	for {
 		select {
 		case <-ticker.C:
 			bot.Send(ctx, "whisper", "markdown", msgStatus)
+		}
+	}
+}
+
+// monitorEventLoop monitors for event messages from the SkyMgrMonitor (when running)
+func (bot *Bot) monitorEventLoop(runctx context.Context, botctx *BotContext, statusMsgChan <-chan string) {
+
+	for {
+		select {
+		case msg := <-statusMsgChan:
+			bot.Send(botctx, "whisper", "markdown", msg)
+		case <-runctx.Done():
+			log.Debugln("Bot.monitorEventLoop - Done Event.")
+			return
 		}
 	}
 }

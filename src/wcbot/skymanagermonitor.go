@@ -19,24 +19,26 @@ const (
 // SkyManagerMonitor is used to monitor a Sky Manager and provide messages to the
 // main process when specific events are detected.
 type SkyManagerMonitor struct {
-	ManagerAddress string
-	CancelFunc     func()
-	connectedNodes map[string]skynode.NodeInfo
+	ManagerAddress       string
+	CancelFunc           func()
+	monitorStatusMsgChan chan string
+	connectedNodes       map[string]skynode.NodeInfo
 }
 
 // NewMonitor creates a SkyManagerMonitor which will monitor the provided managerip.
 func NewMonitor(manageraddress string) *SkyManagerMonitor {
 	return &SkyManagerMonitor{
-		ManagerAddress: manageraddress,
-		CancelFunc:     nil,
-		connectedNodes: make(map[string]skynode.NodeInfo),
+		ManagerAddress:       manageraddress,
+		CancelFunc:           nil,
+		monitorStatusMsgChan: nil,
+		connectedNodes:       make(map[string]skynode.NodeInfo),
 	}
 }
 
 // Run starts the SkyManagerMonitor.
 // If `ctx` is not nil, the monitor will listen to ctx.Done() and stop monitoring
 // when it recieves the signal.
-func (m *SkyManagerMonitor) Run(runctx context.Context, pollInt time.Duration) {
+func (m *SkyManagerMonitor) Run(runctx context.Context, statusMsgChan chan<- string, pollInt time.Duration) {
 	log.Debugf("SkyManagerMonitor Run: Start (Interval: %v)", pollInt)
 	defer log.Debugln("SkyManagerMonitor Run: End")
 
@@ -50,7 +52,7 @@ func (m *SkyManagerMonitor) Run(runctx context.Context, pollInt time.Duration) {
 				log.Error(err)
 			} else {
 				// Maintain the list of connected nodes
-				m.maintainConnectedNodesList(newcns)
+				m.maintainConnectedNodesList(newcns, statusMsgChan)
 			}
 		case <-runctx.Done():
 			log.Debugln("SkyManagerMonitor - Done Event.")
@@ -112,7 +114,7 @@ func (m *SkyManagerMonitor) getAllNodesList() (cns skynode.NodeInfoSlice, err er
 // maintainConnectedNodeList is responsible for maintaining (adding, updating and deleting) Nodes from the
 // Monitors internal connectedNodeList.
 // TODO: Support use of channels for signaling of change events
-func (m *SkyManagerMonitor) maintainConnectedNodesList(newcns skynode.NodeInfoSlice) {
+func (m *SkyManagerMonitor) maintainConnectedNodesList(newcns skynode.NodeInfoSlice, statusMsgChan chan<- string) {
 	// Make sure the newcns structure is not nil, and return if it is (do nothing)
 	if newcns == nil {
 		log.Error("SkyManagerMonitor.maintainConnectedNodesList: newcns is nil.")
@@ -132,8 +134,12 @@ func (m *SkyManagerMonitor) maintainConnectedNodesList(newcns skynode.NodeInfoSl
 			m.connectedNodes[v.Key] = v
 		} else {
 			// Add new NodeInfo
-			log.Debugf("SkyManagerMonitor.maintainConnectedNodesList: Adding New Node:\n%s\n", v.FmtString())
+			//log.Debugf("SkyManagerMonitor.maintainConnectedNodesList: Adding New Node:\n%s\n", v.FmtString())
 			m.connectedNodes[v.Key] = v
+			//statusMsgChan <- fmt.Sprintf("*Node Connected:* %s", v.Key)
+			msg := fmt.Sprintf("*Node Connected:* %s\n\n*%v* Nodes currently connected.", v.Key, len(m.connectedNodes))
+			log.Debugln(msg)
+			statusMsgChan <- msg
 		}
 	}
 
@@ -151,10 +157,13 @@ func (m *SkyManagerMonitor) maintainConnectedNodesList(newcns skynode.NodeInfoSl
 				// Delete the Node from the Connected Node List
 				log.Debugf("SkyManagerMonitor.maintainConnectedNodesList: Node Removed:\n%s\n", v.FmtString())
 				delete(m.connectedNodes, v.Key)
+				msg := fmt.Sprintf("*Node Disconnected:* %s\n\n*%v* Nodes currently connected.", v.Key, len(m.connectedNodes))
+				log.Debugln(msg)
+				statusMsgChan <- msg
 			}
 		}
 	}
 
-	log.Debugf("SkyManagerMonitor.maintainConnectedNodesList: Managing %v Nodes.", len(m.connectedNodes))
+	//log.Debugf("SkyManagerMonitor.maintainConnectedNodesList: Managing %v Nodes.", len(m.connectedNodes))
 	return
 }
