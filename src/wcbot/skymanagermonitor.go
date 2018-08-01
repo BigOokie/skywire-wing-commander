@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/BigOokie/Skywire-Wing-Commander/src/skynode"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -15,24 +16,12 @@ const (
 	managerAPIGetAllConnectedNodes = "/conn/getAll"
 )
 
-// connectedNode structure stores of JSON response from /conn/getAll API
-type connectedNode struct {
-	Key         string `json:"key"`
-	Conntype    string `json:"type"`
-	SendBytes   int    `json:"send_bytes"`
-	RecvBytes   int    `json:"recv_bytes"`
-	LastAckTime int    `json:"last_ack_time"`
-	StartTime   int    `json:"start_time"`
-}
-
-// Defines an in-memory slice (dynamic array) based on the connectedNode struct
-type connectedNodeSlice []connectedNode
-
 // SkyManagerMonitor is used to monitor a Sky Manager and provide messages to the
 // main process when specific events are detected.
 type SkyManagerMonitor struct {
 	ManagerAddress string
 	CancelFunc     func()
+	connectedNodes map[string]skynode.NodeInfo
 }
 
 // NewMonitor creates a SkyManagerMonitor which will monitor the provided managerip.
@@ -40,22 +29,8 @@ func NewMonitor(manageraddress string) *SkyManagerMonitor {
 	return &SkyManagerMonitor{
 		ManagerAddress: manageraddress,
 		CancelFunc:     nil,
+		connectedNodes: make(map[string]skynode.NodeInfo),
 	}
-}
-
-// ConnectedNodeSliceEqual determines if two connectedNodeSlices (a and b) are equal - on the basis that
-// they contain the same list of Nodes (based on Node Keys).
-func connectedNodeSliceEqual(a, b connectedNodeSlice) bool {
-	if len(a) != len(b) {
-		return false
-	}
-
-	for i, v := range a {
-		if v.Key != b[i].Key {
-			return false
-		}
-	}
-	return true
 }
 
 // Run starts the SkyManagerMonitor.
@@ -67,25 +42,16 @@ func (m *SkyManagerMonitor) Run(runctx context.Context, pollInt time.Duration) {
 
 	ticker := time.NewTicker(pollInt)
 
-	var oldcns connectedNodeSlice
-
 	for {
 		select {
 		case <-ticker.C:
 			newcns, err := m.getAllNodesList()
 			if err != nil {
-				log.Debugln(err)
-			}
-
-			// Check if the connected Node list has changed
-			if connectedNodeSliceEqual(oldcns, newcns) {
-				log.Debugln("SkyManagerMonitor: Node list unchanged.")
+				log.Error(err)
 			} else {
-				log.Debugf("SkyManagerMonitor:  Node list changed (Old: %v, New: %v)", len(oldcns), len(newcns))
-				log.Debugln(newcns)
-				oldcns = newcns
+				// Maintain the list of connected nodes
+				m.maintainConnectedNodesList(newcns)
 			}
-
 		case <-runctx.Done():
 			log.Debugln("SkyManagerMonitor - Done Event.")
 			return
@@ -119,19 +85,76 @@ func (m *SkyManagerMonitor) getAllNodesStr() string {
 }
 
 // getAllNodesList requests the list of connected Nodes from the Manager and returns an array (slice) of connectedNode
-func (m *SkyManagerMonitor) getAllNodesList() (cns connectedNodeSlice, err error) {
+func (m *SkyManagerMonitor) getAllNodesList() (cns skynode.NodeInfoSlice, err error) {
 	log.Debugln("SkyManagerMonitor.getAllNodesList")
 	apiURL := fmt.Sprintf("http://%s/%s", m.ManagerAddress, managerAPIGetAllConnectedNodes)
-	//apiURL := fmt.Sprintf("http://%s/%s", "discovery.skycoin.net:8001", managerAPIGetAllConnectedNodes)
 	resp, err := http.Get(apiURL)
+	if err != nil {
+		log.Error(err)
+		return
+	}
 
 	defer resp.Body.Close()
 
 	respbuf, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
+		log.Error(err)
 		return
 	}
 
 	err = json.Unmarshal(respbuf, &cns)
+	if err != nil {
+		log.Error(err)
+	}
+	return
+}
+
+// maintainConnectedNodeList is responsible for maintaining (adding, updating and deleting) Nodes from the
+// Monitors internal connectedNodeList.
+// TODO: Support use of channels for signaling of change events
+func (m *SkyManagerMonitor) maintainConnectedNodesList(newcns skynode.NodeInfoSlice) {
+	// Make sure the newcns structure is not nil, and return if it is (do nothing)
+	if newcns == nil {
+		log.Error("SkyManagerMonitor.maintainConnectedNodesList: newcns is nil.")
+		return
+	}
+
+	// Compare the new connected node list (newcns) against the current list.
+	// If they are not different we dont need to do anything
+	for _, v := range newcns {
+		_, hasKey := m.connectedNodes[v.Key]
+		if hasKey {
+			// Node key found
+			// Until I can figure out a better way - lets replace the existing entry with the new data
+			// Delete and then add the new instance
+			//log.Debugf("SkyManagerMonitor.maintainConnectedNodesList: Maintain Existing Node:\n%s\n", v.FmtString())
+			delete(m.connectedNodes, v.Key)
+			m.connectedNodes[v.Key] = v
+		} else {
+			// Add new NodeInfo
+			log.Debugf("SkyManagerMonitor.maintainConnectedNodesList: Adding New Node:\n%s\n", v.FmtString())
+			m.connectedNodes[v.Key] = v
+		}
+	}
+
+	// If the number of Nodes in the connectedNodes list greater than
+	// the number of Nodes returned from the last request, we need to
+	// prune the connectedNodes list (i.e. some Nodes have been disconnected)
+	if len(m.connectedNodes) > len(newcns) {
+		niMap := skynode.NodeInfoSliceToMap(newcns)
+		// Iterate the connectedNodes and delete any that are not found
+		// in the newly returned connected Node list (niMap)
+		for _, v := range m.connectedNodes {
+			_, hasKey := niMap[v.Key]
+			if !hasKey {
+				// Node Key not found
+				// Delete the Node from the Connected Node List
+				log.Debugf("SkyManagerMonitor.maintainConnectedNodesList: Node Removed:\n%s\n", v.FmtString())
+				delete(m.connectedNodes, v.Key)
+			}
+		}
+	}
+
+	log.Debugf("SkyManagerMonitor.maintainConnectedNodesList: Managing %v Nodes.", len(m.connectedNodes))
 	return
 }
