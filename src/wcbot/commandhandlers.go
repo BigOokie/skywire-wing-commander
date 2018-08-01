@@ -31,7 +31,10 @@ func (bot *Bot) handleCommandStart(ctx *BotContext, command, args string) error 
 		log.Debug(msgMonitorStart)
 		cancelContext, cancelFunc := context.WithCancel(context.Background())
 		bot.skyMgrMonitor.CancelFunc = cancelFunc
+
+		// Start the monitor
 		go bot.skyMgrMonitor.Run(cancelContext, bot.config.Monitor.IntervalSec)
+
 		return bot.Send(ctx, "whisper", "markdown", msgMonitorStart)
 	}
 }
