@@ -8,7 +8,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/BigOokie/Skywire-Wing-Commander/src/skynode"
+	"github.com/BigOokie/skywire-wing-commander/src/skynode"
 	log "github.com/sirupsen/logrus"
 )
 
