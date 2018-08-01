@@ -1,7 +1,7 @@
 # Skywire Wing Commander example configuration file
 [telegram]
 apikey = "YOUR-BOT-API-KEY-HERE"
-chatid = "YOUR-PRIVATE-BOT-CHATID-HERE"
+chatid = YOUR-PRIVATE-BOT-CHATID-HERE(AS AN INTEGER)
 admin = "YOUR TELEGRAM USERID HERE"
 debug = false
 
