@@ -23,22 +23,20 @@ func main() {
 	configPath := flag.String("config", "config.toml", "Path to the Wing Commander config file")
 	config, err := ReadConfig(*configPath)
 	if err != nil {
-		log.Panic(err)
+		log.Error(err)
+		return
 	}
 
 	// Initiate a new Bot instance
 	log.Infoln("Initiating Bot instance.")
 	bot, err := NewBot(config)
 	if err != nil {
-		log.Panic(err)
+		log.Error(err)
+		return
 	}
 
 	log.Infoln("Starting Bot instance.")
 	go bot.Start()
-
-	// Start the Bot Running (in the background)
-	log.Infoln("Skywire Wing Commander Telegram Bot - Ready for duty.")
-	defer log.Infoln("Skywire Wing Commander Telegram Bot - Signing off.")
 
 	// Wait for the app to be signaled to terminate
 	select {
