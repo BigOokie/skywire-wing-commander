@@ -9,10 +9,9 @@ const (
 	msgHelpShort = "*Usage:*\n" +
 		"- /help - show this message\n" +
 		"- /about - show information and credits about my creator and any contributors\n" +
-		"- /status - ask me how I'm going.. and if I'm still running\n" +
-		"- /heartbeat - ask me to send you a notification periodically (config) to let you know I’m still running\n" +
-		"- /start - start me activly monitoring your SkyMiner. Once started, I will send notifications to you for events that occur\n" +
-		"- /stop - stop me monitoring your SkyMiner. Once stopped, I won't send any more notifications\n"
+		"- /status - ask how I'm going.. and if I'm still running\n" +
+		"- /start - start activly monitoring your SkyMiner. Once started, notifications will be sent to you for events that occur. A heartbeat will also be initiated to let you know if the Bot and the Miner are still running.\n" +
+		"- /stop - stop monitoring your SkyMiner. Once stopped, I won't send any more notifications\n"
 
 	msgHelp = "*Wing Commander* here. I will help you to manage and control your SkyMiner and its Nodes.\n\n" +
 		msgHelpShort +
@@ -38,6 +37,8 @@ const (
 
 	// Status cmd message
 	msgStatus = "*Wing Commander* Ready and reporting for duty 👍"
+	// Heartbeat message
+	msgHeartbeat = "*Wing Commander Heatbeat* ❤️"
 
 	// Start cmd messages
 	msgMonitorAlreadyStarted = "*Wing Commander* Sky Manager Monitoring has already been started."
@@ -47,9 +48,6 @@ const (
 	msgMonitorStop       = "*Wing Commander* Sky Manager Monitoring stopping..."
 	msgMonitorStopped    = "*Wing Commander* Sky Manager Monitoring stopped..."
 	msgMonitorNotRunning = "*Wing Commander* Sky Manager Monitoring is not running..."
-
-	// Heartbeat cmd messages
-	msgHeartBeatStarted = "*Wing Commander* Heatbeat notifications started. Interval %v"
 
 	// Default cmd message (unhandled)
 	msgDefault = "Sorry. I don't know that command."

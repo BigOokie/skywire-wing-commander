@@ -47,16 +47,11 @@ var commands = Commands{
 		"status",
 		(*Bot).handleCommandStatus,
 	},
-	Command{
-		false,
-		"heartbeat",
-		(*Bot).handleCommandHeartBeat,
-	},
 	/*
 		Command{
 			false,
-			"licences",
-			(*Bot).handleCommandLicences,
+			"heartbeat",
+			(*Bot).handleCommandHeartBeat,
 		},
 	*/
 }

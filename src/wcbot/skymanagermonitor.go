@@ -22,7 +22,7 @@ type SkyManagerMonitor struct {
 	ManagerAddress       string
 	CancelFunc           func()
 	monitorStatusMsgChan chan string
-	connectedNodes       map[string]skynode.NodeInfo
+	connectedNodes       skynode.NodeInfoMap
 }
 
 // NewMonitor creates a SkyManagerMonitor which will monitor the provided managerip.
@@ -31,7 +31,7 @@ func NewMonitor(manageraddress string) *SkyManagerMonitor {
 		ManagerAddress:       manageraddress,
 		CancelFunc:           nil,
 		monitorStatusMsgChan: nil,
-		connectedNodes:       make(map[string]skynode.NodeInfo),
+		connectedNodes:       make(skynode.NodeInfoMap),
 	}
 }
 
@@ -129,15 +129,12 @@ func (m *SkyManagerMonitor) maintainConnectedNodesList(newcns skynode.NodeInfoSl
 			// Node key found
 			// Until I can figure out a better way - lets replace the existing entry with the new data
 			// Delete and then add the new instance
-			//log.Debugf("SkyManagerMonitor.maintainConnectedNodesList: Maintain Existing Node:\n%s\n", v.FmtString())
 			delete(m.connectedNodes, v.Key)
 			m.connectedNodes[v.Key] = v
 		} else {
 			// Add new NodeInfo
-			//log.Debugf("SkyManagerMonitor.maintainConnectedNodesList: Adding New Node:\n%s\n", v.FmtString())
 			m.connectedNodes[v.Key] = v
-			//statusMsgChan <- fmt.Sprintf("*Node Connected:* %s", v.Key)
-			msg := fmt.Sprintf("*Node Connected:* %s\n\n*%v* Nodes currently connected.", v.Key, len(m.connectedNodes))
+			msg := fmt.Sprintf("*Node Connected:* %s\n\n*Conected Nodes:* %v", v.Key, len(m.connectedNodes))
 			log.Debugln(msg)
 			statusMsgChan <- msg
 		}
@@ -163,7 +160,5 @@ func (m *SkyManagerMonitor) maintainConnectedNodesList(newcns skynode.NodeInfoSl
 			}
 		}
 	}
-
-	//log.Debugf("SkyManagerMonitor.maintainConnectedNodesList: Managing %v Nodes.", len(m.connectedNodes))
 	return
 }

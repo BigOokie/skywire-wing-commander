@@ -14,10 +14,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Renamed application and project to Skywire-Wing-Commander (from skywire-telegram-notify-bot).
 - Restructured repository layout (folders).
 - Notifications for Node `connect` and `disconnect` events are sent via Telegram. Monitoring is initiated by the `/start` command, and terminated using the `/stop` command. Monitoring interval (seconds) is set within the `config.toml`. Each time a connect or disconnect notification is provided, the Bot will also provide a count of the number of Nodes currently connected to the Manager.
+- The `/start` command now also initiates a heartbeat based on a configurable interval (`config.toml`).
 
 ### Deprecated
 ### Removed
 - Support for commande line parameters. All runtime configuration must now be sourced from `config.toml`
+- The `/heartbeat` command has been removed. A heartbeat is now managed by the `/start` command.
 ### Fixed
 ### Security
 

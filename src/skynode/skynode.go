@@ -1,6 +1,8 @@
 package skynode
 
-import "fmt"
+import (
+	"fmt"
+)
 
 // NodeInfo structure stores of JSON response from /conn/getAll API
 type NodeInfo struct {
@@ -15,8 +17,11 @@ type NodeInfo struct {
 // NodeInfoSlice defines an in-memory (dynamic) array of NodeInfo structures
 type NodeInfoSlice []NodeInfo
 
+// NodeInfoMap defines a string key based map of NodeInfo structs
+type NodeInfoMap map[string]NodeInfo
+
 // NodeInfoSliceToMap convers a provided NodeInfoSlice to a NodeInfoMap
-func NodeInfoSliceToMap(nis NodeInfoSlice) map[string]NodeInfo {
+func NodeInfoSliceToMap(nis NodeInfoSlice) NodeInfoMap {
 	niMap := make(map[string]NodeInfo)
 	for _, ni := range nis {
 		niMap[ni.Key] = ni
@@ -69,3 +74,24 @@ func (ni NodeInfo) FmtString() string {
 
 	return fmt.Sprintf(msg, ni.Key, ni.Conntype, ni.SendBytes, ni.RecvBytes, ni.LastAckTime, ni.StartTime)
 }
+
+/*
+type RWMap struct {
+	sync.RWMutex
+	m map[string]int
+}
+
+// Get is a wrapper for getting the value from the underlying map
+func (r *RWMap) Get(key string) int {
+	r.RLock()
+	defer r.RUnlock()
+	return r.m[key]
+}
+
+// Set is a wrapper for setting the value of a key in the underlying map
+func (r *RWMap) Set(key string, val int) {
+	r.Lock()
+	defer r.Unlock()
+	r.m[key] = val
+}
+*/

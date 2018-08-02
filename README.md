@@ -125,7 +125,6 @@ This section outlines the Telegram Bot commands that are currently supported by 
 - [Help](#help)
 - [About](#about)
 - [Status](#status)
-- [Heartbeat](#heartbeat)
 - [Start](#start)
 - [Stop](#stop)
 
@@ -144,22 +143,17 @@ Shows information and credits about the creator of **Wing Commander** and any ke
 
 Manually request current status of the **Wing Commander** Bot.
 
-## Heartbeat
-`/heartbeat`
-
-Start an automated heatbeat - the **Wing Commander** Bot will periodically notify you that it is still running. The interval is specified in the `config.toml`.
-
 ## Start
 `/start`
 
 **Wing Commander** will start monitoring the **Skyminer** that it is running on.
-Once started, **Wing Commander** will provide notification updates via Telegram when specific events occur within the **SkyMiner**. Currently the following events will trigger notifications:
-- Skywire Node managed by the SkyMiner connects or disconnects.
+Once started, **Wing Commander** will provide notification updates via Telegram when any Node managed by the SkyMiner connects or disconnects.
+Additionally, the Start command will initiate a Heartbeat which will provide a status update on a configurable cycle (interval set in `config.toml`).  The Heartbeat will help you to ensure that the Bot and/or the SkyMiner itself is still running. If you stop recieving the Heartbeat - you need to check whats going on.
 
 ## Stop
 `/stop`
 
-**Wing Commander** will stop monitoring the SkyMiner.
+**Wing Commander** will stop monitoring the SkyMiner. This will also stop the Heartbeat.
 
 # Known Issues
 The following section outlines some known issues that need to be taken into consideration by anyone running this software:
