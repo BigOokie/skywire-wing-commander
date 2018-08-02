@@ -1,7 +1,7 @@
 # Skywire Wing Commander
 <img src="assets/icons/WingCommanderLogoFull-600x600.png" width=250 height=250>
 
-**Note:** The SkyCoin Cloud logo (above) is the property of the [SkyCoin project](https://skycoin.net).
+**Note:** The Skycoin Cloud logo (above) is the property of the [Skycoin project](https://skycoin.net).
 
 | Build Status |  |
 |--------------|--|
@@ -24,11 +24,11 @@
 - [Donations](#Donations)
 
 # Overview
-**Wing Commander** is a Telegram Bot written in `Go` designed to help the **[Skyfleet](https://skycoin.net)** community monitor and manage their SkyMiners and associated Nodes.
+**Wing Commander** is a Telegram Bot written in `Go` designed to help the **[Skyfleet](https://skycoin.net)** community monitor and manage their Skyminers and associated Nodes.
 
 This is currently a *Work In Progress (WIP)* and has been released as an early *Alpha* to select group for testing and feedback. More details will be provided as the project progresses.
 
-Please note that this **is not an official [SkyCoin](https://skycoin.net) project**. If you have issues or questions - please **do not bother the SkyCoin or Skywire teams** - raise any issues or feature requests  in [GitHub](https://github.com/BigOokie/skywire-wing-commander/issues). Also note that this is not my job - I am doing this as an active member of the Skyfleet community and will endevor to get back to you and resolve issues when I can. Please have patience and bare with me.
+Please note that this **is not an official [Skycoin](https://skycoin.net) project**. If you have issues or questions - please **do not bother the Skycoin or Skywire teams** - raise any issues or feature requests  in [GitHub](https://github.com/BigOokie/skywire-wing-commander/issues). Also note that this is not my job - I am doing this as an active member of the Skyfleet community and will endevor to get back to you and resolve issues when I can. Please have patience and bare with me.
 
 The intention of this project is to have a specialised Telegram Bot application (written in Go) to run on a Skycoin Skywire (Skyminer) Manager Node and provide its owner with realtime management and monitoring capabilities.
 
@@ -56,7 +56,8 @@ I won't cover specifics here - I suggest you Google it.
 Once you have created a new Bot, the `@BotFather` will provide you with details similar to the below:
 ```
 @BotFather:
-Done! Congratulations on your new bot. You will find it at t.me/{YOUR-BOT-NAME_bot}. You can now add a description, about section and profile picture for your bot, see /help for a list of commands. By the way, when you've finished creating your cool bot, ping our Bot Support if you want a better username for it. Just make sure the bot is fully operational before you do this.
+Done! Congratulations on your new bot. You will find it at t.me/{YOUR-BOT-NAME_bot}. 
+You can now add a description, about section and profile picture for your bot, see /help for a list of commands. By the way, when you've finished creating your cool bot, ping our Bot Support if you want a better username for it. Just make sure the bot is fully operational before you do this.
 
 Use this token to access the HTTP API:
 NNNNNNNNN:ABCD1234abc1_aBCD12345EFghiJK1234ab
@@ -72,7 +73,7 @@ The `@BotFather` allows you to control certain settings for the Bot - including 
 ## Install and Build
 The **Wing Commander** Bot is designed to operate on your Skywire Manager Node - it is not intended or expected to function on a subordinate Node that does not run the Skywire Manager.
 
-It is expected that you have `Go v1.10.x` installed. I will leave the installation of this to you. The below steps assume Go is correctly installed and your `$GOPATH` is correctly de
+It is expected that you have `Go v1.10.x` installed. I will leave the installation of this to you. The below steps assume Go is correctly installed and your `$GOPATH` is correctly defined.
 
 To get and build the code use the following commands - note paths are case-sensative:
 ```sh
@@ -112,7 +113,7 @@ The above URL should produce `JSON` output for your Bot, including the `ChatID`.
 To run **Wing Commander** as a background process (detached from the terminal):
 ```sh
 cd $GOPATH/bin
-nohup ./wcbot /dev/null 2>&1 & echo $! > wcbot.pid
+nohup ./wcbot /dev/null 2>&1 & echo $! > wcbot.pid &
 ```
 
 ### Run as forground process
@@ -159,13 +160,13 @@ Manually request current status of the **Wing Commander** Bot.
 `/start`
 
 **Wing Commander** will start monitoring the **Skyminer** that it is running on.
-Once started, **Wing Commander** will provide notification updates via Telegram when any Node managed by the SkyMiner connects or disconnects.
-Additionally, the Start command will initiate a Heartbeat which will provide a status update on a configurable cycle (interval set in `config.toml`).  The Heartbeat will help you to ensure that the Bot and/or the SkyMiner itself is still running. If you stop recieving the Heartbeat - you need to check whats going on.
+Once started, **Wing Commander** will provide notification updates via Telegram when any Node managed by the Skyminer connects or disconnects.
+Additionally, the `/start` command will initiate a Heartbeat which will provide a status update on a configurable cycle (interval set in `config.toml`).  The Heartbeat will help you to ensure that the Bot and/or the Skyminer itself is still running. If you stop recieving the Heartbeat - you need to check whats going on.
 
 ## Stop
 `/stop`
 
-**Wing Commander** will stop monitoring the SkyMiner. This will also stop the Heartbeat.
+**Wing Commander** will stop monitoring the Skyminer. This will also stop the Heartbeat.
 
 # Known Issues
 The following section outlines some known issues that need to be taken into consideration by anyone running this software:
@@ -175,7 +176,7 @@ The following section outlines some known issues that need to be taken into cons
 
 I have built and tested this on the following setups - but please note it is still considered *ALPHA*: 
 - DIY Raspberry Pi Miner
-- Official SkyMiner (using official OrangePi images)
+- Official Skyminer (using official OrangePi images)
 - DIY on MacOS.
 
 **YOU TAKE FULL RESPONSIBILITY**
