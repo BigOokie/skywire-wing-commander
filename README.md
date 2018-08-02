@@ -23,20 +23,24 @@
 - [Known Issues](#known-issues)
 - [Donations](#Donations)
 
+***
+
 # Overview
-**Wing Commander** is a Telegram Bot written in `Go` designed to help the **[Skyfleet](https://skycoin.net)** community monitor and manage their Skyminers and associated Nodes.
+**Wing Commander** is a Telegram bot written in `Go` designed to help the **[Skyfleet](https://skycoin.net)** community monitor and manage their Skyminers and associated Nodes.
 
 This is currently a *Work In Progress (WIP)* and has been released as an early *Alpha* to select group for testing and feedback. More details will be provided as the project progresses.
 
 Please note that this **is not an official [Skycoin](https://skycoin.net) project**. If you have issues or questions - please **do not bother the Skycoin or Skywire teams** - raise any issues or feature requests  in [GitHub](https://github.com/BigOokie/skywire-wing-commander/issues). Also note that this is not my job - I am doing this as an active member of the Skyfleet community and will endeavor to get back to you and resolve issues when I can. Please have patience and bare with me.
 
-The intention of this project is to have a specialised Telegram Bot application (written in Go) to run on a Skycoin Skywire (Skyminer) Manager Node and provide its owner with realtime management and monitoring capabilities.
+The intention of this project is to have a specialised Telegram bot application (written in Go) to run on a Skycoin Skywire (Skyminer) Manager Node and provide its owner with realtime management and monitoring capabilities.
+
+***
 
 # Wing Commander Setup
 This section is incomplete and requires further work. It should be sufficient however for those interested in working with the *Alpha* release to get it running.
 
 ## Configuration File
-You MUST provide a valid configuration file for the Bot or it will not launch. The config file must reside in the following location `$HOME\.wingcommander\config.toml`
+You MUST provide a valid configuration file for the bot or it will not launch. The config file must reside in the following location `$HOME\.wingcommander\config.toml`
 
 You will need to create the `.wingcommander` folder and then place the `config.toml` file into it.
 ```sh
@@ -53,22 +57,22 @@ Initiate a Telegram chat with the `@BotFather`. The `@BotFather` is a bot provid
 
 I won't cover specifics here - I suggest you Google it.
 
-Once you have created a new Bot, the `@BotFather` will provide you with details similar to the below:
+Once you have created a new bot, the `@BotFather` will provide you with details similar to the below:
 ```
 @BotFather:
 Done! Congratulations on your new bot. You will find it at t.me/{YOUR-BOT-NAME_bot}. 
-You can now add a description, about section and profile picture for your bot, see /help for a list of commands. By the way, when you've finished creating your cool bot, ping our Bot Support if you want a better username for it. Just make sure the bot is fully operational before you do this.
+You can now add a description, about section and profile picture for your bot, see /help for a list of commands. By the way, when you've finished creating your cool bot, ping our bot Support if you want a better username for it. Just make sure the bot is fully operational before you do this.
 
 Use this token to access the HTTP API:
 NNNNNNNNN:ABCD1234abc1_aBCD12345EFghiJK1234ab
 
-For a description of the Bot API, see this page: https://core.telegram.org/bots/api
+For a description of the bot API, see this page: https://core.telegram.org/bots/api
 ```
 
 You will need to paste the (API) `token` provided by the `@BotFather` into your `config.toml` file .
 
 ### Suggested Bot Settings
-The `@BotFather` allows you to control certain settings for the bot - including its ability to participate in group chats. At this stage the Bot has been designed for use in private chats only. Further, I would strongly recommend not allowing it to be used by anyone other than youself or within group context.
+The `@BotFather` allows you to control certain settings for the bot - including its ability to participate in group chats. At this stage the bot has been designed for use in private chats only. Further, I would strongly recommend not allowing it to be used by anyone other than youself or within group context.
 
 ## Install and Build
 The **Wing Commander** bot is designed to operate on your Skywire Manager Node - it is not intended or expected to function on a subordinate Node that does not run the Skywire Manager.
@@ -133,6 +137,8 @@ pkill -F wcbot.pid
 
 Alternatively, if you are running **Wing Commander** interactively from the command line, you can press `CTRL+C` to shut it down gracefully.
 
+***
+
 # Wing Commander Commands
 This section outlines the Telegram Bot commands that are currently supported by **Wing Commander**:
 - [Help](#help)
@@ -167,6 +173,8 @@ Additionally, the `/start` command will initiate a heartbeat which will provide 
 `/stop`
 
 **Wing Commander** will stop monitoring the Skyminer. This will also stop the heartbeat.
+
+***
 
 # Known Issues
 The following section outlines some known issues that need to be taken into consideration by anyone running this software:
