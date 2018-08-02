@@ -28,12 +28,12 @@
 
 This is currently a *Work In Progress (WIP)* and has been released as an early *Alpha* to select group for testing and feedback. More details will be provided as the project progresses.
 
-Please note that this **is not an official [Skycoin](https://skycoin.net) project**. If you have issues or questions - please **do not bother the Skycoin or Skywire teams** - raise any issues or feature requests  in [GitHub](https://github.com/BigOokie/skywire-wing-commander/issues). Also note that this is not my job - I am doing this as an active member of the Skyfleet community and will endevor to get back to you and resolve issues when I can. Please have patience and bare with me.
+Please note that this **is not an official [Skycoin](https://skycoin.net) project**. If you have issues or questions - please **do not bother the Skycoin or Skywire teams** - raise any issues or feature requests  in [GitHub](https://github.com/BigOokie/skywire-wing-commander/issues). Also note that this is not my job - I am doing this as an active member of the Skyfleet community and will endeavor to get back to you and resolve issues when I can. Please have patience and bare with me.
 
 The intention of this project is to have a specialised Telegram Bot application (written in Go) to run on a Skycoin Skywire (Skyminer) Manager Node and provide its owner with realtime management and monitoring capabilities.
 
 # Wing Commander Setup
-This section is incomplete and requires further work. It should e sufficient however for those interested in working with the *Alpha* release to get it running.
+This section is incomplete and requires further work. It should be sufficient however for those interested in working with the *Alpha* release to get it running.
 
 ## Configuration File
 You MUST provide a valid configuration file for the Bot or it will not launch. The config file must reside in the following location `$HOME\.wingcommander\config.toml`
@@ -44,12 +44,12 @@ cd ~
 mkdir .wincommander
 ```
 
-Refer to the provided example configution file: `BigOokie\skywire-wing-commander\src\wcbot\config.example.toml` file for details of all requied settings. I suggest copying this as a template and then using a text editor such as `nano` or `vi` to edit the details. 
+Refer to the provided example configution file: `BigOokie\skywire-wing-commander\src\wcbot\config.example.toml` file for details of all required settings. I suggest copying this as a template and then using a text editor such as `nano` or `vi` to edit the details. 
 
 ## Create your Bot
 <img src="assets/images/Telegram-BotFather.jpg" width=150 height=150>
 
-Initiate a Telegram chat with the `@BotFather`. The `@BotFather` is a Bot provided by Telegram and will guide you through the process of creating a new Telegram account for your Bot. 
+Initiate a Telegram chat with the `@BotFather`. The `@BotFather` is a bot provided by Telegram and will guide you through the process of creating a new Telegram account for your bot. 
 
 I won't cover specifics here - I suggest you Google it.
 
@@ -68,14 +68,14 @@ For a description of the Bot API, see this page: https://core.telegram.org/bots/
 You will need to paste the (API) `token` provided by the `@BotFather` into your `config.toml` file .
 
 ### Suggested Bot Settings
-The `@BotFather` allows you to control certain settings for the Bot - including its ability to participate in Group Chats. At this stage the Bot has been designed for use in private chats only. Further, I would strongly recommend not allowing it to be used by anyone other than youself or within Group context
+The `@BotFather` allows you to control certain settings for the bot - including its ability to participate in group chats. At this stage the Bot has been designed for use in private chats only. Further, I would strongly recommend not allowing it to be used by anyone other than youself or within group context.
 
 ## Install and Build
-The **Wing Commander** Bot is designed to operate on your Skywire Manager Node - it is not intended or expected to function on a subordinate Node that does not run the Skywire Manager.
+The **Wing Commander** bot is designed to operate on your Skywire Manager Node - it is not intended or expected to function on a subordinate Node that does not run the Skywire Manager.
 
 It is expected that you have `Go v1.10.x` installed. I will leave the installation of this to you. The below steps assume Go is correctly installed and your `$GOPATH` is correctly defined.
 
-To get and build the code use the following commands - note paths are case-sensative:
+To get and build the code use the following commands - note paths are case-sensitive:
 ```sh
 mkdir -p $GOPATH/src/github.com/BigOokie
 cd $GOPATH/src/github.com/BigOokie
@@ -93,21 +93,21 @@ go install -v ./...
 ```
 
 ## Run Wing Commander
-To run the **Wing Commander** Bot you must have a `config.toml` file setup. At present, the `config.toml` file MUST be placed into the same folder that the `wcbot` application (i.e. `$GOPATH/bin/`). This will be moved into the users folder at some point in the future.
+To run the **Wing Commander** bot you must have a `config.toml` file setup. At present, the `config.toml` file MUST be placed into the same folder that the `wcbot` application (i.e. `$GOPATH/bin/`). This will be moved into the users folder at some point in the future.
 
 There is an example configuration file provided with the source (`config.example.toml`). Easiest way to start is to copy this and replace the required values.
 
 Key elements you will need in the `config.toml` file are:
-- The Bot token, provided by the `@BotFather`
-- Your Bots `ChatID`.
-- Your Telegram `@` user name
+- The bot token, provided by the `@BotFather`
+- Your bots `ChatID`.
+- Your Telegram `@` user name (type `@username`in telegram and click on it if you don't know how to get one)
 
 ### Find your ChatID
-To get your `ChatID` go into Telegram and send a chat message to your newly created Bot (it will not respond). Once you have initiated a chat with your bot, then enter the following URL into your browser:
+To get your `ChatID` go into Telegram and send a chat message to your newly created bot (it will not respond). Once you have initiated a chat with your bot, then enter the following URL into your browser:
 ```sh
 https://api.telegram.org/bot<YourBOTToken>/getUpdates
 ```
-The above URL should produce `JSON` output for your Bot, including the `ChatID`. Paste your `ChatID` into your `config.toml` file.
+The above URL should produce `JSON` output for your bot, including the `ChatID`. Paste your `ChatID` into your `config.toml` file.
 
 ### Run as background process
 To run **Wing Commander** as a background process (detached from the terminal):
@@ -117,7 +117,7 @@ nohup ./wcbot /dev/null 2>&1 & echo $! > wcbot.pid &
 ```
 
 ### Run as forground process
-To run **Wing Commander** as a forground process (debug info logged to the terminal):
+To run **Wing Commander** as a foreground process (debug info logged to the terminal):
 ```sh
 cd $GOPATH/bin
 ./wcbot
@@ -131,7 +131,7 @@ cd $GOPATH/bin
 pkill -F wcbot.pid
 ```
 
-Alternativly, if you are running **Wing Commander** interactivly from the command line, you can pres `CTRL+C` to shut it down gracefully.
+Alternatively, if you are running **Wing Commander** interactively from the command line, you can press `CTRL+C` to shut it down gracefully.
 
 # Wing Commander Commands
 This section outlines the Telegram Bot commands that are currently supported by **Wing Commander**:
@@ -160,23 +160,23 @@ Manually request current status of the **Wing Commander** Bot.
 `/start`
 
 **Wing Commander** will start monitoring the **Skyminer** that it is running on.
-Once started, **Wing Commander** will provide notification updates via Telegram when any Node managed by the Skyminer connects or disconnects.
-Additionally, the `/start` command will initiate a Heartbeat which will provide a status update on a configurable cycle (interval set in `config.toml`).  The Heartbeat will help you to ensure that the Bot and/or the Skyminer itself is still running. If you stop recieving the Heartbeat - you need to check whats going on.
+Once started, **Wing Commander** will provide notification updates via Telegram when any Node managed by the Skyminer Manager connects or disconnects.
+Additionally, the `/start` command will initiate a heartbeat which will provide a status update on a configurable cycle (interval set in `config.toml`).  The heartbeat will help you to ensure that the bot and/or the Skyminer itself is still running. **If you stop receiving the heartbeat, you need to check whats going on.**
 
 ## Stop
 `/stop`
 
-**Wing Commander** will stop monitoring the Skyminer. This will also stop the Heartbeat.
+**Wing Commander** will stop monitoring the Skyminer. This will also stop the heartbeat.
 
 # Known Issues
 The following section outlines some known issues that need to be taken into consideration by anyone running this software:
-- DNS level blocking/filtering of telegram API domain on the Skywire nodes (or routers). [More detail provided below](#opendns-errors).
+- DNS level blocking/filtering of Telegram API domain on the Skywire nodes (or routers). [More detail provided below](#opendns-errors).
 
-- Repository Renamed. The Repository has recently been renamed. It was previously `skywire-telegram-notify-bot`. It is now called `skywire-wing-commander` (note that this is case sensative). Please make sure you update any references to the new repo name.
+- Repository renamed. The repository has recently been renamed. It was previously `skywire-telegram-notify-bot`. It is now called `skywire-wing-commander` (note that this is case sensitive). Please make sure you update any references to the new repo name.
 
 I have built and tested this on the following setups - but please note it is still considered *ALPHA*: 
 - DIY Raspberry Pi Miner
-- Official Skyminer (using official OrangePi images)
+- Official Skyminer (using the [official prepared images](https://github.com/skycoin/skywire#ip-presetted-system-images) for the orange pi prime)
 - DIY on MacOS.
 
 **YOU TAKE FULL RESPONSIBILITY**
@@ -185,13 +185,13 @@ I have built and tested this on the following setups - but please note it is sti
 If you are running OpenDNS or other DNS which protects and prevents access to certain domains, you may need to update the settings to ensure that the Telegram API domain (`https://api.telegram.org`) is not blocked.
 In OpenDNS this is blocked by the `Chat` and `Instant message` areas.
 
-Access to the Telegram API is being blocked if you get the following error when trying to run the Bot
+Access to the Telegram API is being blocked if you get the following error when trying to run the Bot:
 ```sh
 PANI[0000] Post https://api.telegram.org/bot{BOTTOKEN_FROM_BOTFATHER}/getMe: x509: certificate signed by unknown authority 
 ```
 
-You can verify this i using `curl`. Run the following cmd and if you get the error show, the Domain is being blocked. If the domain isnt blocked you should get a JSON response from Telegrams API.
-```sh
+You can verify this by using `curl`. Run the following command and if you get the error shown below, the domain is being blocked. If the domain isn't blocked you should get a JSON response from Telegrams API.
+```
 curl https://api.telegram.org/bot{BOTTOKEN_FROM_BOTFATHER}/getMe
 
 curl: (60) SSL certificate problem: unable to get local issuer certificate
