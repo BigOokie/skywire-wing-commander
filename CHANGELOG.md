@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Added
+### Changed
+### Deprecated
+### Removed
+### Fixed
+### Security
+
 ## [v0.1.0-alpha.1] - 2018-08-02
 ### Added
 - TOML based configuration. A valid `config.toml` file is required in the users `$HOME/.wingcommander` folder. The `$HOME` folder may be different depending on your OS. An example reference configuration file is provided (`config.toml.example`).
@@ -62,6 +70,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Fixed
 ### Security
 
+[Unreleased]: https://github.com/BigOokie/Skywire-Wing-Commander/compare/master...dev
 [v0.1.0-alpha.1]:
 https://github.com/BigOokie/Skywire-Wing-Commander/compare/v0.0.3-alpha...v0.1.0-alpha.1
 [v0.0.3-alpha]: https://github.com/BigOokie/Skywire-Wing-Commander/compare/v0.0.2-alpha...v0.0.3-alpha
