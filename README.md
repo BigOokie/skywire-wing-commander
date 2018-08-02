@@ -12,7 +12,8 @@
 - [Changelog](CHANGELOG.md)
 - [Credits](CREDITS.md)
 - [Overview](#overview)
-- [Wing Comamander Setup](wing-comamander-setup)
+- [Wing Comamander Setup](#wing-comamander-setup)
+    - [Configuration File](#configuration-file)
     - [Create your Bot](#create-your-bot)
     - [Install and Build](#install-and-build)
     - [Update and Rebuild](#update-and-rebuild)
@@ -31,8 +32,19 @@ Please note that this **is not an official [SkyCoin](https://skycoin.net) projec
 
 The intention of this project is to have a specialised Telegram Bot application (written in Go) to run on a Skycoin Skywire (Skyminer) Manager Node and provide its owner with realtime management and monitoring capabilities.
 
-# Wing Comamander Setup
+# Wing Commander Setup
 This section is incomplete and requires further work. It should e sufficient however for those interested in working with the *Alpha* release to get it running.
+
+## Configuration File
+You MUST provide a valid configuration file for the Bot or it will not launch. The config file must reside in the following location `$HOME\.wingcommander\config.toml`
+
+You will need to create the `.wingcommander` folder and then place the `config.toml` file into it.
+```sh
+cd ~
+mkdir .wincommander
+```
+
+Refer to the provided example configution file: `BigOokie\skywire-wing-commander\src\wcbot\config.example.toml` file for details of all requied settings. I suggest copying this as a template and then using a text editor such as `nano` or `vi` to edit the details. 
 
 ## Create your Bot
 <img src="assets/images/Telegram-BotFather.jpg" width=150 height=150>
