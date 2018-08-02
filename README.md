@@ -13,13 +13,15 @@
 - [Credits](CREDITS.md)
 - [Overview](#overview)
 - [Wing Comamander Setup](#wing-comamander-setup)
-    - [Configuration File](#configuration-file)
     - [Create your Bot](#create-your-bot)
     - [Install and Build](#install-and-build)
     - [Update and Rebuild](#update-and-rebuild)
-- [Running Wing Commander](#run-wing-commander)
-- [Stopping Wing Commander](#stop-wing-commander)
-- [Wing Commander Bot Commands](#wing-commander-bot-commands)
+    - [Configuration](#configuration)
+- [Running Wing Commander](#running-wing-commander)
+     - [Background process](#background-process)
+    - [Forground Process](#forground-process)
+- [Stopping Wing Commander](#stopping-wing-commander)
+- [Wing Commander Commands](#wing-commander-commands)
 - [Known Issues](#known-issues)
 - [Donations](#Donations)
 
@@ -30,7 +32,7 @@
 
 This is currently a *Work In Progress (WIP)* and has been released as an early *Alpha* to select group for testing and feedback. More details will be provided as the project progresses.
 
-Please note that this **is not an official [Skycoin](https://skycoin.net) project**. If you have issues or questions - please **do not bother the Skycoin or Skywire teams** - raise any issues or feature requests  in [GitHub](https://github.com/BigOokie/skywire-wing-commander/issues). Also note that this is not my job - I am doing this as an active member of the Skyfleet community and will endeavor to get back to you and resolve issues when I can. Please have patience and bare with me.
+Please note that this **is not an official [Skycoin](https://skycoin.net) project**. If you have issues or questions - please **do not bother the Skycoin or Skywire teams** - raise any issues or feature requests  in [GitHub](https://github.com/BigOokie/skywire-wing-commander/issues/new/choose). Also note that this is not my job - I am doing this as an active member of the Skyfleet community and will endeavor to get back to you and resolve issues when I can. Please have patience and bare with me.
 
 The intention of this project is to have a specialised Telegram bot application (written in Go) to run on a Skycoin Skywire (Skyminer) Manager Node and provide its owner with realtime management and monitoring capabilities.
 
@@ -38,17 +40,6 @@ The intention of this project is to have a specialised Telegram bot application 
 
 # Wing Commander Setup
 This section is incomplete and requires further work. It should be sufficient however for those interested in working with the *Alpha* release to get it running.
-
-## Configuration File
-You MUST provide a valid configuration file for the bot or it will not launch. The config file must reside in the following location `$HOME\.wingcommander\config.toml`
-
-You will need to create the `.wingcommander` folder and then place the `config.toml` file into it.
-```sh
-cd ~
-mkdir .wincommander
-```
-
-Refer to the provided example configution file: `BigOokie\skywire-wing-commander\src\wcbot\config.example.toml` file for details of all required settings. I suggest copying this as a template and then using a text editor such as `nano` or `vi` to edit the details. 
 
 ## Create your Bot
 <img src="assets/images/Telegram-BotFather.jpg" width=150 height=150>
@@ -88,7 +79,7 @@ cd skywire-wing-commander
 go install -v ./...
 ```
 
-## Update and rebuild
+## Update and Rebuild
 To update and rebuild, use the following commands:
 ```sh
 cd $GOPATH/src/github.com/BigOokie/skywire-wing-commander
@@ -96,12 +87,23 @@ git pull origin master
 go install -v ./...
 ```
 
-## Run Wing Commander
-To run the **Wing Commander** bot you must have a `config.toml` file setup. At present, the `config.toml` file MUST be placed into the same folder that the `wcbot` application (i.e. `$GOPATH/bin/`). This will be moved into the users folder at some point in the future.
+## Configuration
+You MUST provide a valid configuration file for the bot or it will not launch. The config file must reside in the following location `$HOME\.wingcommander\config.toml`
 
-There is an example configuration file provided with the source (`config.example.toml`). Easiest way to start is to copy this and replace the required values.
+Refer to the following example configuration file: [config.example.toml](\src\wcbot\config.example.toml)
+It is recommended to copy the example configuration file to `$HOME\.wingcommander\config.toml`. Use the example file as a template and edit the details as needed. 
 
-Key elements you will need in the `config.toml` file are:
+The following commands can be used to setup the required folders and copy the example config file template:
+```sh
+cd ~
+mkdir .wincommander
+cd .wingcommander
+cp $GOPATH/src/github.com/BigOokie/skywire-wing-commander/src/wcbot/config.example.toml ~/.wingommander/config.toml
+```
+
+Use an editor (`nano`, `vi`) to update the `.wingcommander/config.toml` file.
+
+Key elements you will need in the `config.toml` file are - but feel free to edit other settings, but the defaults should be fine for most users:
 - The bot token, provided by the `@BotFather`
 - Your bots `ChatID`.
 - Your Telegram `@` user name (type `@username`in telegram and click on it if you don't know how to get one)
@@ -113,14 +115,15 @@ https://api.telegram.org/bot<YourBOTToken>/getUpdates
 ```
 The above URL should produce `JSON` output for your bot, including the `ChatID`. Paste your `ChatID` into your `config.toml` file.
 
-### Run as background process
+## Running Wing Commander
+### Background process
 To run **Wing Commander** as a background process (detached from the terminal):
 ```sh
 cd $GOPATH/bin
 nohup ./wcbot /dev/null 2>&1 & echo $! > wcbot.pid &
 ```
 
-### Run as forground process
+### Forground process
 To run **Wing Commander** as a foreground process (debug info logged to the terminal):
 ```sh
 cd $GOPATH/bin
@@ -129,7 +132,7 @@ cd $GOPATH/bin
 
 Once the **Wing Commander** Bot is running, start a private chat with the Bot you can make use for the commands to run it (see following section)
 
-## Stop Wing Commander 
+## Stopping Wing Commander 
 ```sh
 cd $GOPATH/bin
 pkill -F wcbot.pid
