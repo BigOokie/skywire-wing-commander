@@ -67,15 +67,6 @@ func (bot *Bot) handleCommandStatus(ctx *BotContext, command, args string) error
 	return bot.Send(ctx, "whisper", "markdown", fmt.Sprintf("*%v* Nodes currently connected.", len(bot.skyMgrMonitor.connectedNodes)))
 }
 
-/*
-// Handler for heartbeat command
-func (bot *Bot) handleCommandHeartBeat(ctx *BotContext, command, args string) error {
-	log.Debug("Handle command /heartbeat")
-	go bot.botHeartbeatLoop(ctx)
-	return bot.Send(ctx, "whisper", "markdown", fmt.Sprintf(msgHeartBeatStarted, bot.config.Monitor.HeartbeatIntMin))
-}
-*/
-
 func (bot *Bot) handleDirectMessageFallback(ctx *BotContext, text string) (bool, error) {
 	errmsg := fmt.Sprintf("Sorry, I only take commands. '%s' is not a command.\n\n%s", text, msgHelpShort)
 	log.Debugf(errmsg)
@@ -92,21 +83,6 @@ func (bot *Bot) AddGroupMessageHandler(handler MessageHandler) {
 	bot.groupMessageHandlers = append(bot.groupMessageHandlers, handler)
 }
 
-/*
-// Bot Heartbeat Loop
-func (bot *Bot) botHeartbeatLoop(ctx *BotContext) {
-	ticker := time.NewTicker(time.Minute * bot.config.Monitor.HeartbeatIntMin)
-
-	for {
-		select {
-		case <-ticker.C:
-			bot.Send(ctx, "whisper", "markdown", msgStatus)
-			bot.Send(ctx, "whisper", "markdown", fmt.Sprintf("*%v* Nodes currently connected.", len(bot.skyMgrMonitor.connectedNodes)))
-		}
-	}
-}
-*/
-
 // monitorEventLoop monitors for event messages from the SkyMgrMonitor (when running).
 // Its also responsible for managing the Heartbeat (if configured)
 func (bot *Bot) monitorEventLoop(runctx context.Context, botctx *BotContext, statusMsgChan <-chan string) {
@@ -122,7 +98,6 @@ func (bot *Bot) monitorEventLoop(runctx context.Context, botctx *BotContext, sta
 		// Heartbeat ticker event
 		case <-tickerHB.C:
 			log.Debug("Bot.monitorEventLoop - Heartbeat event")
-			//bot.Send(botctx, "whisper", "markdown", fmt.Sprintf("%s\n\n*Connected Nodes:* %v", msgHeartbeat, len(bot.skyMgrMonitor.connectedNodes)))
 			bot.Send(botctx, "whisper", "markdown", fmt.Sprintf(msgHeartbeat, len(bot.skyMgrMonitor.connectedNodes)))
 
 		// Context has been cancelled. Shutdown
