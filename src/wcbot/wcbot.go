@@ -349,28 +349,37 @@ func (bot *Bot) Reply(ctx *BotContext, format, text string) error {
 }
 
 func (bot *Bot) handleMessage(ctx *BotContext) error {
-<<<<<<< HEAD
-	log.Printf("Bot.handleMessage: chat %d (%s)", ctx.message.Chat.ID, ctx.message.Chat.UserName)
-=======
-
+	// Check to ensure the User sending the message is registered in the Bots config
+	// as the Admin user. Ignore any message or command from anyone else
+	// Fixed #10
 	if fmt.Sprintf("@%s", ctx.message.Chat.UserName) != bot.config.Telegram.Admin {
 		log.Debugf("Ignoring message from non-owner user chat %d (%s)", ctx.message.Chat.ID, "@"+ctx.message.Chat.UserName)
 		return nil
 	}
 
->>>>>>> 83d921be7e55fc01c92d964bab4614b32773fc6f
-	if (ctx.message.Chat.IsGroup() || ctx.message.Chat.IsSuperGroup()) && ctx.message.Chat.ID == bot.config.Telegram.ChatID {
-		log.Debug("Bot.handleMessage - handleGroupMessage")
-		//return bot.handleGroupMessage(ctx)
-		log.Printf("unknown chat %d (%s)", ctx.message.Chat.ID, ctx.message.Chat.UserName)
-		return nil
-	} else if ctx.message.Chat.IsPrivate() {
+	// If this is a prive chat then respond - on the basis we now know we are
+	// talking to the registered Admin user (as per config)
+	if ctx.message.Chat.IsPrivate() {
 		log.Debug("Bot.handleMessage - handlePrivateMessage")
 		return bot.handlePrivateMessage(ctx)
 	} else {
 		log.Debugf("unknown chat %d (%s)", ctx.message.Chat.ID, ctx.message.Chat.UserName)
 		return nil
 	}
+	/*
+		if (ctx.message.Chat.IsGroup() || ctx.message.Chat.IsSuperGroup()) && ctx.message.Chat.ID == bot.config.Telegram.ChatID {
+			log.Debug("Bot.handleMessage - handleGroupMessage")
+			//return bot.handleGroupMessage(ctx)
+			log.Printf("unknown chat %d (%s)", ctx.message.Chat.ID, ctx.message.Chat.UserName)
+			return nil
+		} else if ctx.message.Chat.IsPrivate() {
+			log.Debug("Bot.handleMessage - handlePrivateMessage")
+			return bot.handlePrivateMessage(ctx)
+		} else {
+			log.Debugf("unknown chat %d (%s)", ctx.message.Chat.ID, ctx.message.Chat.UserName)
+			return nil
+		}
+	*/
 }
 
 func NewBot(config *Config) (*Bot, error) {
