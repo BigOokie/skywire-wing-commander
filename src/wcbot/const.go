@@ -38,7 +38,7 @@ const (
 	// Status cmd message
 	msgStatus = "*Wing Commander* Ready and reporting for duty 👍"
 	// Heartbeat message
-	msgHeartbeat = "*Wing Commander Heatbeat* ❤️"
+	msgHeartbeat = "*Wing Commander Heatbeat* ❤️\n*Connected Nodes:* %v"
 
 	// Start cmd messages
 	msgMonitorAlreadyStarted = "*Wing Commander* Sky Manager Monitoring has already been started."

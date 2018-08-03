@@ -122,7 +122,8 @@ func (bot *Bot) monitorEventLoop(runctx context.Context, botctx *BotContext, sta
 		// Heartbeat ticker event
 		case <-tickerHB.C:
 			log.Debug("Bot.monitorEventLoop - Heartbeat event")
-			bot.Send(botctx, "whisper", "markdown", fmt.Sprintf("%s\n\n*Connected Nodes:* %v", msgHeartbeat, len(bot.skyMgrMonitor.connectedNodes)))
+			//bot.Send(botctx, "whisper", "markdown", fmt.Sprintf("%s\n\n*Connected Nodes:* %v", msgHeartbeat, len(bot.skyMgrMonitor.connectedNodes)))
+			bot.Send(botctx, "whisper", "markdown", fmt.Sprintf(msgHeartbeat, len(bot.skyMgrMonitor.connectedNodes)))
 
 		// Context has been cancelled. Shutdown
 		case <-runctx.Done():
