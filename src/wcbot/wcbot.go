@@ -337,12 +337,18 @@ func (bot *Bot) Reply(ctx *BotContext, format, text string) error {
 }
 
 func (bot *Bot) handleMessage(ctx *BotContext) error {
+
+	if fmt.Sprintf("@%s", ctx.message.Chat.UserName) != bot.config.Telegram.Admin {
+		log.Debugf("Ignoring message from non-owner user chat %d (%s)", ctx.message.Chat.ID, "@"+ctx.message.Chat.UserName)
+		return nil
+	}
+
 	if (ctx.message.Chat.IsGroup() || ctx.message.Chat.IsSuperGroup()) && ctx.message.Chat.ID == bot.config.Telegram.ChatID {
 		return bot.handleGroupMessage(ctx)
 	} else if ctx.message.Chat.IsPrivate() {
 		return bot.handlePrivateMessage(ctx)
 	} else {
-		log.Printf("unknown chat %d (%s)", ctx.message.Chat.ID, ctx.message.Chat.UserName)
+		log.Debugf("unknown chat %d (%s)", ctx.message.Chat.ID, ctx.message.Chat.UserName)
 		return nil
 	}
 }
