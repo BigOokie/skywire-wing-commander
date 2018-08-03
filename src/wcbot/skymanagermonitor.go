@@ -162,3 +162,13 @@ func (m *SkyManagerMonitor) maintainConnectedNodesList(newcns skynode.NodeInfoSl
 	}
 	return
 }
+
+// GetConnectedNodeCount will return the count of Nodes within the connectedNodes structure
+// If the structure is nil (not yet assigned), 0 will be returned
+func (m *SkyManagerMonitor) GetConnectedNodeCount() int {
+	if m.connectedNodes == nil {
+		return 0
+	} else {
+		return len(m.connectedNodes)
+	}
+}
