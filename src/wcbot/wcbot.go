@@ -349,7 +349,16 @@ func (bot *Bot) Reply(ctx *BotContext, format, text string) error {
 }
 
 func (bot *Bot) handleMessage(ctx *BotContext) error {
+<<<<<<< HEAD
 	log.Printf("Bot.handleMessage: chat %d (%s)", ctx.message.Chat.ID, ctx.message.Chat.UserName)
+=======
+
+	if fmt.Sprintf("@%s", ctx.message.Chat.UserName) != bot.config.Telegram.Admin {
+		log.Debugf("Ignoring message from non-owner user chat %d (%s)", ctx.message.Chat.ID, "@"+ctx.message.Chat.UserName)
+		return nil
+	}
+
+>>>>>>> 83d921be7e55fc01c92d964bab4614b32773fc6f
 	if (ctx.message.Chat.IsGroup() || ctx.message.Chat.IsSuperGroup()) && ctx.message.Chat.ID == bot.config.Telegram.ChatID {
 		log.Debug("Bot.handleMessage - handleGroupMessage")
 		//return bot.handleGroupMessage(ctx)
@@ -359,7 +368,7 @@ func (bot *Bot) handleMessage(ctx *BotContext) error {
 		log.Debug("Bot.handleMessage - handlePrivateMessage")
 		return bot.handlePrivateMessage(ctx)
 	} else {
-		log.Printf("unknown chat %d (%s)", ctx.message.Chat.ID, ctx.message.Chat.UserName)
+		log.Debugf("unknown chat %d (%s)", ctx.message.Chat.ID, ctx.message.Chat.UserName)
 		return nil
 	}
 }
