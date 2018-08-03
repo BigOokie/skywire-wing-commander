@@ -134,7 +134,7 @@ func (m *SkyManagerMonitor) maintainConnectedNodesList(newcns skynode.NodeInfoSl
 		} else {
 			// Add new NodeInfo
 			m.connectedNodes[v.Key] = v
-			msg := fmt.Sprintf("*Node Connected:* %s\n\n*Conected Nodes:* %v", v.Key, len(m.connectedNodes))
+			msg := fmt.Sprintf(msgNodeConnected, v.Key, len(m.connectedNodes))
 			log.Debugln(msg)
 			statusMsgChan <- msg
 		}
@@ -154,7 +154,7 @@ func (m *SkyManagerMonitor) maintainConnectedNodesList(newcns skynode.NodeInfoSl
 				// Delete the Node from the Connected Node List
 				log.Debugf("SkyManagerMonitor.maintainConnectedNodesList: Node Removed:\n%s\n", v.FmtString())
 				delete(m.connectedNodes, v.Key)
-				msg := fmt.Sprintf("*Node Disconnected:* %s\n\n*%v* Nodes currently connected.", v.Key, len(m.connectedNodes))
+				msg := fmt.Sprintf(msgNodeDisconnected, v.Key, len(m.connectedNodes))
 				log.Debugln(msg)
 				statusMsgChan <- msg
 			}
@@ -168,7 +168,6 @@ func (m *SkyManagerMonitor) maintainConnectedNodesList(newcns skynode.NodeInfoSl
 func (m *SkyManagerMonitor) GetConnectedNodeCount() int {
 	if m.connectedNodes == nil {
 		return 0
-	} else {
-		return len(m.connectedNodes)
 	}
+	return len(m.connectedNodes)
 }

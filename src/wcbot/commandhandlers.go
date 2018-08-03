@@ -63,8 +63,7 @@ func (bot *Bot) handleCommandStop(ctx *BotContext, command, args string) error {
 // Handler for status command
 func (bot *Bot) handleCommandStatus(ctx *BotContext, command, args string) error {
 	log.Debug("Handle command /status")
-	bot.Send(ctx, "whisper", "markdown", msgStatus)
-	return bot.Send(ctx, "whisper", "markdown", fmt.Sprintf("*%v* Nodes currently connected.", len(bot.skyMgrMonitor.connectedNodes)))
+	return bot.Send(ctx, "whisper", "markdown", fmt.Sprintf(msgStatus, bot.skyMgrMonitor.GetConnectedNodeCount()))
 }
 
 func (bot *Bot) handleDirectMessageFallback(ctx *BotContext, text string) (bool, error) {
@@ -98,7 +97,7 @@ func (bot *Bot) monitorEventLoop(runctx context.Context, botctx *BotContext, sta
 		// Heartbeat ticker event
 		case <-tickerHB.C:
 			log.Debug("Bot.monitorEventLoop - Heartbeat event")
-			bot.Send(botctx, "whisper", "markdown", fmt.Sprintf(msgHeartbeat, len(bot.skyMgrMonitor.connectedNodes)))
+			bot.Send(botctx, "whisper", "markdown", fmt.Sprintf(msgHeartbeat, bot.skyMgrMonitor.GetConnectedNodeCount()))
 
 		// Context has been cancelled. Shutdown
 		case <-runctx.Done():

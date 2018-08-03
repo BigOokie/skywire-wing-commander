@@ -35,10 +35,15 @@ const (
 		"*Skycoin:* ES5LccJDhBCK275APmW9tmQNEgiYwTFKQF\n" +
 		"*Bitcoin:* 37rPeTNjosfydkB4nNNN1XKNrrxxfbLcMA\n"
 
+	msgConnectedNodes = "*Connected Nodes:* %v"
 	// Status cmd message
-	msgStatus = "*Wing Commander* Ready and reporting for duty 👍"
+	msgStatus = "*Wing Commander* Ready and reporting for duty 👍\n" + msgConnectedNodes
 	// Heartbeat message
-	msgHeartbeat = "*Wing Commander Heatbeat* ❤️\n*Connected Nodes:* %v"
+	msgHeartbeat = "*Wing Commander Heatbeat* ❤️\n" + msgConnectedNodes
+
+	// Node Connect/Disconnect Event Messages
+	msgNodeConnected    = "*Node Connected:* %s\n\n" + msgConnectedNodes
+	msgNodeDisconnected = "*Node Disconnected:* %s\n\n" + msgConnectedNodes
 
 	// Start cmd messages
 	msgMonitorAlreadyStarted = "*Wing Commander* Sky Manager Monitoring has already been started."
