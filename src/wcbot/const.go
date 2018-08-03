@@ -10,10 +10,10 @@ const (
 		"- /help - show this message\n" +
 		"- /about - show information and credits about my creator and any contributors\n" +
 		"- /status - ask how I'm going.. and if I'm still running\n" +
-		"- /start - start activly monitoring your SkyMiner. Once started, notifications will be sent to you for events that occur. A heartbeat will also be initiated to let you know if the Bot and the Miner are still running.\n" +
-		"- /stop - stop monitoring your SkyMiner. Once stopped, I won't send any more notifications\n"
+		"- /start - start activly monitoring your Skyminer. Once started, notifications will be sent to you for events that occur. A heartbeat will also be initiated to let you know if the bot and the Miner are still running.\n" +
+		"- /stop - stop monitoring your Skyminer. Once stopped, I won't send any more notifications\n"
 
-	msgHelp = "*Wing Commander* here. I will help you to manage and control your SkyMiner and its Nodes.\n\n" +
+	msgHelp = "*Wing Commander* here. I will help you to manage and control your Skyminer and its Nodes.\n\n" +
 		msgHelpShort +
 		"\n" +
 		"\n" +
@@ -21,19 +21,19 @@ const (
 
 	// About cmd message
 	msgAbout = "*Wing Commander (" + version + ")*\n" +
-		"A Telegram Bot written in *Go* designed to help the *Skyfleet* community monitor and manage their *SkyMiners*.\n" +
+		"A Telegram bot written in *Go* designed to help the *Skyfleet* community monitor and manage their *Skyminers*.\n" +
 		"\n" +
 		"*Created by:* @BigOokie *2018*\n" +
 		"*GitHub:* https://github.com/BigOokie/skywire-wing-commander\n" +
 		"*Twitter:* https://twitter.com/BigOokie\n" +
 		"\n" +
-		"Issues and feature requests must be logged via [GitHub](https://github.com/BigOokie/skywire-wing-commander/issues)\n" +
+		"Issues and feature requests must be logged via [GitHub](https://github.com/BigOokie/skywire-wing-commander/issues/new/choose)\n" +
 		"\n" +
 		"*SkyCoin*: https://skycoin.net/\n" +
 		"\n" +
 		"*Donations most welcome* 👍\n" +
 		"*Skycoin:* ES5LccJDhBCK275APmW9tmQNEgiYwTFKQF\n" +
-		"*BitCoin:* 37rPeTNjosfydkB4nNNN1XKNrrxxfbLcMA\n"
+		"*Bitcoin:* 37rPeTNjosfydkB4nNNN1XKNrrxxfbLcMA\n"
 
 	// Status cmd message
 	msgStatus = "*Wing Commander* Ready and reporting for duty 👍"
