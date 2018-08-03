@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v0.1.1-alpha.1] - 2018-08-03
+### Added
+### Changed
+### Deprecated
+### Removed
+### Fixed
+### Security
+- Prevent the **Wing Commander** bot from responding to any user who is not configured as the Admin (in the `config.toml`). Messages or commander from non-admin users are simply dropped and ignored. Previously they could be processed - meaning any Telegram user could initiate a private chat with an instance of the **Wing Commander** bot that they do not own. This has now been resolved.  All users should upgrade to this version. v0.1.0-alpha.1 should not be used.
+
 ## [v0.1.0-alpha.1] - 2018-08-02
 ### Added
 - TOML based configuration. A valid `config.toml` file is required in the users `$HOME/.wingcommander` folder. The `$HOME` folder may be different depending on your OS. An example reference configuration file is provided (`config.toml.example`).
@@ -62,6 +71,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Fixed
 ### Security
 
+[v0.1.1-alpha.1]:
+https://github.com/BigOokie/Skywire-Wing-Commander/compare/v0.0.3-alpha...v0.1.1-alpha.1
 [v0.1.0-alpha.1]:
 https://github.com/BigOokie/Skywire-Wing-Commander/compare/v0.0.3-alpha...v0.1.0-alpha.1
 [v0.0.3-alpha]: https://github.com/BigOokie/Skywire-Wing-Commander/compare/v0.0.2-alpha...v0.0.3-alpha
