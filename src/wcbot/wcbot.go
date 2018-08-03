@@ -316,10 +316,12 @@ func (bot *Bot) Send(ctx *BotContext, mode, format, text string) error {
 func (bot *Bot) SendReplyKeyboard(ctx *BotContext, kb tgbotapi.ReplyKeyboardMarkup) error {
 	var msg tgbotapi.MessageConfig
 
-	msg = tgbotapi.NewMessage(int64(ctx.message.From.ID), "") //ctx.message.Text)
+	msg = tgbotapi.NewMessage(int64(ctx.message.From.ID), ctx.message.Text)
 	msg.ReplyMarkup = kb
 
 	_, err := bot.telegram.Send(msg)
+	//msg.ReplyMarkup = tgbotapi.NewRemoveKeyboard(true)
+	//_, err = bot.telegram.Send(msg)
 	return err
 }
 
@@ -347,9 +349,14 @@ func (bot *Bot) Reply(ctx *BotContext, format, text string) error {
 }
 
 func (bot *Bot) handleMessage(ctx *BotContext) error {
+	log.Printf("Bot.handleMessage: chat %d (%s)", ctx.message.Chat.ID, ctx.message.Chat.UserName)
 	if (ctx.message.Chat.IsGroup() || ctx.message.Chat.IsSuperGroup()) && ctx.message.Chat.ID == bot.config.Telegram.ChatID {
-		return bot.handleGroupMessage(ctx)
+		log.Debug("Bot.handleMessage - handleGroupMessage")
+		//return bot.handleGroupMessage(ctx)
+		log.Printf("unknown chat %d (%s)", ctx.message.Chat.ID, ctx.message.Chat.UserName)
+		return nil
 	} else if ctx.message.Chat.IsPrivate() {
+		log.Debug("Bot.handleMessage - handlePrivateMessage")
 		return bot.handlePrivateMessage(ctx)
 	} else {
 		log.Printf("unknown chat %d (%s)", ctx.message.Chat.ID, ctx.message.Chat.UserName)
