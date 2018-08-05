@@ -5,8 +5,6 @@ import (
 	"fmt"
 	"time"
 
-	"gopkg.in/telegram-bot-api.v4"
-
 	log "github.com/sirupsen/logrus"
 )
 
@@ -66,39 +64,6 @@ func (bot *Bot) handleCommandStop(ctx *BotContext, command, args string) error {
 func (bot *Bot) handleCommandStatus(ctx *BotContext, command, args string) error {
 	log.Debug("Handle command /status")
 	return bot.Send(ctx, "whisper", "markdown", fmt.Sprintf(msgStatus, bot.skyMgrMonitor.GetConnectedNodeCount()))
-}
-
-// Handler for nodes command
-func (bot *Bot) handleCommandNodes(ctx *BotContext, command, args string) error {
-	log.Debug("Handle command /nodes")
-
-	if bot.skyMgrMonitor.GetConnectedNodeCount() == 0 {
-		return bot.Send(ctx, "whisper", "markdown", "No connected Nodes.")
-	}
-
-	var nodeListKB = tgbotapi.NewReplyKeyboard(
-		tgbotapi.NewKeyboardButtonRow(
-			tgbotapi.NewKeyboardButton("1"),
-			tgbotapi.NewKeyboardButton("2"),
-			tgbotapi.NewKeyboardButton("3"),
-		),
-		tgbotapi.NewKeyboardButtonRow(
-			tgbotapi.NewKeyboardButton("4"),
-			tgbotapi.NewKeyboardButton("5"),
-			tgbotapi.NewKeyboardButton("6"),
-		),
-	)
-
-	// Mark the keyboard as one time use. The keyboard will be hidden
-	// once a button is selected
-	nodeListKB.OneTimeKeyboard = true
-
-	err := bot.SendReplyKeyboard(ctx, nodeListKB)
-	if err != nil {
-		log.Error(err)
-	}
-
-	return err
 }
 
 func (bot *Bot) handleDirectMessageFallback(ctx *BotContext, text string) (bool, error) {

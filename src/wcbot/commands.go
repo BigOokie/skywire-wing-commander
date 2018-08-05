@@ -47,9 +47,4 @@ var commands = Commands{
 		"status",
 		(*Bot).handleCommandStatus,
 	},
-	Command{
-		false,
-		"nodes",
-		(*Bot).handleCommandNodes,
-	},
 }

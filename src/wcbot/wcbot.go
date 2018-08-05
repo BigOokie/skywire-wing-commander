@@ -313,18 +313,6 @@ func (bot *Bot) Send(ctx *BotContext, mode, format, text string) error {
 	return err
 }
 
-func (bot *Bot) SendReplyKeyboard(ctx *BotContext, kb tgbotapi.ReplyKeyboardMarkup) error {
-	var msg tgbotapi.MessageConfig
-
-	msg = tgbotapi.NewMessage(int64(ctx.message.From.ID), ctx.message.Text)
-	msg.ReplyMarkup = kb
-
-	_, err := bot.telegram.Send(msg)
-	//msg.ReplyMarkup = tgbotapi.NewRemoveKeyboard(true)
-	//_, err = bot.telegram.Send(msg)
-	return err
-}
-
 /*
 func (bot *Bot) ReplyAboutEvent(ctx *Context, text string, event *Event) error {
 	return bot.Send(ctx, "reply", "markdown", fmt.Sprintf(

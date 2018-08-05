@@ -9,7 +9,6 @@ const (
 	msgHelpShort = "*Usage:*\n" +
 		"- /help - show this message\n" +
 		"- /about - show information and credits about my creator and any contributors\n" +
-		"- /nodes - list the currently connected Nodes\n" +
 		"- /status - ask how I'm going.. and if I'm still running\n" +
 		"- /start - start activly monitoring your Skyminer. Once started, notifications will be sent to you for events that occur. A heartbeat will also be initiated to let you know if the bot and the Miner are still running.\n" +
 		"- /stop - stop monitoring your Skyminer. Once stopped, I won't send any more notifications\n"
