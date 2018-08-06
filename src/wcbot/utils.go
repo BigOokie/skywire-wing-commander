@@ -7,8 +7,8 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-// userHome returns the current user home path
-func userHome() string {
+// UserHome returns the current user home path
+func UserHome() string {
 	if runtime.GOOS == "windows" {
 		home := os.Getenv("HOMEDRIVE") + os.Getenv("HOMEPATH")
 		if home == "" {
@@ -20,8 +20,8 @@ func userHome() string {
 	return os.Getenv("HOME")
 }
 
-// fileExists checks if the provided file exists or not
-func fileExists(filename string) bool {
+// FileExists checks if the provided file exists or not
+func FileExists(filename string) bool {
 	if _, err := os.Stat(filename); os.IsNotExist(err) {
 		log.Warnf("File does not exist: %s", filename)
 		return false

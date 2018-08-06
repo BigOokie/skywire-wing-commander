@@ -20,7 +20,7 @@ func main() {
 	defer log.Infoln("Skywire Wing Commander Telegram Bot - Stopped.")
 
 	// Load configuration
-	configPath := filepath.Join(userHome(), ".wingcommander", "config.toml")
+	configPath := filepath.Join(UserHome(), ".wingcommander", "config.toml")
 	config, err := ReadConfig(configPath)
 	if err != nil {
 		log.Error(err)
