@@ -76,24 +76,45 @@ func (bot *Bot) handleCommandNodes(ctx *BotContext, command, args string) error 
 		return bot.Send(ctx, "whisper", "markdown", "No connected Nodes.")
 	}
 
-	var nodeListKB = tgbotapi.NewReplyKeyboard(
-		tgbotapi.NewKeyboardButtonRow(
-			tgbotapi.NewKeyboardButton("1"),
-			tgbotapi.NewKeyboardButton("2"),
-			tgbotapi.NewKeyboardButton("3"),
-		),
-		tgbotapi.NewKeyboardButtonRow(
-			tgbotapi.NewKeyboardButton("4"),
-			tgbotapi.NewKeyboardButton("5"),
-			tgbotapi.NewKeyboardButton("6"),
-		),
-	)
+	var replyKeyboard tgbotapi.InlineKeyboardMarkup
+	var keyboard [][]tgbotapi.InlineKeyboardButton
+	var btnrow []tgbotapi.InlineKeyboardButton
+	var btn tgbotapi.InlineKeyboardButton
+
+	// Iterate the connectedNodes and build a keyboard with one button
+	// containing the Node Key per row
+	for _, v := range bot.skyMgrMonitor.connectedNodes {
+		btn = tgbotapi.NewInlineKeyboardButtonData(v.Key, v.Key)
+		btnrow = tgbotapi.NewInlineKeyboardRow(btn)
+
+		keyboard = append(keyboard, btnrow)
+	}
+
+	replyKeyboard = tgbotapi.InlineKeyboardMarkup{
+		InlineKeyboard: keyboard,
+	}
+
+	/*
+
+		var nodeListKB = tgbotapi.NewReplyKeyboard(
+			tgbotapi.NewKeyboardButtonRow(
+				tgbotapi.NewKeyboardButton("1"),
+				tgbotapi.NewKeyboardButton("2"),
+				tgbotapi.NewKeyboardButton("3"),
+			),
+			tgbotapi.NewKeyboardButtonRow(
+				tgbotapi.NewKeyboardButton("4"),
+				tgbotapi.NewKeyboardButton("5"),
+				tgbotapi.NewKeyboardButton("6"),
+			),
+		)
+	*/
 
 	// Mark the keyboard as one time use. The keyboard will be hidden
 	// once a button is selected
-	nodeListKB.OneTimeKeyboard = true
+	//nodeListKB.OneTimeKeyboard = true
 
-	err := bot.SendReplyKeyboard(ctx, nodeListKB)
+	err := bot.SendReplyKeyboard(ctx, replyKeyboard)
 	if err != nil {
 		log.Error(err)
 	}

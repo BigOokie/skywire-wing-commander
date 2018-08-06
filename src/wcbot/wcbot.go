@@ -325,6 +325,18 @@ func (bot *Bot) SendReplyKeyboard(ctx *BotContext, kb tgbotapi.ReplyKeyboardMark
 	return err
 }
 
+func (bot *Bot) SendReplyInlineKeyboard(ctx *BotContext, kb tgbotapi.InlineKeyboardMarkup) error {
+	var msg tgbotapi.MessageConfig
+
+	msg = tgbotapi.NewMessage(int64(ctx.message.From.ID), ctx.message.Text)
+	msg.ReplyMarkup = kb
+
+	_, err := bot.telegram.Send(msg)
+	//msg.ReplyMarkup = tgbotapi.NewRemoveKeyboard(true)
+	//_, err = bot.telegram.Send(msg)
+	return err
+}
+
 /*
 func (bot *Bot) ReplyAboutEvent(ctx *Context, text string, event *Event) error {
 	return bot.Send(ctx, "reply", "markdown", fmt.Sprintf(
@@ -447,7 +459,7 @@ func (bot *Bot) Start() error {
 	if err != nil {
 		return fmt.Errorf("Failed to create Telegram updates channel: %v", err)
 	}
-	//go bot.maintain()
+
 	for update := range updates {
 		if err := bot.handleUpdate(&update); err != nil {
 			log.Errorf("Error: %v", err)
