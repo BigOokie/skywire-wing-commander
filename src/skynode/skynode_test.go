@@ -73,6 +73,10 @@ func TestNodesAreEqualExactOK(t *testing.T) {
 	if !NodesAreEqual(nodeA, nodeB) {
 		t.Fail()
 	}
+
+	if diff := deep.Equal(nodeA, nodeB); diff != nil {
+		t.Error(diff)
+	}
 }
 
 func TestNodesAreEqualKeysOnlyOK(t *testing.T) {
@@ -93,6 +97,10 @@ func TestNodesAreEqualKeysOnlyOK(t *testing.T) {
 		StartTime:   0}
 
 	if !NodesAreEqual(nodeA, nodeB) {
+		t.Fail()
+	}
+
+	if diff := deep.Equal(nodeA, nodeB); diff == nil {
 		t.Fail()
 	}
 }
