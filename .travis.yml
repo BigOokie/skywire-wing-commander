@@ -1,10 +1,16 @@
 language: go
+
 sudo: false
+
 go:
-  - tip
+  - "1.10"
+
 before_install:
   - go get github.com/mattn/goveralls
+  - go get golang.org/x/tools/cover
+
 script:
   - $GOPATH/bin/goveralls -service=travis-ci
+  
 notifications:
   webhooks: https://fathomless-fjord-24024.herokuapp.com/notify
