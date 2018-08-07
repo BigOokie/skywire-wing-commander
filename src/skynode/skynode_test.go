@@ -2,6 +2,8 @@ package skynode
 
 import (
 	"testing"
+
+	"github.com/go-test/deep"
 )
 
 func TestNodeInfoString(t *testing.T) {
@@ -150,6 +152,10 @@ func TestNodeInfoSliceToMapl(t *testing.T) {
 		_, hasKey := nodeMap[node.Key]
 		if !hasKey {
 			t.Errorf("Node [%s] not found in NodeMap", node.Key)
+		}
+
+		if diff := deep.Equal(node, nodeMap[node.Key]); diff != nil {
+			t.Error(diff)
 		}
 	}
 
