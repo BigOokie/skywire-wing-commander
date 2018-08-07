@@ -4,6 +4,7 @@
 **Note:** The Skycoin Cloud logo (above) is the property of the [Skycoin project](https://skycoin.net).
 
 [![Go Report Card](https://goreportcard.com/badge/github.com/BigOokie/skywire-wing-commander)](https://goreportcard.com/report/github.com/BigOokie/skywire-wing-commander)
+[![Coverage Status](https://coveralls.io/repos/github/BigOokie/skywire-wing-commander/badge.svg?branch=master)](https://coveralls.io/github/BigOokie/skywire-wing-commander?branch=master)
 
 | Build Status |  |
 |--------------|--|
