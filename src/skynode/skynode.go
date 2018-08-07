@@ -59,7 +59,7 @@ func NodeInfoSliceEqual(a, b NodeInfoSlice) bool {
 
 // String satisfies the fmt.Stringer interface for the NodeInfo type
 func (ni NodeInfo) String() string {
-	msg := "Key: %s, Type: %s, SendBytes: %v, RecvBytes: %v, LastAckTime: %vs, StartTime: $vs"
+	msg := "Key: %s, Type: %s, SendBytes: %v, RecvBytes: %v, LastAckTime: %vs, StartTime: %vs"
 	return fmt.Sprintf(msg, ni.Key, ni.Conntype, ni.SendBytes, ni.RecvBytes, ni.LastAckTime, ni.StartTime)
 }
 
