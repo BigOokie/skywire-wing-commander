@@ -5,6 +5,7 @@ import (
 	"os/signal"
 	"path/filepath"
 
+	"github.com/BigOokie/skywire-wing-commander/src/utils"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -20,7 +21,7 @@ func main() {
 	defer log.Infoln("Skywire Wing Commander Telegram Bot - Stopped.")
 
 	// Load configuration
-	configPath := filepath.Join(UserHome(), ".wingcommander", "config.toml")
+	configPath := filepath.Join(utils.UserHome(), ".wingcommander", "config.toml")
 	config, err := ReadConfig(configPath)
 	if err != nil {
 		log.Error(err)

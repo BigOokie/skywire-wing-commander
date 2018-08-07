@@ -1,4 +1,4 @@
-package main
+package utils
 
 import (
 	"testing"
@@ -15,5 +15,11 @@ func TestFileExistsOk(t *testing.T) {
 	var goodFilename string = "./utils_test.go"
 	if !FileExists(goodFilename) {
 		t.Errorf("File (%s) does not exist but should.", goodFilename)
+	}
+}
+
+func TestUserHome(t *testing.T) {
+	if UserHome() == "" {
+		t.Error("Failed to determine User Home Pather.")
 	}
 }
