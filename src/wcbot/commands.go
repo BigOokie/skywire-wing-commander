@@ -1,11 +1,15 @@
 package main
 
+// Command struct is used to define a Telegram Bot command, including
+// if its an Admin only command, the string command (i.e. `/start`) and
+// the function that will handle the command
 type Command struct {
 	Admin       bool
 	Command     string
 	Handlerfunc CommandHandler
 }
 
+// Commands provides an array (slice) of Command structs
 type Commands []Command
 
 func (bot *Bot) setCommandHandlers() {

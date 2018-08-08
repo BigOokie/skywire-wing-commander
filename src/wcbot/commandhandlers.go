@@ -27,19 +27,20 @@ func (bot *Bot) handleCommandStart(ctx *BotContext, command, args string) error 
 	if bot.skyMgrMonitor.IsRunning() {
 		log.Debug(msgMonitorAlreadyStarted)
 		return bot.Send(ctx, "whisper", "markdown", msgMonitorAlreadyStarted)
-	} else {
-		log.Debug(msgMonitorStart)
-		cancelContext, cancelFunc := context.WithCancel(context.Background())
-		bot.skyMgrMonitor.CancelFunc = cancelFunc
-		bot.skyMgrMonitor.monitorStatusMsgChan = make(chan string)
-
-		// Start the Event Monitor - provide cancelContext
-		go bot.monitorEventLoop(cancelContext, ctx, bot.skyMgrMonitor.monitorStatusMsgChan)
-		// Start the monitor - provide cancelContext
-		go bot.skyMgrMonitor.Run(cancelContext, bot.skyMgrMonitor.monitorStatusMsgChan, bot.config.Monitor.IntervalSec)
-
-		return bot.Send(ctx, "whisper", "markdown", msgMonitorStart)
 	}
+
+	log.Debug(msgMonitorStart)
+	cancelContext, cancelFunc := context.WithCancel(context.Background())
+	bot.skyMgrMonitor.CancelFunc = cancelFunc
+	bot.skyMgrMonitor.monitorStatusMsgChan = make(chan string)
+
+	// Start the Event Monitor - provide cancelContext
+	go bot.monitorEventLoop(cancelContext, ctx, bot.skyMgrMonitor.monitorStatusMsgChan)
+	// Start the monitor - provide cancelContext
+	go bot.skyMgrMonitor.Run(cancelContext, bot.skyMgrMonitor.monitorStatusMsgChan, bot.config.Monitor.IntervalSec)
+
+	return bot.Send(ctx, "whisper", "markdown", msgMonitorStart)
+
 }
 
 // Handler for stop command
