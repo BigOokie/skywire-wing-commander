@@ -6,7 +6,7 @@ import (
 	"github.com/go-test/deep"
 )
 
-func TestNodeInfoString(t *testing.T) {
+func Test_NodeInfoString(t *testing.T) {
 	nodeInfo := NodeInfo{
 		Key:         "02b9d1cab7467771ce2bc8fd7c7340bba0c2a511004650064bcb368386263694fd",
 		Conntype:    "TCP",
@@ -29,7 +29,7 @@ func TestNodeInfoString(t *testing.T) {
 	}
 }
 
-func TestNodeInfoFmtString(t *testing.T) {
+func Test_NodeInfoFmtString(t *testing.T) {
 	nodeInfo := NodeInfo{
 		Key:         "02b9d1cab7467771ce2bc8fd7c7340bba0c2a511004650064bcb368386263694fd",
 		Conntype:    "TCP",
@@ -53,7 +53,7 @@ func TestNodeInfoFmtString(t *testing.T) {
 	}
 }
 
-func TestNodesAreEqualExactOK(t *testing.T) {
+func Test_NodesAreEqual_ExactOK(t *testing.T) {
 	nodeA := NodeInfo{
 		Key:         "02b9d1cab7467771ce2bc8fd7c7340bba0c2a511004650064bcb368386263694fd",
 		Conntype:    "TCP",
@@ -79,7 +79,7 @@ func TestNodesAreEqualExactOK(t *testing.T) {
 	}
 }
 
-func TestNodesAreEqualKeysOnlyOK(t *testing.T) {
+func Test_NodesAreEqual_KeysOnlyOK(t *testing.T) {
 	nodeA := NodeInfo{
 		Key:         "02b9d1cab7467771ce2bc8fd7c7340bba0c2a511004650064bcb368386263694fd",
 		Conntype:    "TCP",
@@ -105,7 +105,7 @@ func TestNodesAreEqualKeysOnlyOK(t *testing.T) {
 	}
 }
 
-func TestNodesAreEqualFail(t *testing.T) {
+func Test_NodesAreEqual_Fail(t *testing.T) {
 	nodeA := NodeInfo{
 		Key:         "02b9d1cab7467771ce2bc8fd7c7340bba0c2a511004650064bcb368386263694fd",
 		Conntype:    "TCP",
@@ -127,8 +127,7 @@ func TestNodesAreEqualFail(t *testing.T) {
 	}
 }
 
-func TestNodeInfoSliceToMapl(t *testing.T) {
-
+func Test_NodeInfoSliceToMap(t *testing.T) {
 	nodeA := NodeInfo{
 		Key:         "NODE1KEY",
 		Conntype:    "TCP",
