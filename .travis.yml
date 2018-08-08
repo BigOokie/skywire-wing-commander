@@ -11,6 +11,7 @@ before_install:
 
 script:
   - $GOPATH/bin/goveralls -service=travis-ci
+  - go test ./...
   
 notifications:
   webhooks: https://fathomless-fjord-24024.herokuapp.com/notify
