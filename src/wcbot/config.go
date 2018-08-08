@@ -3,6 +3,8 @@ package main
 import (
 	"time"
 
+	"github.com/BigOokie/skywire-wing-commander/src/utils"
+
 	"github.com/BurntSushi/toml"
 	log "github.com/sirupsen/logrus"
 )
@@ -29,6 +31,10 @@ type Config struct {
 
 // ReadConfig will read configuration from the provided TOML config file
 func ReadConfig(filename string) (*Config, error) {
+	if !utils.FileExists(filename) {
+		log.Error("Unable to find config file.")
+	}
+
 	var conf Config
 	_, err := toml.DecodeFile(filename, &conf)
 	if err != nil {
