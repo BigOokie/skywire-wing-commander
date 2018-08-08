@@ -11,7 +11,7 @@ import (
 // Handler for help command
 func (bot *Bot) handleCommandHelp(ctx *BotContext, command, args string) error {
 	log.Debug("Handle command /help")
-	return bot.Send(ctx, "whisper", "markdown", msgHelp)
+	return bot.Send(ctx, "whisper", "markdown", fmt.Sprintf(msgHelp, bot.config.Telegram.Admin))
 }
 
 // Handler for about command
@@ -55,10 +55,11 @@ func (bot *Bot) handleCommandStop(ctx *BotContext, command, args string) error {
 		bot.skyMgrMonitor.monitorStatusMsgChan = nil
 		log.Debug(msgMonitorStopped)
 		return bot.Send(ctx, "whisper", "markdown", msgMonitorStop)
-	} else {
-		log.Debug(msgMonitorNotRunning)
-		return bot.Send(ctx, "whisper", "markdown", msgMonitorNotRunning)
 	}
+
+	log.Debug(msgMonitorNotRunning)
+	return bot.Send(ctx, "whisper", "markdown", msgMonitorNotRunning)
+
 }
 
 // Handler for status command
