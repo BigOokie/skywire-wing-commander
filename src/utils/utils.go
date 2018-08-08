@@ -23,10 +23,10 @@ func UserHome() string {
 // FileExists checks if the provided file exists or not
 func FileExists(filename string) bool {
 	if _, err := os.Stat(filename); os.IsNotExist(err) {
-		log.Warnf("File does not exist: %s", filename)
+		log.Errorf("File (%s) does not exist. Error: %s", filename, err)
 		return false
 	}
 
-	log.Debugf("File exists: %s", filename)
+	log.Debugf("File (%s) exists.", filename)
 	return true
 }
