@@ -2,7 +2,7 @@ package main
 
 // Define constants used by the application
 const (
-	version = "v0.2.0-alpha.1"
+	version = "v0.1.1-alpha.2"
 
 	// Bot command messages:
 	// Help message
@@ -29,7 +29,7 @@ const (
 		"\n" +
 		"Issues and feature requests must be logged via [GitHub](https://github.com/BigOokie/skywire-wing-commander/issues/new/choose)\n" +
 		"\n" +
-		"*SkyCoin*: https://skycoin.net/\n" +
+		"*SkyCoin*: https://www.skycoin.net/\n" +
 		"\n" +
 		"*Donations most welcome* 👍\n" +
 		"*Skycoin:* ES5LccJDhBCK275APmW9tmQNEgiYwTFKQF\n" +
