@@ -99,9 +99,9 @@ It is recommended to copy the example configuration file to `$HOME\.wingcommande
 The following commands can be used to setup the required folders and copy the example config file template:
 ```sh
 cd ~
-mkdir .wincommander
+mkdir .wingcommander
 cd .wingcommander
-cp $GOPATH/src/github.com/BigOokie/skywire-wing-commander/src/wcbot/config.example.toml ~/.wingommander/config.toml
+cp $GOPATH/src/github.com/BigOokie/skywire-wing-commander/src/wcbot/config.example.toml ~/.wingcommander/config.toml
 ```
 
 Use an editor (`nano`, `vi`) to update the `.wingcommander/config.toml` file.
