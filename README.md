@@ -43,7 +43,7 @@ The intention of this project is to have a specialised Telegram bot application 
 ***
 
 # Wing Commander Setup
-This section is incomplete and requires further work. It should be sufficient however for those interested in working with the *Alpha* release to get it running.
+The following section should contain all the steps requied to setup and build the bot.
 
 ## Create your Bot
 
@@ -194,7 +194,7 @@ The following section outlines some known issues that need to be taken into cons
 
 - Repository renamed. The repository has recently been renamed. It was previously `skywire-telegram-notify-bot`. It is now called `skywire-wing-commander` (note that this is case sensitive). Please make sure you update any references to the new repo name.
 
-I have built and tested this on the following setups - but please note it is still considered *ALPHA*: 
+I have built and tested this on the following setups: 
 - DIY Raspberry Pi Miner
 - Official Skyminer (using the [official prepared images](https://github.com/skycoin/skywire#ip-presetted-system-images) for the orange pi prime)
 - DIY on MacOS.
