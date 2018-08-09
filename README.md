@@ -14,6 +14,7 @@
 # Contents
 - [Changelog](CHANGELOG.md)
 - [Credits](CREDITS.md)
+- [Contributors](CONTRIBUTORS.md)
 - [Overview](#overview)
 - [Wing Comamander Setup](#wing-comamander-setup)
     - [Create your Bot](#create-your-bot)
