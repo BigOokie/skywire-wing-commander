@@ -46,6 +46,7 @@ The intention of this project is to have a specialised Telegram bot application 
 This section is incomplete and requires further work. It should be sufficient however for those interested in working with the *Alpha* release to get it running.
 
 ## Create your Bot
+
 <img src="assets/images/Telegram-BotFather.jpg" width=150 height=150>
 
 Initiate a Telegram chat with the `@BotFather`. The `@BotFather` is a bot provided by Telegram and will guide you through the process of creating a new Telegram account for your bot. 
@@ -175,6 +176,10 @@ Manually request current status of the **Wing Commander** Bot.
 **Wing Commander** will start monitoring the **Skyminer** that it is running on.
 Once started, **Wing Commander** will provide notification updates via Telegram when any Node managed by the Skyminer Manager connects or disconnects.
 Additionally, the `/start` command will initiate a heartbeat which will provide a status update on a configurable cycle (interval set in `config.toml`).  The heartbeat will help you to ensure that the bot and/or the Skyminer itself is still running. **If you stop receiving the heartbeat, you need to check whats going on.**
+
+### Heartbeat screenshot
+<img src="assets/images/WingCommander-Heartbeat.png">
+
 
 ## Stop
 `/stop`
