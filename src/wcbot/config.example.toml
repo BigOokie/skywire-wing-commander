@@ -8,7 +8,7 @@
 apikey = "YOUR-BOT-API-KEY-HERE"
 # Telegram chatid. Go here to find this: https://api.telegram.org/bot<YourBOTToken>/getUpdates
 # This is an integer field - not a string
-chatid = YOUR-PRIVATE-BOT-CHATID-HERE(AS AN INTEGER)
+chatid = 0123456789
 # Your Telegram @USERNAME
 admin = "YOUR TELEGRAM @USERNAME"
 # Telegram API debugging (true or false)
