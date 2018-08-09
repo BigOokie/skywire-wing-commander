@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [v0.2.0-beta.1] - TBC
 ### Added
 - Code tests.
-- 
+- Added list of Contributors [CONTRIBUTORS.md](CONTRIBUTORS.md)
 ### Changed
 - Minor updates to messages generated from Wing Commander.
 ### Deprecated
