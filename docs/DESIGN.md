@@ -1,6 +1,6 @@
 # High level design: Wing Commander
 
-**THIS DOCUMENT IS NOW DEPRICATED**
+**THIS DOCUMENT IS NOW DEPRICATED - DO NOT USE**
 
 Wing Commander is a SkyMiner Management Telegram Bot built for the Skyfleet community
 
