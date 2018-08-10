@@ -123,6 +123,13 @@ https://api.telegram.org/bot<Insert-Your-BOT-APIKey-Here>/getUpdates
 ```
 The above URL should produce `JSON` output for your bot, including the `ChatID`. Paste your `ChatID` into your `config.toml` file.
 
+An example of the `JSON` output is as follows:
+```json
+{"ok":true,"result":[{"update_id":111111111,
+"message":{"message_id":4,"from":{"id":222222222,"is_bot":false,"first_name":"TestUser","last_name":"","username":"TestUSer","language_code":"en-US"},"chat":{"id":000000000,"first_name":"TestUser","last_name":"","username":"TestUser","type":"private"},"date":1533900000,"text":"Hello"}}]}
+```
+In the example above, `"chat":{"id":000000000` is what you are looking for, and specifically the `id` which in this example is `000000000`.
+
 ## Running Wing Commander
 ### Background process
 To run **Wing Commander** as a background process (detached from the terminal):
