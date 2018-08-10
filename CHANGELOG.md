@@ -8,12 +8,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Code tests.
 - Added list of Contributors [CONTRIBUTORS.md](CONTRIBUTORS.md)
+- Added ability for Bot to compensate for missing `@` on `admin` user in `config.toml`. Previosuly is the admin user was not prefixed with an `@` the Bot would refuse to respond to messages from your user on Telegram. Now the Bot will compensate (the `config.toml` file is unchanged) by updating its runtime configuration to add the missing `@` if required. The Bot will log a warning to notify you.
 ### Changed
 - Minor updates to messages generated from Wing Commander.
 ### Deprecated
 ### Removed
 ### Fixed
-- Inorporate minor fixes to code and doco from community feedback during ALPAH release stage.
+- Minor fixes to code and doco from community feedback during ALPAH release stage.
 ### Security
 
 ## [v0.1.1-alpha.1] - 2018-08-03
