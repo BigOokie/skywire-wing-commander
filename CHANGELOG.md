@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [v0.2.0-beta.1] - TBC
+## [v0.2.0-beta.1] - 2018-08-10
 ### Added
 - Code tests.
 - Added list of Contributors [CONTRIBUTORS.md](CONTRIBUTORS.md)
@@ -14,7 +14,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Deprecated
 ### Removed
 ### Fixed
-- Minor fixes to code and doco from community feedback during ALPAH release stage.
+- Minor fixes to code and doco based on community feedback during ALPAH release stage.
 ### Security
 
 ## [v0.1.1-alpha.1] - 2018-08-03
@@ -84,7 +84,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Fixed
 ### Security
 
-[v0.2.0-beta.1]: https://github.com/BigOokie/Skywire-Wing-Commander/compare/master...dev
+[v0.2.0-beta.1]: 
+https://github.com/BigOokie/Skywire-Wing-Commander/compare/v0.1.1-alpha.1...v0.2.0-beta.1
 [v0.1.1-alpha.1]:
 https://github.com/BigOokie/Skywire-Wing-Commander/compare/v0.1.0-alpha.1...v0.1.1-alpha.1
 [v0.1.0-alpha.1]:
