@@ -227,6 +227,24 @@ curl https://api.telegram.org/bot{BOTTOKEN_FROM_BOTFATHER}/getMe
 curl: (60) SSL certificate problem: unable to get local issuer certificate
 ```
 
+## Date-Time set incorrectly
+If the Date-time on your Node is set incorrectly you will get certificate issues as well.
+If you get the following error messages (when running interactivly) you need to check the date on your node.
+```sh
+INFO[0000] Initiating Bot instance.
+ERRO[0001] Failed to initialize Telegram API: Post https://api.telegram.org/bot{BOTTOKEN_FROM_BOTFATHER}/getMe: x509: certificate has expired or is not yet valid
+INFO[0001] Skywire Wing Commander Telegram Bot - Stopped.
+```
+Check your system date
+```sh
+date
+```
+
+Change your system date with this command (replacing the example date and time with the current):
+```sh
+timedatectl set-time '2018-08-10 11:57'
+```
+
 # Donations
 This is not my job, but I enjoy building things for the **Skyfleet** community. If you find my work useful, please consider donating to support it.
 ```
