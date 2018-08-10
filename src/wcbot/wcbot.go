@@ -44,6 +44,7 @@ type User struct {
 	exists bool
 }
 
+// NameAndTags is a helper function to append namess and tags to users within the group
 func (u *User) NameAndTags() string {
 	var tags []string
 	if u.Banned {
@@ -66,9 +67,12 @@ func (u *User) NameAndTags() string {
 	return identifier
 }
 
+/*
+// Exists determines if the current user exists or not
 func (u *User) Exists() bool {
 	return u.exists
 }
+*/
 
 /*
 func (bot *Bot) enableUser(u *User) ([]string, error) {
@@ -286,6 +290,9 @@ func (bot *Bot) handleGroupMessage(ctx *BotContext) error {
 	return gerr
 }
 
+// Send will send a new message from the Bot using the provided BotContext
+// The mode, format and text parameters are used to constuct the message and
+// determine its format and delivery
 func (bot *Bot) Send(ctx *BotContext, mode, format, text string) error {
 	var msg tgbotapi.MessageConfig
 	switch mode {
@@ -321,6 +328,7 @@ func (bot *Bot) ReplyAboutEvent(ctx *Context, text string, event *Event) error {
 }
 */
 
+/*
 func (bot *Bot) Ask(ctx *BotContext, text string) error {
 	msg := tgbotapi.NewMessage(ctx.message.Chat.ID, text)
 	msg.ReplyMarkup = tgbotapi.ForceReply{
@@ -331,7 +339,10 @@ func (bot *Bot) Ask(ctx *BotContext, text string) error {
 	_, err := bot.telegram.Send(msg)
 	return err
 }
+*/
 
+// Reply will respond to a message recieved by the Bot in the BotContext (ctx).
+// Specify the reply format and message text as parameters.
 func (bot *Bot) Reply(ctx *BotContext, format, text string) error {
 	return bot.Send(ctx, "reply", format, text)
 }
@@ -341,19 +352,19 @@ func (bot *Bot) handleMessage(ctx *BotContext) error {
 	// as the Admin user. Ignore any message or command from anyone else
 	// Fixed #10
 	if fmt.Sprintf("@%s", ctx.message.Chat.UserName) != bot.config.Telegram.Admin {
-		log.Debugf("Ignoring message from non-owner user chat %d (%s)", ctx.message.Chat.ID, "@"+ctx.message.Chat.UserName)
+		log.Debugf("Bot.handleMessage: Ignoring message from non-owner user chat %d (%s)", ctx.message.Chat.ID, "@"+ctx.message.Chat.UserName)
 		return nil
 	}
 
-	// If this is a prive chat then respond - on the basis we now know we are
-	// talking to the registered Admin user (as per config)
-	if ctx.message.Chat.IsPrivate() {
-		log.Debug("Bot.handleMessage - handlePrivateMessage")
-		return bot.handlePrivateMessage(ctx)
-	} else {
-		log.Debugf("unknown chat %d (%s)", ctx.message.Chat.ID, ctx.message.Chat.UserName)
+	// If this is NOT a prive chat then DONT respond
+	if !ctx.message.Chat.IsPrivate() {
+		log.Debugf("Bot.handleMessage: Unknown chat %d (%s)", ctx.message.Chat.ID, ctx.message.Chat.UserName)
 		return nil
 	}
+
+	log.Debug("Bot.handleMessage: handlePrivateMessage")
+	return bot.handlePrivateMessage(ctx)
+
 	/*
 		if (ctx.message.Chat.IsGroup() || ctx.message.Chat.IsSuperGroup()) && ctx.message.Chat.ID == bot.config.Telegram.ChatID {
 			log.Debug("Bot.handleMessage - handleGroupMessage")
@@ -370,6 +381,8 @@ func (bot *Bot) handleMessage(ctx *BotContext) error {
 	*/
 }
 
+// NewBot will create a new instance of a Bot struct based on the passed Config structure
+// which supplies runtime configuration for the bot.
 func NewBot(config *Config) (*Bot, error) {
 	var bot = Bot{
 		config:               config,
@@ -422,6 +435,7 @@ func (bot *Bot) handleUpdate(update *tgbotapi.Update) error {
 	return bot.handleMessage(&ctx)
 }
 
+// Start will start the Bot running - the main duty being to monitor for and handle messages
 func (bot *Bot) Start() error {
 	log.Infoln("BOT: Starting.")
 	update := tgbotapi.NewUpdate(0)
@@ -435,7 +449,7 @@ func (bot *Bot) Start() error {
 	if err != nil {
 		return fmt.Errorf("Failed to create Telegram updates channel: %v", err)
 	}
-	//go bot.maintain()
+
 	for update := range updates {
 		if err := bot.handleUpdate(&update); err != nil {
 			log.Errorf("Error: %v", err)

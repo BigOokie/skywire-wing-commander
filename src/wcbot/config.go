@@ -1,6 +1,7 @@
 package main
 
 import (
+	"strings"
 	"time"
 
 	"github.com/BigOokie/skywire-wing-commander/src/utils"
@@ -46,6 +47,13 @@ func ReadConfig(filename string) (*Config, error) {
 	// Adjust time durations for interval configurations
 	conf.Monitor.IntervalSec = time.Second * conf.Monitor.IntervalSec
 	conf.Monitor.HeartbeatIntMin = time.Minute * conf.Monitor.HeartbeatIntMin
+
+	// Check if the Admin user is prefixed with `@`
+	if !strings.HasPrefix(conf.Telegram.Admin, "@") {
+		// Add an "@" as the first character
+		conf.Telegram.Admin = "@" + conf.Telegram.Admin
+		log.Warnf("ReadConfig: admin username configuration is not prefixed `@`. Runtime config updated to prevent errors.")
+	}
 
 	DebugLogConfig(&conf)
 

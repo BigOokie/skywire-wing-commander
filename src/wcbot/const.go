@@ -2,7 +2,7 @@ package main
 
 // Define constants used by the application
 const (
-	version = "v0.1.1-alpha.2"
+	version = "v0.2.0-beta.1"
 
 	// Bot command messages:
 	// Help message
@@ -13,11 +13,11 @@ const (
 		"- /start - start activly monitoring your Skyminer. Once started, notifications will be sent to you for events that occur. A heartbeat will also be initiated to let you know if the bot and the Miner are still running.\n" +
 		"- /stop - stop monitoring your Skyminer. Once stopped, I won't send any more notifications\n"
 
-	msgHelp = "*Wing Commander* here. I will help you to manage and control your Skyminer and its Nodes.\n\n" +
+	msgHelp = "*Wing Commander* here. I will help you to manage and monitor your Skyminer and its Nodes.\n\n" +
 		msgHelpShort +
 		"\n" +
 		"\n" +
-		"Note: I am bound to this chat."
+		"Note: I am bound to this chat. I will only respond to commands from my configured Admin (%s)."
 
 	// About cmd message
 	msgAbout = "*Wing Commander (" + version + ")*\n" +
@@ -29,30 +29,29 @@ const (
 		"\n" +
 		"Issues and feature requests must be logged via [GitHub](https://github.com/BigOokie/skywire-wing-commander/issues/new/choose)\n" +
 		"\n" +
-		"*SkyCoin*: https://www.skycoin.net/\n" +
+		"*Skycoin*: https://www.skycoin.net/\n" +
 		"\n" +
 		"*Donations most welcome* 👍\n" +
-		"*Skycoin:* ES5LccJDhBCK275APmW9tmQNEgiYwTFKQF\n" +
-		"*Bitcoin:* 37rPeTNjosfydkB4nNNN1XKNrrxxfbLcMA\n"
+		"*Skycoin:* ES5LccJDhBCK275APmW9tmQNEgiYwTFKQF"
 
 	msgConnectedNodes = "*Connected Nodes:* %v"
 	// Status cmd message
 	msgStatus = "*Wing Commander* Ready and reporting for duty 👍\n" + msgConnectedNodes
 	// Heartbeat message
-	msgHeartbeat = "*Wing Commander Heatbeat* ❤️\n" + msgConnectedNodes
+	msgHeartbeat = "*Wing Commander Heatbeat* ❣️\n" + msgConnectedNodes
 
 	// Node Connect/Disconnect Event Messages
 	msgNodeConnected    = "*Node Connected:* %s\n\n" + msgConnectedNodes
-	msgNodeDisconnected = "*Node Disconnected:* %s\n\n" + msgConnectedNodes
+	msgNodeDisconnected = "‼ *Node Disconnected:* %s\n\n" + msgConnectedNodes
 
 	// Start cmd messages
-	msgMonitorAlreadyStarted = "*Wing Commander* Sky Manager Monitoring has already been started."
-	msgMonitorStart          = "*Wing Commander* Sky Manager Monitoring starting..."
+	msgMonitorAlreadyStarted = "️️*Wing Commander* Monitoring has already been started."
+	msgMonitorStart          = "*Wing Commander* Monitoring starting..."
 
 	// Stop cmd message
-	msgMonitorStop       = "*Wing Commander* Sky Manager Monitoring stopping..."
-	msgMonitorStopped    = "*Wing Commander* Sky Manager Monitoring stopped..."
-	msgMonitorNotRunning = "*Wing Commander* Sky Manager Monitoring is not running..."
+	msgMonitorStop       = "*Wing Commander* Monitoring stopping..."
+	msgMonitorStopped    = "*Wing Commander* Monitoring stopped..."
+	msgMonitorNotRunning = "*Wing Commander* Monitoring is not running..."
 
 	// Default cmd message (unhandled)
 	msgDefault = "Sorry. I don't know that command."

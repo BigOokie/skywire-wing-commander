@@ -1,7 +1,7 @@
 # Skywire Wing Commander
 <img src="assets/icons/WingCommanderLogoFull-600x600.png" width=250 height=250>
 
-**Note:** The Skycoin Cloud logo (above) is the property of the [Skycoin project](https://skycoin.net)
+**Note:** The Skycoin Cloud included in the logo above is the property of the [Skycoin project](https://skycoin.net), and has been used here with permission of the Skycoin project.
 
 [![Go Report Card](https://goreportcard.com/badge/github.com/BigOokie/skywire-wing-commander)](https://goreportcard.com/report/github.com/BigOokie/skywire-wing-commander)
 [![Coverage Status](https://coveralls.io/repos/github/BigOokie/skywire-wing-commander/badge.svg?branch=master)](https://coveralls.io/github/BigOokie/skywire-wing-commander?branch=master)
@@ -14,6 +14,7 @@
 # Contents
 - [Changelog](CHANGELOG.md)
 - [Credits](CREDITS.md)
+- [Contributors](CONTRIBUTORS.md)
 - [Overview](#overview)
 - [Wing Comamander Setup](#wing-comamander-setup)
     - [Create your Bot](#create-your-bot)
@@ -33,18 +34,19 @@
 # Overview
 **Wing Commander** is a Telegram bot written in `Go` designed to help the **[Skyfleet](https://skycoin.net)** community monitor and manage their Skyminers and associated Nodes.
 
-This is currently a *Work In Progress (WIP)* and has been released as an early *Alpha* to select group for testing and feedback. More details will be provided as the project progresses.
+This is currently a *Work In Progress (WIP)*. The initial *ALPHA* release phase has been completed, and the project is now being made available more broadly in *BETA* release form.
 
-Please note that this **is not an official [Skycoin](https://skycoin.net) project**. If you have issues or questions - please **do not bother the Skycoin or Skywire teams** - raise any issues or feature requests  in [GitHub](https://github.com/BigOokie/skywire-wing-commander/issues/new/choose). Also note that this is not my job - I am doing this as an active member of the Skyfleet community and will endeavor to get back to you and resolve issues when I can. Please have patience and bare with me.
+Please note that this **is not an official [Skycoin](https://skycoin.net) project**. If you have issues or questions - please **do not bother the Skycoin or Skywire teams** - raise any issues or feature requests in [GitHub](https://github.com/BigOokie/skywire-wing-commander/issues/new/choose). Also note that this is not my job - I am doing this as an active member of the **Skyfleet** community and will endeavor to get back to you and resolve issues when I can. Please have patience and bare with me.
 
 The intention of this project is to have a specialised Telegram bot application (written in Go) to run on a Skycoin Skywire (Skyminer) Manager Node and provide its owner with realtime management and monitoring capabilities.
 
 ***
 
 # Wing Commander Setup
-This section is incomplete and requires further work. It should be sufficient however for those interested in working with the *Alpha* release to get it running.
+The following section should contain all the steps requied to setup and build the bot.
 
 ## Create your Bot
+
 <img src="assets/images/Telegram-BotFather.jpg" width=150 height=150>
 
 Initiate a Telegram chat with the `@BotFather`. The `@BotFather` is a bot provided by Telegram and will guide you through the process of creating a new Telegram account for your bot. 
@@ -104,19 +106,29 @@ cd .wingcommander
 cp $GOPATH/src/github.com/BigOokie/skywire-wing-commander/src/wcbot/config.example.toml ~/.wingcommander/config.toml
 ```
 
-Use an editor (`nano`, `vi`) to update the `.wingcommander/config.toml` file.
+Next edit the `config.toml` file and update it with your specific settings.
+```sh
+nano config.toml
+```
 
 Key elements you will need in the `config.toml` file are - but feel free to edit other settings, but the defaults should be fine for most users:
 - The bot token, provided by the `@BotFather`
 - Your bots `ChatID`.
-- Your Telegram `@` user name (type `@username`in telegram and click on it if you don't know how to get one)
+- Your Telegram `@` username
 
 ### Find your ChatID
 To get your `ChatID` go into Telegram and send a chat message to your newly created bot (it will not respond). Once you have initiated a chat with your bot, then enter the following URL into your browser:
 ```
-https://api.telegram.org/bot<YourBOTToken>/getUpdates
+https://api.telegram.org/bot{BOTTOKEN_FROM_BOTFATHER}/getUpdates
 ```
 The above URL should produce `JSON` output for your bot, including the `ChatID`. Paste your `ChatID` into your `config.toml` file.
+
+An example of the `JSON` output is as follows:
+```json
+{"ok":true,"result":[{"update_id":111111111,
+"message":{"message_id":4,"from":{"id":222222222,"is_bot":false,"first_name":"TestUser","last_name":"","username":"TestUSer","language_code":"en-US"},"chat":{"id":000000000,"first_name":"TestUser","last_name":"","username":"TestUser","type":"private"},"date":1533900000,"text":"Hello"}}]}
+```
+In the example above, `"chat":{"id":000000000` is what you are looking for, and specifically the `id` which in this example is `000000000`.
 
 ## Running Wing Commander
 ### Background process
@@ -175,6 +187,10 @@ Manually request current status of the **Wing Commander** Bot.
 Once started, **Wing Commander** will provide notification updates via Telegram when any Node managed by the Skyminer Manager connects or disconnects.
 Additionally, the `/start` command will initiate a heartbeat which will provide a status update on a configurable cycle (interval set in `config.toml`).  The heartbeat will help you to ensure that the bot and/or the Skyminer itself is still running. **If you stop receiving the heartbeat, you need to check whats going on.**
 
+### Heartbeat screenshot
+<img src="assets/images/WingCommander-Heartbeat.png">
+
+
 ## Stop
 `/stop`
 
@@ -188,7 +204,7 @@ The following section outlines some known issues that need to be taken into cons
 
 - Repository renamed. The repository has recently been renamed. It was previously `skywire-telegram-notify-bot`. It is now called `skywire-wing-commander` (note that this is case sensitive). Please make sure you update any references to the new repo name.
 
-I have built and tested this on the following setups - but please note it is still considered *ALPHA*: 
+I have built and tested this on the following setups: 
 - DIY Raspberry Pi Miner
 - Official Skyminer (using the [official prepared images](https://github.com/skycoin/skywire#ip-presetted-system-images) for the orange pi prime)
 - DIY on MacOS.
@@ -215,6 +231,4 @@ curl: (60) SSL certificate problem: unable to get local issuer certificate
 This is not my job, but I enjoy building things for the **Skyfleet** community. If you find my work useful, please consider donating to support it.
 ```
 Skycoin:    ES5LccJDhBCK275APmW9tmQNEgiYwTFKQF
-
-BitCoin:    37rPeTNjosfydkB4nNNN1XKNrrxxfbLcMA
 ```
