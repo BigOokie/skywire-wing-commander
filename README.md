@@ -114,12 +114,12 @@ nano config.toml
 Key elements you will need in the `config.toml` file are - but feel free to edit other settings, but the defaults should be fine for most users:
 - The bot token, provided by the `@BotFather`
 - Your bots `ChatID`.
-- Your Telegram `@` user name (type `@username` in telegram and click on it if you don't know how to get one)
+- Your Telegram `@` username
 
 ### Find your ChatID
 To get your `ChatID` go into Telegram and send a chat message to your newly created bot (it will not respond). Once you have initiated a chat with your bot, then enter the following URL into your browser:
 ```
-https://api.telegram.org/bot<Insert-Your-BOT-APIKey-Here>/getUpdates
+https://api.telegram.org/bot{BOTTOKEN_FROM_BOTFATHER}/getUpdates
 ```
 The above URL should produce `JSON` output for your bot, including the `ChatID`. Paste your `ChatID` into your `config.toml` file.
 
