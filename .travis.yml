@@ -16,5 +16,3 @@ script:
   - go test ./...
   - $GOPATH/bin/goveralls -service=travis-ci
   
-notifications:
-  webhooks: https://fathomless-fjord-24024.herokuapp.com/notify
