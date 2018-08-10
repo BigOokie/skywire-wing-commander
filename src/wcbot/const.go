@@ -38,14 +38,14 @@ const (
 	// Status cmd message
 	msgStatus = "*Wing Commander* Ready and reporting for duty 👍\n" + msgConnectedNodes
 	// Heartbeat message
-	msgHeartbeat = "*Wing Commander Heatbeat* ❤️\n" + msgConnectedNodes
+	msgHeartbeat = "*Wing Commander Heatbeat* ❣️\n" + msgConnectedNodes
 
 	// Node Connect/Disconnect Event Messages
 	msgNodeConnected    = "*Node Connected:* %s\n\n" + msgConnectedNodes
-	msgNodeDisconnected = "*Node Disconnected:* %s\n\n" + msgConnectedNodes
+	msgNodeDisconnected = "‼ *Node Disconnected:* %s\n\n" + msgConnectedNodes
 
 	// Start cmd messages
-	msgMonitorAlreadyStarted = "*Wing Commander* Monitoring has already been started."
+	msgMonitorAlreadyStarted = "️️*Wing Commander* Monitoring has already been started."
 	msgMonitorStart          = "*Wing Commander* Monitoring starting..."
 
 	// Stop cmd message
