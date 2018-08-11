@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 ### Added
+- Added `/showconfig` command. This will ask the Bot to display its current runtime configuration, as stored in the `config.toml` file.
 ### Changed
 ### Deprecated
 ### Removed

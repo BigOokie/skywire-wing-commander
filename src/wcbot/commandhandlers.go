@@ -22,6 +22,12 @@ func (bot *Bot) handleCommandAbout(ctx *BotContext, command, args string) error 
 	return bot.Send(ctx, "whisper", "markdown", wcconst.MsgAbout)
 }
 
+// Handler for showconfig command
+func (bot *Bot) handleCommandShowConfig(ctx *BotContext, command, args string) error {
+	log.Debug("Handle command /showconfig")
+	return bot.Send(ctx, "whisper", "markdown", fmt.Sprintf(wcconst.MsgShowConfig, bot.config.String()))
+}
+
 // Handler for start command
 func (bot *Bot) handleCommandStart(ctx *BotContext, command, args string) error {
 	log.Debug("Handle command /start")

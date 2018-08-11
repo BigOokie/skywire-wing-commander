@@ -10,6 +10,7 @@ const (
 		"- /help - show this message\n" +
 		"- /about - show information and credits about my creator and any contributors\n" +
 		"- /status - ask how I'm going.. and if I'm still running\n" +
+		"- /showconfig - display runtime configuration (from config.toml)\n" +
 		"- /start - start activly monitoring your Skyminer. Once started, notifications will be sent to you for events that occur. A heartbeat will also be initiated to let you know if the bot and the Miner are still running.\n" +
 		"- /stop - stop monitoring your Skyminer. Once stopped, I won't send any more notifications\n"
 
@@ -33,6 +34,8 @@ const (
 		"\n" +
 		"*Donations most welcome* 👍\n" +
 		"*Skycoin:* ES5LccJDhBCK275APmW9tmQNEgiYwTFKQF"
+
+	MsgShowConfig = "*Wing Commander Configuration*\n%s\n"
 
 	MsgConnectedNodes = "*Connected Nodes:* %v"
 	// Status cmd message
