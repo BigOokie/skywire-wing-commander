@@ -1,15 +1,16 @@
 # Skywire Wing Commander example configuration file
 # Use this file as a tempate to build your own configuration file
 # and place it in ~/.wingcommander/config.toml
+# Note: Lines begining with a # are comments
 
 # Telegram configuration
 [telegram]
-# Telegram bot API key (token). This is provided by the @BotFather
+# Telegram bot API key (token). This is provided by the @BotFather. The value must be enclosed in " "
 apikey = "YOUR-BOT-API-KEY-HERE"
 # Telegram chatid. Go here to find this: https://api.telegram.org/bot<YourBOTToken>/getUpdates
-# This is an integer field - not a string
+# This is an integer field - not a string - dont use " "
 chatid = 0123456789
-# Your Telegram @USERNAME
+# Your Telegram @USERNAME enclosed in " "
 admin = "YOUR TELEGRAM @USERNAME"
 # Telegram API debugging (true or false)
 debug = false
