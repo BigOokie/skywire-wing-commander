@@ -1,6 +1,7 @@
 package wcconfig
 
 import (
+	"fmt"
 	"strings"
 	"time"
 
@@ -28,6 +29,24 @@ type Config struct {
 		IntervalSec     time.Duration
 		HeartbeatIntMin time.Duration
 	}
+}
+
+// String is the stringer function for the Config struct
+func (c *Config) String() string {
+	resultstr := "[WingCommander]\n" +
+		"  twofactorenabled = %v\n" +
+		"[SkyManager]\n" +
+		"  address = \"%s\"\n" +
+		"[Telegram]\n" +
+		"  apikey = \"%s\"\n" +
+		"  chatid = %v\n" +
+		"  admin  = \"%s\"\n" +
+		"  debug  = %v\n" +
+		"[Monitor]\n" +
+		"  intervalsec = %v\n" +
+		"  heartbeatintmin = %v\n"
+
+	return fmt.Sprintf(resultstr, c.WingCommander.TwoFactorEnabled, c.SkyManager.Address, c.Telegram.APIKey, c.Telegram.ChatID, c.Telegram.Admin, c.Telegram.Debug, c.Monitor.IntervalSec, c.Monitor.HeartbeatIntMin)
 }
 
 // ReadConfig will read configuration from the provided TOML config file
@@ -62,19 +81,5 @@ func ReadConfig(filename string) (*Config, error) {
 
 // DebugLogConfig will log debug information for the passed Config structure
 func DebugLogConfig(conf *Config) {
-	log.Debugln("WingCommander Configs:")
-	log.Debugf("  twofactorenabled = %v", conf.WingCommander.TwoFactorEnabled)
-
-	log.Debugln("Node Manager Configs:")
-	log.Debugf("  address = %s", conf.SkyManager.Address)
-
-	log.Debugln("Telegram Configs:")
-	log.Debugf("  apikey = %s", conf.Telegram.APIKey)
-	log.Debugf("  chatid = %v", conf.Telegram.ChatID)
-	log.Debugf("  admin  = %s", conf.Telegram.Admin)
-	log.Debugf("  debug  = %v", conf.Telegram.Debug)
-
-	log.Debugln("Monitor Configs:")
-	log.Debugf("  intervalsec = %v", conf.Monitor.IntervalSec)
-	log.Debugf("  heartbeatintmin = %v", conf.Monitor.HeartbeatIntMin)
+	log.Debugf("Wing Commander Configuration:\n%s", conf.String())
 }
