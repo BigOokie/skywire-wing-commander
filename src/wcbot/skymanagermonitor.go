@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/BigOokie/skywire-wing-commander/src/skynode"
+	"github.com/BigOokie/skywire-wing-commander/src/wcconst"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -134,7 +135,7 @@ func (m *SkyManagerMonitor) maintainConnectedNodesList(newcns skynode.NodeInfoSl
 		} else {
 			// Add new NodeInfo
 			m.connectedNodes[v.Key] = v
-			msg := fmt.Sprintf(msgNodeConnected, v.Key, len(m.connectedNodes))
+			msg := fmt.Sprintf(wcconst.MsgNodeConnected, v.Key, len(m.connectedNodes))
 			log.Debugln(msg)
 			statusMsgChan <- msg
 		}
@@ -154,7 +155,7 @@ func (m *SkyManagerMonitor) maintainConnectedNodesList(newcns skynode.NodeInfoSl
 				// Delete the Node from the Connected Node List
 				log.Debugf("SkyManagerMonitor.maintainConnectedNodesList: Node Removed:\n%s\n", v.FmtString())
 				delete(m.connectedNodes, v.Key)
-				msg := fmt.Sprintf(msgNodeDisconnected, v.Key, len(m.connectedNodes))
+				msg := fmt.Sprintf(wcconst.MsgNodeDisconnected, v.Key, len(m.connectedNodes))
 				log.Debugln(msg)
 				statusMsgChan <- msg
 			}
