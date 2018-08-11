@@ -103,7 +103,7 @@ The following commands can be used to setup the required folders and copy the ex
 cd ~
 mkdir .wingcommander
 cd .wingcommander
-cp $GOPATH/src/github.com/BigOokie/skywire-wing-commander/src/wcbot/config.example.toml ~/.wingcommander/config.toml
+cp $GOPATH/src/github.com/BigOokie/skywire-wing-commander/config.example.toml ~/.wingcommander/config.toml
 ```
 
 Next edit the `config.toml` file and update it with your specific settings.
