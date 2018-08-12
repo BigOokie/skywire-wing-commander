@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 ### Added
+- Added autorestart shell script (`StartCommander.sh`). Thanks to @Cryptovinnie
+- Added config file generator shell script (`TelegramDetails.sh`). Thanks to @Cryptovinnie
 ### Changed
 ### Deprecated
 ### Removed

@@ -22,8 +22,9 @@
     - [Update and Rebuild](#update-and-rebuild)
     - [Configuration](#configuration)
 - [Running Wing Commander](#running-wing-commander)
-     - [Background process](#background-process)
+    - [Background process](#background-process)
     - [Forground Process](#forground-process)
+    - [Automatic restart](#automatic-restart)
 - [Stopping Wing Commander](#stopping-wing-commander)
 - [Wing Commander Commands](#wing-commander-commands)
 - [Known Issues](#known-issues)
@@ -95,7 +96,8 @@ go install -v ./...
 ## Configuration
 You MUST provide a valid configuration file for the bot or it will not launch. The config file must reside in the following location `$HOME\.wingcommander\config.toml`
 
-Refer to the following example configuration file: [config.example.toml](\src\wcbot\config.example.toml)
+Refer to the following example configuration file: [config.example.toml](\src\wcbot\config.example.toml). 
+
 It is recommended to copy the example configuration file to `$HOME\.wingcommander\config.toml`. Use the example file as a template and edit the details as needed. 
 
 The following commands can be used to setup the required folders and copy the example config file template:
@@ -104,19 +106,25 @@ cd ~
 mkdir .wingcommander
 cd .wingcommander
 cp $GOPATH/src/github.com/BigOokie/skywire-wing-commander/src/wcbot/config.example.toml ~/.wingcommander/config.toml
+cp $GOPATH/src/github.com/BigOokie/skywire-wing-commander/src/wcbot/TelegramDetails.sh ~/.wingcommander/TelegramDetails.sh
+chmod +x TelegramDetails.sh 
 ```
-
-Next edit the `config.toml` file and update it with your specific settings.
+Next run to assist you with updating the config file:
+```sh
+./TelegramDetails.sh
+``` 
+This script will ask you for your Bot API Key which will look similar to this:
+```
+640158980:A1HwlYeM7RWvoHflI3-55518gvETkC-hJro
+```
+On completion, the script should have updated all the required settings in the `config.toml` for you. You can review and tweak any of the other settings manually (if needed) by using the following command (this should not be needed however):
 ```sh
 nano config.toml
 ```
 
-Key elements you will need in the `config.toml` file are - but feel free to edit other settings, but the defaults should be fine for most users:
-- The bot token, provided by the `@BotFather`
-- Your bots `ChatID`.
-- Your Telegram `@` username
-
 ### Find your ChatID
+**NOTE: You can skip this section if you used the auto config script above.**
+
 To get your `ChatID` go into Telegram and send a chat message to your newly created bot (it will not respond). Once you have initiated a chat with your bot, then enter the following URL into your browser:
 ```
 https://api.telegram.org/bot{BOTTOKEN_FROM_BOTFATHER}/getUpdates
@@ -131,6 +139,7 @@ An example of the `JSON` output is as follows:
 In the example above, `"chat":{"id":000000000` is what you are looking for, and specifically the `id` which in this example is `000000000`.
 
 ## Running Wing Commander
+
 ### Background process
 To run **Wing Commander** as a background process (detached from the terminal):
 ```sh
@@ -145,7 +154,19 @@ cd $GOPATH/bin
 ./wcbot
 ```
 
-Once the **Wing Commander** Bot is running, start a private chat with the Bot you can make use for the commands to run it (see following section)
+### Automatic restart 
+Use the following commands to setup an automatic startup script to check and restart the **Wing Commander** bot incase the Manager Node goes offline.
+```sh 
+cd $GOPATH/src/github.com/BigOokie/skywire-wing-commander/src/wcbot
+chmod +x StartCommander.sh 
+crontab -e 
+```
+Go to the bottom of the file and enter the following:
+
+```sh
+@reboot /go/src/github.com/BigOokie/skywire-wing-commander/src/wcbot/StartCommander.sh
+```
+Then press `CTRL+O` & `ENTER` to Save, then press `CTRL+X` to Exit.
 
 ## Stopping Wing Commander 
 ```sh
