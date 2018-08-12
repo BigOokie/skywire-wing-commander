@@ -11,7 +11,7 @@ echo $TELEUSERNAME
 ChatID=$(curl -s "https://api.telegram.org/bot$APIKEYS/getUpdates" | grep -Po '"id":\K.*?(?=,)'| head -1 )
 echo $ChatID
 
-sed -i -e "s/apikey = .*/apikey = "$APIKEYS"/" config.toml
+sed -i -e "s/apikey = .*/apikey = \"$APIKEYS\"/" config.toml
 sed -i -e "s/admin = .*/admin = "$TELEUSERNAME"/" config.toml
 sed -i -e "s/chatid = .*/chatid = $ChatID/" config.toml
 
