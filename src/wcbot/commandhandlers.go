@@ -73,7 +73,13 @@ func (bot *Bot) handleCommandStop(ctx *BotContext, command, args string) error {
 // Handler for status command
 func (bot *Bot) handleCommandStatus(ctx *BotContext, command, args string) error {
 	log.Debug("Handle command /status")
-	return bot.Send(ctx, "whisper", "markdown", fmt.Sprintf(wcconst.MsgStatus, bot.skyMgrMonitor.GetConnectedNodeCount()))
+
+	if bot.skyMgrMonitor.IsRunning() {
+		return bot.Send(ctx, "whisper", "markdown", fmt.Sprintf(wcconst.MsgStatus, bot.skyMgrMonitor.GetConnectedNodeCount()))
+	} else {
+		return bot.Send(ctx, "whisper", "markdown", wcconst.MsgMonitorNotRunning)
+	}
+
 }
 
 func (bot *Bot) handleDirectMessageFallback(ctx *BotContext, text string) (bool, error) {
