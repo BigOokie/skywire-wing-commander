@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [v0.2.0-beta.2] - 2018-08-12
 ### Added
 - Added autorestart shell script (`wcstart.sh`). Thanks to @Cryptovinnie
 - Added config file generator shell script (`wcbuildconfig.sh`). Thanks to @Cryptovinnie
@@ -96,16 +96,20 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Fixed
 ### Security
 
-[Unreleased]: https://github.com/BigOokie/Skywire-Wing-Commander/compare/master...dev
+[v0.2.0-beta.2]: 
+https://github.com/BigOokie/Skywire-Wing-Commander/compare/v0.2.0-beta.1...v0.2.0-beta.2
 [v0.2.0-beta.1]: 
 https://github.com/BigOokie/Skywire-Wing-Commander/compare/v0.1.1-alpha.1...v0.2.0-beta.1
 [v0.1.1-alpha.1]:
 https://github.com/BigOokie/Skywire-Wing-Commander/compare/v0.1.0-alpha.1...v0.1.1-alpha.1
 [v0.1.0-alpha.1]:
 https://github.com/BigOokie/Skywire-Wing-Commander/compare/v0.0.3-alpha...v0.1.0-alpha.1
-[v0.0.3-alpha]: https://github.com/BigOokie/Skywire-Wing-Commander/compare/v0.0.2-alpha...v0.0.3-alpha
-[v0.0.2-alpha]: https://github.com/BigOokie/Skywire-Wing-Commander/compare/v0.0.1-alpha...v0.0.2-alpha
-[v0.0.1-alpha]: https://github.com/BigOokie/Skywire-Wing-Commander/commit/70153f0777a3d71bdc15bb4509c0b36ce45e096b
+[v0.0.3-alpha]:
+https://github.com/BigOokie/Skywire-Wing-Commander/compare/v0.0.2-alpha...v0.0.3-alpha
+[v0.0.2-alpha]:
+https://github.com/BigOokie/Skywire-Wing-Commander/compare/v0.0.1-alpha...v0.0.2-alpha
+[v0.0.1-alpha]:
+https://github.com/BigOokie/Skywire-Wing-Commander/commit/70153f0777a3d71bdc15bb4509c0b36ce45e096b
 
 
 
