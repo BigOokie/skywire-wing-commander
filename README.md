@@ -22,9 +22,9 @@
     - [Update and Rebuild](#update-and-rebuild)
     - [Configuration](#configuration)
 - [Running Wing Commander](#running-wing-commander)
-    - [Auto Restart](#auto-restart)
-     - [Background process](#background-process)
+    - [Background process](#background-process)
     - [Forground Process](#forground-process)
+    - [Automatic restart](#automatic-restart)
 - [Stopping Wing Commander](#stopping-wing-commander)
 - [Wing Commander Commands](#wing-commander-commands)
 - [Known Issues](#known-issues)
@@ -133,22 +133,6 @@ An example of the `JSON` output is as follows:
 "message":{"message_id":4,"from":{"id":222222222,"is_bot":false,"first_name":"TestUser","last_name":"","username":"TestUSer","language_code":"en-US"},"chat":{"id":000000000,"first_name":"TestUser","last_name":"","username":"TestUser","type":"private"},"date":1533900000,"text":"Hello"}}]}
 ```
 In the example above, `"chat":{"id":000000000` is what you are looking for, and specifically the `id` which in this example is `000000000`.
-## Automatically restart on reboot. 
-
-### Auto Restart script 
-Set up AutoStartup Script if manager node goes offline:
-```sh 
-cd $GOPATH/src/github.com/BigOokie/skywire-wing-commander/src/wcbot
-chmod +x StartCommander.sh 
-crontab -e 
-```
-Go to the bottom of the file and enter 
-
-```
-@reboot /go/src/github.com/BigOokie/skywire-wing-commander/src/wcbot/StartCommander.sh
-```
-Ctrl + O & ENTER to Save, then Ctrl + X to Exit.
-
 
 ## Running Wing Commander
 
@@ -166,7 +150,19 @@ cd $GOPATH/bin
 ./wcbot
 ```
 
-Once the **Wing Commander** Bot is running, start a private chat with the Bot you can make use for the commands to run it (see following section)
+### Automatic restart 
+Use the following commands to setup an automatic startup script to check and restart the **Wing Commander** bot incase the Manager Node goes offline.
+```sh 
+cd $GOPATH/src/github.com/BigOokie/skywire-wing-commander/src/wcbot
+chmod +x StartCommander.sh 
+crontab -e 
+```
+Go to the bottom of the file and enter the following:
+
+```sh
+@reboot /go/src/github.com/BigOokie/skywire-wing-commander/src/wcbot/StartCommander.sh
+```
+Then press `CTRL+O` & `ENTER` to Save, then press `CTRL+X` to Exit.
 
 ## Stopping Wing Commander 
 ```sh
