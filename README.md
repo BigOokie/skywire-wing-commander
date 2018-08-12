@@ -105,7 +105,10 @@ cd ~
 mkdir .wingcommander
 cd .wingcommander
 cp $GOPATH/src/github.com/BigOokie/skywire-wing-commander/src/wcbot/config.example.toml ~/.wingcommander/config.toml
+cp $GOPATH/src/github.com/BigOokie/skywire-wing-commander/src/wcbot/TelegramDetails.sh ~/.wingcommander/TelegramDetails.sh
+chmod +x TelegramDetails.sh 
 ```
+Next run ```./TelegramDetails.sh``` It will ask you for your Bot API which will look similar to this ```640158980:A1HwlYeM7RWvoHflI3-55518gvETkC-hJro```
 
 Next edit the `config.toml` file and update it with your specific settings.
 ```sh
