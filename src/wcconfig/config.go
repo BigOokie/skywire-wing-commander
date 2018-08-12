@@ -39,12 +39,12 @@ func (c *Config) String() string {
 		"  address = \"%s\"\n" +
 		"[Telegram]\n" +
 		"  apikey = \"%s\"\n" +
-		"  chatid = %v\n" +
+		"  chatid = %d\n" +
 		"  admin  = \"%s\"\n" +
 		"  debug  = %v\n" +
 		"[Monitor]\n" +
-		"  intervalsec = %v\n" +
-		"  heartbeatintmin = %v\n"
+		"  intervalsec = %d\n" +
+		"  heartbeatintmin = %d\n"
 
 	return fmt.Sprintf(resultstr, c.WingCommander.TwoFactorEnabled, c.SkyManager.Address, c.Telegram.APIKey, c.Telegram.ChatID, c.Telegram.Admin, c.Telegram.Debug, c.Monitor.IntervalSec, c.Monitor.HeartbeatIntMin)
 }
