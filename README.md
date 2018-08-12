@@ -106,12 +106,12 @@ cd ~
 mkdir .wingcommander
 cd .wingcommander
 cp $GOPATH/src/github.com/BigOokie/skywire-wing-commander/src/wcbot/config.example.toml ~/.wingcommander/config.toml
-cp $GOPATH/src/github.com/BigOokie/skywire-wing-commander/src/wcbot/TelegramDetails.sh ~/.wingcommander/TelegramDetails.sh
-chmod +x TelegramDetails.sh 
+cp $GOPATH/src/github.com/BigOokie/skywire-wing-commander/src/wcbot/wcbuildconfig.sh ~/.wingcommander/wcbuildconfig.sh
+chmod +x wcbuildconfig.sh 
 ```
 Next run to assist you with updating the config file:
 ```sh
-./TelegramDetails.sh
+./wcbuildconfig.sh
 ``` 
 This script will ask you for your Bot API Key which will look similar to this:
 ```
@@ -158,13 +158,13 @@ cd $GOPATH/bin
 Use the following commands to setup an automatic startup script to check and restart the **Wing Commander** bot incase the Manager Node goes offline.
 ```sh 
 cd $GOPATH/src/github.com/BigOokie/skywire-wing-commander/src/wcbot
-chmod +x StartCommander.sh 
+chmod +x wcstart.sh 
 crontab -e 
 ```
 Go to the bottom of the file and enter the following:
 
 ```sh
-@reboot /go/src/github.com/BigOokie/skywire-wing-commander/src/wcbot/StartCommander.sh
+@reboot /go/src/github.com/BigOokie/skywire-wing-commander/src/wcbot/wcstart.sh
 ```
 Then press `CTRL+O` & `ENTER` to Save, then press `CTRL+X` to Exit.
 
