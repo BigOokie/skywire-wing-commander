@@ -5,6 +5,9 @@ import (
 	"os/signal"
 	"path/filepath"
 
+	"github.com/BigOokie/skywire-wing-commander/src/wcconfig"
+	"github.com/BigOokie/skywire-wing-commander/src/wcconst"
+
 	"github.com/BigOokie/skywire-wing-commander/src/utils"
 	log "github.com/sirupsen/logrus"
 )
@@ -22,7 +25,7 @@ func main() {
 
 	// Load configuration
 	configPath := filepath.Join(utils.UserHome(), ".wingcommander", "config.toml")
-	config, err := ReadConfig(configPath)
+	config, err := wcconfig.ReadConfig(configPath)
 	if err != nil {
 		log.Error(err)
 		return
@@ -43,9 +46,9 @@ func main() {
 	select {
 	case signal := <-osSignal:
 		if signal == os.Interrupt {
-			log.Debugln(msgOSInteruptSig)
+			log.Debugln(wcconst.MsgOSInteruptSig)
 		} else if signal == os.Kill {
-			log.Debugln(msgOSKillSig)
+			log.Debugln(wcconst.MsgOSKillSig)
 		}
 	}
 }

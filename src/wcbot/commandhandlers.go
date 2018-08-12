@@ -5,19 +5,27 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/BigOokie/skywire-wing-commander/src/wcconst"
+
 	log "github.com/sirupsen/logrus"
 )
 
 // Handler for help command
 func (bot *Bot) handleCommandHelp(ctx *BotContext, command, args string) error {
 	log.Debug("Handle command /help")
-	return bot.Send(ctx, "whisper", "markdown", fmt.Sprintf(msgHelp, bot.config.Telegram.Admin))
+	return bot.Send(ctx, "whisper", "markdown", fmt.Sprintf(wcconst.MsgHelp, bot.config.Telegram.Admin))
 }
 
 // Handler for about command
 func (bot *Bot) handleCommandAbout(ctx *BotContext, command, args string) error {
 	log.Debug("Handle command /about")
-	return bot.Send(ctx, "whisper", "markdown", msgAbout)
+	return bot.Send(ctx, "whisper", "markdown", wcconst.MsgAbout)
+}
+
+// Handler for showconfig command
+func (bot *Bot) handleCommandShowConfig(ctx *BotContext, command, args string) error {
+	log.Debug("Handle command /showconfig")
+	return bot.Send(ctx, "whisper", "markdown", fmt.Sprintf(wcconst.MsgShowConfig, bot.config.String()))
 }
 
 // Handler for start command
@@ -25,11 +33,11 @@ func (bot *Bot) handleCommandStart(ctx *BotContext, command, args string) error 
 	log.Debug("Handle command /start")
 
 	if bot.skyMgrMonitor.IsRunning() {
-		log.Debug(msgMonitorAlreadyStarted)
-		return bot.Send(ctx, "whisper", "markdown", msgMonitorAlreadyStarted)
+		log.Debug(wcconst.MsgMonitorAlreadyStarted)
+		return bot.Send(ctx, "whisper", "markdown", wcconst.MsgMonitorAlreadyStarted)
 	}
 
-	log.Debug(msgMonitorStart)
+	log.Debug(wcconst.MsgMonitorStart)
 	cancelContext, cancelFunc := context.WithCancel(context.Background())
 	bot.skyMgrMonitor.CancelFunc = cancelFunc
 	bot.skyMgrMonitor.monitorStatusMsgChan = make(chan string)
@@ -39,7 +47,7 @@ func (bot *Bot) handleCommandStart(ctx *BotContext, command, args string) error 
 	// Start the monitor - provide cancelContext
 	go bot.skyMgrMonitor.Run(cancelContext, bot.skyMgrMonitor.monitorStatusMsgChan, bot.config.Monitor.IntervalSec)
 
-	return bot.Send(ctx, "whisper", "markdown", msgMonitorStart)
+	return bot.Send(ctx, "whisper", "markdown", wcconst.MsgMonitorStart)
 
 }
 
@@ -48,28 +56,34 @@ func (bot *Bot) handleCommandStop(ctx *BotContext, command, args string) error {
 	log.Debug("Handle command /stop")
 
 	if bot.skyMgrMonitor.IsRunning() {
-		log.Debug(msgMonitorStop)
+		log.Debug(wcconst.MsgMonitorStop)
 		bot.skyMgrMonitor.CancelFunc()
 		bot.skyMgrMonitor.CancelFunc = nil
 		close(bot.skyMgrMonitor.monitorStatusMsgChan)
 		bot.skyMgrMonitor.monitorStatusMsgChan = nil
-		log.Debug(msgMonitorStopped)
-		return bot.Send(ctx, "whisper", "markdown", msgMonitorStop)
+		log.Debug(wcconst.MsgMonitorStopped)
+		return bot.Send(ctx, "whisper", "markdown", wcconst.MsgMonitorStop)
 	}
 
-	log.Debug(msgMonitorNotRunning)
-	return bot.Send(ctx, "whisper", "markdown", msgMonitorNotRunning)
+	log.Debug(wcconst.MsgMonitorNotRunning)
+	return bot.Send(ctx, "whisper", "markdown", wcconst.MsgMonitorNotRunning)
 
 }
 
 // Handler for status command
 func (bot *Bot) handleCommandStatus(ctx *BotContext, command, args string) error {
 	log.Debug("Handle command /status")
-	return bot.Send(ctx, "whisper", "markdown", fmt.Sprintf(msgStatus, bot.skyMgrMonitor.GetConnectedNodeCount()))
+
+	if bot.skyMgrMonitor.IsRunning() {
+		return bot.Send(ctx, "whisper", "markdown", fmt.Sprintf(wcconst.MsgStatus, bot.skyMgrMonitor.GetConnectedNodeCount()))
+	} else {
+		return bot.Send(ctx, "whisper", "markdown", wcconst.MsgMonitorNotRunning)
+	}
+
 }
 
 func (bot *Bot) handleDirectMessageFallback(ctx *BotContext, text string) (bool, error) {
-	errmsg := fmt.Sprintf("Sorry, I only take commands. '%s' is not a command.\n\n%s", text, msgHelpShort)
+	errmsg := fmt.Sprintf("Sorry, I only take commands. '%s' is not a command.\n\n%s", text, wcconst.MsgHelpShort)
 	log.Debugf(errmsg)
 	return true, bot.Reply(ctx, "markdown", errmsg)
 }
@@ -99,7 +113,7 @@ func (bot *Bot) monitorEventLoop(runctx context.Context, botctx *BotContext, sta
 		// Heartbeat ticker event
 		case <-tickerHB.C:
 			log.Debug("Bot.monitorEventLoop - Heartbeat event")
-			bot.Send(botctx, "whisper", "markdown", fmt.Sprintf(msgHeartbeat, bot.skyMgrMonitor.GetConnectedNodeCount()))
+			bot.Send(botctx, "whisper", "markdown", fmt.Sprintf(wcconst.MsgHeartbeat, bot.skyMgrMonitor.GetConnectedNodeCount()))
 
 		// Context has been cancelled. Shutdown
 		case <-runctx.Done():

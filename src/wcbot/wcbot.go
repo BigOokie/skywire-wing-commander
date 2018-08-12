@@ -5,13 +5,15 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/BigOokie/skywire-wing-commander/src/wcconfig"
+	"github.com/BigOokie/skywire-wing-commander/src/wcconst"
 	log "github.com/sirupsen/logrus"
 	"gopkg.in/telegram-bot-api.v4"
 )
 
 // Bot provides management of the interface to the Telegram Bot
 type Bot struct {
-	config                 *Config
+	config                 *wcconfig.Config
 	telegram               *tgbotapi.BotAPI
 	skyMgrMonitor          *SkyManagerMonitor
 	commandHandlers        map[string]CommandHandler
@@ -159,7 +161,7 @@ func (bot *Bot) handlePrivateMessage(ctx *BotContext) error {
 		cmd, args := ctx.message.Command(), ctx.message.CommandArguments()
 		err := bot.handleCommand(ctx, cmd, args)
 		if err != nil {
-			errmsg := fmt.Sprintf("Sorry,'/%s' is an unknown command.\n\n%s", cmd, msgHelpShort)
+			errmsg := fmt.Sprintf("Sorry,'/%s' is an unknown command.\n\n%s", cmd, wcconst.MsgHelpShort)
 
 			//log.Debugf("Command: '/%s %s' failed: %v", cmd, args, err)
 			log.Debugf(errmsg)
@@ -383,7 +385,7 @@ func (bot *Bot) handleMessage(ctx *BotContext) error {
 
 // NewBot will create a new instance of a Bot struct based on the passed Config structure
 // which supplies runtime configuration for the bot.
-func NewBot(config *Config) (*Bot, error) {
+func NewBot(config *wcconfig.Config) (*Bot, error) {
 	var bot = Bot{
 		config:               config,
 		commandHandlers:      make(map[string]CommandHandler),

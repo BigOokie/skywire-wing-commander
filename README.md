@@ -183,6 +183,7 @@ This section outlines the Telegram Bot commands that are currently supported by 
 - [Help](#help)
 - [About](#about)
 - [Status](#status)
+- [Show Config](#showconfig)
 - [Start](#start)
 - [Stop](#stop)
 
@@ -200,6 +201,11 @@ Shows information and credits about the creator of **Wing Commander** and any ke
 `/status`
 
 Manually request current status of the **Wing Commander** Bot.
+
+## Show Config
+`/showconfig`
+
+Show the current runtime configuration for the bot based on the content of the `config.toml` file.
 
 ## Start
 `/start`
