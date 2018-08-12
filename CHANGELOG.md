@@ -1,15 +1,20 @@
-# Changelog
+# Wing Commander Changelog
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [v0.2.0-beta.1] - 2018-08-10
 ### Added
+- Code tests.
+- Added list of Contributors [CONTRIBUTORS.md](CONTRIBUTORS.md)
+- Added ability for Bot to compensate for missing `@` on `admin` user in `config.toml`. Previosuly is the admin user was not prefixed with an `@` the Bot would refuse to respond to messages from your user on Telegram. Now the Bot will compensate (the `config.toml` file is unchanged) by updating its runtime configuration to add the missing `@` if required. The Bot will log a warning to notify you.
 ### Changed
+- Minor updates to messages generated from Wing Commander.
 ### Deprecated
 ### Removed
 ### Fixed
+- Minor fixes to code and doco based on community feedback during ALPAH release stage.
 ### Security
 
 ## [v0.1.1-alpha.1] - 2018-08-03
@@ -79,7 +84,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Fixed
 ### Security
 
-[Unreleased]: https://github.com/BigOokie/Skywire-Wing-Commander/compare/master...dev
+[v0.2.0-beta.1]: 
+https://github.com/BigOokie/Skywire-Wing-Commander/compare/v0.1.1-alpha.1...v0.2.0-beta.1
 [v0.1.1-alpha.1]:
 https://github.com/BigOokie/Skywire-Wing-Commander/compare/v0.1.0-alpha.1...v0.1.1-alpha.1
 [v0.1.0-alpha.1]:
