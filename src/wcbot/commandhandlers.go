@@ -79,7 +79,27 @@ func (bot *Bot) handleCommandStatus(ctx *BotContext, command, args string) error
 	} else {
 		return bot.Send(ctx, "whisper", "markdown", wcconst.MsgMonitorNotRunning)
 	}
+}
 
+// Handler for help CheckUpdate
+func (bot *Bot) handleCommandCheckUpdate(ctx *BotContext, command, args string) error {
+	log.Debug("Handle command /checkupdate")
+	bot.Send(ctx, "whisper", "markdown", "Checking update...")
+
+	result, err := CheckUpdate()
+
+	if err != nil {
+		log.Error(err)
+		return bot.Send(ctx, "whisper", "markdown", "Error checking update.")
+	}
+
+	if string(result) == "true" {
+		log.Debugln("CheckUpdate: Update available.")
+		return bot.Send(ctx, "whisper", "markdown", "Updates available.")
+	} else {
+		log.Debugln("CheckUpdate: No updates available.")
+		return bot.Send(ctx, "whisper", "markdown", "No updates available.")
+	}
 }
 
 func (bot *Bot) handleDirectMessageFallback(ctx *BotContext, text string) (bool, error) {

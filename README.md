@@ -186,6 +186,7 @@ This section outlines the Telegram Bot commands that are currently supported by 
 - [Show Config](#showconfig)
 - [Start](#start)
 - [Stop](#stop)
+- [Check Updates(#check-updates)]
 
 ## Help
 `/help`
@@ -222,6 +223,11 @@ Additionally, the `/start` command will initiate a heartbeat which will provide 
 `/stop`
 
 **Wing Commander** will stop monitoring the Skyminer. This will also stop the heartbeat.
+
+## Check Update
+`/checkupdate`
+
+**Wing Commander** will check the GitHub repository to determine if there are updates available or not and will report back the findings.
 
 ***
 

@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Added autorestart shell script (`wcstart.sh`). Thanks to @Cryptovinnie
 - Added config file generator shell script (`wcbuildconfig.sh`). Thanks to @Cryptovinnie
 - Added `/showconfig` command. This will ask the Bot to display its current runtime configuration, as stored in the `config.toml` file.
+- Added `/checkupdate` command. This allows the Bot to check for new releases on GitHub and report back the status.
 ### Changed
 - `/status` command will now respond differently depending on if the Monitor is currently runing or not (i.e. `/start`). When the Monitor is not running, the responce will indicate this. When the Monitor is running, the responce will indicate the current number of connected Nodes.
 ### Deprecated

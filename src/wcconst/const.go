@@ -2,7 +2,11 @@ package wcconst
 
 // Define constants used by the application
 const (
+	// BotVersion defines the SEMVER for the app. This MUST be bumped on each release.
 	BotVersion = "v0.2.0-beta.2"
+
+	// ScriptPath defines the path to the Scripts folder
+	ScriptPath = "/src/github.com/BigOokie/skywire-wing-commander/src/scripts/"
 
 	// Bot command messages:
 	// Help message
@@ -12,7 +16,8 @@ const (
 		"- /status - ask how I'm going.. and if I'm still running\n" +
 		"- /showconfig - display runtime configuration (from config.toml)\n" +
 		"- /start - start activly monitoring your Skyminer. Once started, notifications will be sent to you for events that occur. A heartbeat will also be initiated to let you know if the bot and the Miner are still running.\n" +
-		"- /stop - stop monitoring your Skyminer. Once stopped, I won't send any more notifications\n"
+		"- /stop - stop monitoring your Skyminer. Once stopped, I won't send any more notifications\n" +
+		"- /checkupdate - check for new updates."
 
 	MsgHelp = "*Wing Commander* here. I will help you to manage and monitor your Skyminer and its Nodes.\n\n" +
 		MsgHelpShort +

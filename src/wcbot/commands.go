@@ -56,4 +56,9 @@ var commands = Commands{
 		"showconfig",
 		(*Bot).handleCommandShowConfig,
 	},
+	Command{
+		false,
+		"checkupdate",
+		(*Bot).handleCommandCheckUpdate,
+	},
 }
