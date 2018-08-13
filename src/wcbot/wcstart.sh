@@ -4,4 +4,4 @@
 export GOPATH="$HOME/go"
 
 cd $GOPATH/bin
-nohup ./wcbot /dev/null 2>&1 & echo $! > wcbot.pid &
+./wcbot /dev/null 2>&1 & echo $! > wcbot.pid &
