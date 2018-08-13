@@ -157,14 +157,15 @@ cd $GOPATH/bin
 ### Automatic restart 
 Use the following commands to setup an automatic startup script to check and restart the **Wing Commander** bot incase the Manager Node goes offline.
 ```sh 
-cd $GOPATH/src/github.com/BigOokie/skywire-wing-commander/src/wcbot
-chmod +x wcstart.sh 
+cp $GOPATH/src/github.com/BigOokie/skywire-wing-commander/src/wcbot/wcstart.sh /etc/init.d/wcstart.sh
+cd /etc/init.d
+chmod 755 wcstart.sh 
 crontab -e 
 ```
 Go to the bottom of the file and enter the following:
 
 ```sh
-@reboot /go/src/github.com/BigOokie/skywire-wing-commander/src/wcbot/wcstart.sh
+@reboot /etc/init.d/wcstart.sh
 ```
 Then press `CTRL+O` & `ENTER` to Save, then press `CTRL+X` to Exit.
 
