@@ -6,6 +6,7 @@ package wcconfig
 
 import (
 	"testing"
+	"time"
 
 	"github.com/go-test/deep"
 )
@@ -22,8 +23,8 @@ func Test_ConfigString(t *testing.T) {
 		"  admin  = \"@TESTUSER\"\n" +
 		"  debug  = false\n" +
 		"[Monitor]\n" +
-		"  intervalsec = 1\n" +
-		"  heartbeatintmin = 1\n"
+		"  intervalsec = 10s\n" +
+		"  heartbeatintmin = 2h0m0s\n"
 
 	var config Config
 	config.WingCommander.TwoFactorEnabled = false
@@ -32,8 +33,8 @@ func Test_ConfigString(t *testing.T) {
 	config.Telegram.ChatID = 123456789
 	config.Telegram.Admin = "@TESTUSER"
 	config.Telegram.Debug = false
-	config.Monitor.IntervalSec = 1
-	config.Monitor.HeartbeatIntMin = 1
+	config.Monitor.IntervalSec = 10 * time.Second
+	config.Monitor.HeartbeatIntMin = 120 * time.Minute
 
 	if diff := deep.Equal(config.String(), expectstr); diff != nil {
 		t.Error(diff)
