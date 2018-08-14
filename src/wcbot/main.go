@@ -27,9 +27,12 @@ func main() {
 	defer log.Infoln("Skywire Wing Commander Telegram Bot - Stopped.")
 
 	// Load configuration
-	//configPath := filepath.Join(utils.UserHome(), ".wingcommander", "config.toml")
-	//config, err := wcconfig.ReadConfig(configPath)
-	config, err := wcconfig.LoadConfigParameters("config.toml")
+	config, err := wcconfig.LoadConfigParameters("config", "$HOME/.wingcommander", map[string]interface{}{
+		"telegram.debug":          false,
+		"monitor.intervalsec":     10,
+		"monitor.heartbeatintmin": 120,
+		"skymanager.address":      "127.0.0.1:8000",
+	})
 
 	if err != nil {
 		log.Error(err)

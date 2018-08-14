@@ -74,36 +74,18 @@ func (c *Config) DebugLogConfig() {
 	log.Debugf("Wing Commander Configuration:\n%s", c.String())
 }
 
-// LoadConfigParameters loads config parameters from the provided config file.
-// The default file is config.toml in the .wingcommander folder in the users Home
-// JSON, toml or yaml file can be used (toml preferred and default).
-func LoadConfigParameters(configName string) (Config, error) {
-	confNameSplit := strings.Split(configName, ".")
-	fileType := confNameSplit[len(confNameSplit)-1]
-	switch fileType {
-	case "toml", "json", "yaml", "yml":
-		viper.SetConfigType(confNameSplit[len(confNameSplit)-1])
-	default:
-		return Config{}, fmt.Errorf("invalid blockchain config file type: %s", fileType)
+// LoadConfigParameters
+func LoadConfigParameters(filename, pathname string, defaults map[string]interface{}) (Config, error) {
+	v1, err := readConfig(filename, pathname, defaults)
+
+	if err != nil {
+		panic(fmt.Errorf("LoadConfigParameters: error reading config: %v", err))
 	}
-
-	configName = configName[:len(configName)-(len(fileType)+1)]
-	viper.SetConfigName(configName)
-	viper.AddConfigPath("$HOME/.wingcommander/")
-
-	// set app config defaults
-	setConfigDefaults()
 
 	config := Config{}
 
-	if err := viper.ReadInConfig(); err != nil {
-		log.Debug("ReadInConfig")
-		return config, err
-	}
-
-	if err := viper.Unmarshal(&config); err != nil {
-		log.Debug("Unmarshal")
-		return config, err
+	if err := v1.Unmarshal(&config); err != nil {
+		panic(fmt.Errorf("LoadConfigParameters: error loading config: %v", err))
 	}
 
 	config.Monitor.IntervalSec = config.Monitor.IntervalSec * time.Second
@@ -120,15 +102,17 @@ func LoadConfigParameters(configName string) (Config, error) {
 	return config, nil
 }
 
-func setConfigDefaults() {
-
-	// Telegram defaults
-	viper.SetDefault("telegram.debug", false)
-
-	// Monitor defaults
-	viper.SetDefault("monitor.intervalsec", 10)
-	viper.SetDefault("monitor.heartbeatintmin", 120)
-
-	// Skyminer defaults
-	viper.SetDefault("skymanager.address", "127.0.0.1:8000")
+// ReadConfig attempts to read configuration parameters from the provided
+// file (`filename`) and utilises the provided set of default values
+// If successful it will return a *viper.Viper struct
+func readConfig(filename, pathname string, defaults map[string]interface{}) (*viper.Viper, error) {
+	v := viper.New()
+	for key, value := range defaults {
+		v.SetDefault(key, value)
+	}
+	v.SetConfigName(filename)
+	v.AddConfigPath(pathname)
+	v.AutomaticEnv()
+	err := v.ReadInConfig()
+	return v, err
 }
