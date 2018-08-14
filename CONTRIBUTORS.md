@@ -1,5 +1,5 @@
 # Wing Commander Contributors
-The following lists all contributors to the **Wing Commander** project.
+A big Thank You! to all contibutors that have helped to make **Wing Commander** even better:
 
 - **[BigOokie](https://github.com/BigOokie)**
     - Original concept, design, code and documentation.
