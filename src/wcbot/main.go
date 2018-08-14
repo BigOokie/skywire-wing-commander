@@ -1,14 +1,17 @@
+// Copyright © 2018 BigOokie
+//
+// Use of this source code is governed by an MIT
+// license that can be found in the LICENSE file.
+
 package main
 
 import (
 	"os"
 	"os/signal"
-	"path/filepath"
 
 	"github.com/BigOokie/skywire-wing-commander/src/wcconfig"
 	"github.com/BigOokie/skywire-wing-commander/src/wcconst"
 
-	"github.com/BigOokie/skywire-wing-commander/src/utils"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -24,8 +27,10 @@ func main() {
 	defer log.Infoln("Skywire Wing Commander Telegram Bot - Stopped.")
 
 	// Load configuration
-	configPath := filepath.Join(utils.UserHome(), ".wingcommander", "config.toml")
-	config, err := wcconfig.ReadConfig(configPath)
+	//configPath := filepath.Join(utils.UserHome(), ".wingcommander", "config.toml")
+	//config, err := wcconfig.ReadConfig(configPath)
+	config, err := wcconfig.LoadConfigParameters("config.toml")
+
 	if err != nil {
 		log.Error(err)
 		return
