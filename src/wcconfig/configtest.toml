@@ -33,12 +33,3 @@ heartbeatintmin = 120
 # it is assumed it will be running on the same machine and that the 
 # Skywire Manager app defaults are in use
 address="127.0.0.1:8000"
-
-
-
-
-
-
-
-
-

@@ -40,3 +40,31 @@ func Test_ConfigString(t *testing.T) {
 		t.Error(diff)
 	}
 }
+
+func Test_LoadConfigParameters_BadFileName(t *testing.T) {
+	// Load configuration
+	_, err := LoadConfigParameters("file-does-not-exist", ".", map[string]interface{}{
+		"telegram.debug":          false,
+		"monitor.intervalsec":     10,
+		"monitor.heartbeatintmin": 120,
+		"skymanager.address":      "127.0.0.1:8000",
+	})
+
+	if err == nil {
+		t.Error(err)
+	}
+}
+
+func Test_LoadConfigParameters_GoodFileName(t *testing.T) {
+	// Load configuration
+	_, err := LoadConfigParameters("configtest", ".", map[string]interface{}{
+		"telegram.debug":          false,
+		"monitor.intervalsec":     10,
+		"monitor.heartbeatintmin": 120,
+		"skymanager.address":      "127.0.0.1:8000",
+	})
+
+	if err != nil {
+		t.Error(err)
+	}
+}

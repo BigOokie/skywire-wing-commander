@@ -10,9 +10,8 @@ import (
 	"strings"
 	"time"
 
-	viper "github.com/spf13/viper"
-
 	log "github.com/sirupsen/logrus"
+	viper "github.com/spf13/viper"
 )
 
 // Config structure models the applications configuration structure
@@ -74,35 +73,7 @@ func (c *Config) DebugLogConfig() {
 	log.Debugf("Wing Commander Configuration:\n%s", c.String())
 }
 
-// LoadConfigParameters
-func LoadConfigParameters(filename, pathname string, defaults map[string]interface{}) (Config, error) {
-	v1, err := readConfig(filename, pathname, defaults)
-
-	if err != nil {
-		panic(fmt.Errorf("LoadConfigParameters: error reading config: %v", err))
-	}
-
-	config := Config{}
-
-	if err := v1.Unmarshal(&config); err != nil {
-		panic(fmt.Errorf("LoadConfigParameters: error loading config: %v", err))
-	}
-
-	config.Monitor.IntervalSec = config.Monitor.IntervalSec * time.Second
-	config.Monitor.HeartbeatIntMin = config.Monitor.HeartbeatIntMin * time.Minute
-
-	// Check if the Admin user is prefixed with `@`
-	if !strings.HasPrefix(config.Telegram.Admin, "@") {
-		// Add an "@" as the first character
-		config.Telegram.Admin = "@" + config.Telegram.Admin
-		log.Warnf("ReadConfig: admin username configuration is not prefixed `@`. Runtime config updated to prevent errors.")
-	}
-
-	config.DebugLogConfig()
-	return config, nil
-}
-
-// ReadConfig attempts to read configuration parameters from the provided
+// readConfig attempts to read configuration parameters from the provided
 // file (`filename`) and utilises the provided set of default values
 // If successful it will return a *viper.Viper struct
 func readConfig(filename, pathname string, defaults map[string]interface{}) (*viper.Viper, error) {
@@ -115,4 +86,38 @@ func readConfig(filename, pathname string, defaults map[string]interface{}) (*vi
 	v.AutomaticEnv()
 	err := v.ReadInConfig()
 	return v, err
+}
+
+// LoadConfigParameters will load the applications configuration from the
+// specified configuration file `filename` (note file extention must not be provided) in the
+// specified path `pathname`. The function also provides the ability to specify
+// configuration defaults.
+// An `error` will be returned if any errors occur.
+// A valid `Config` struct will be returned on success.
+func LoadConfigParameters(filename, pathname string, defaults map[string]interface{}) (Config, error) {
+	v1, err := readConfig(filename, pathname, defaults)
+
+	config := Config{}
+
+	if err != nil {
+		return config, err
+	}
+
+	if err := v1.Unmarshal(&config); err != nil {
+		return config, err
+	}
+
+	// Validate and adjust any configuration parameters
+	config.Monitor.IntervalSec = config.Monitor.IntervalSec * time.Second
+	config.Monitor.HeartbeatIntMin = config.Monitor.HeartbeatIntMin * time.Minute
+
+	// Check if the Admin user is prefixed with `@`
+	if !strings.HasPrefix(config.Telegram.Admin, "@") {
+		// Add an "@" as the first character
+		config.Telegram.Admin = "@" + config.Telegram.Admin
+		log.Warnf("ReadConfig: admin username configuration is not prefixed `@`. Runtime config updated to prevent errors.")
+	}
+
+	config.DebugLogConfig()
+	return config, nil
 }

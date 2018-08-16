@@ -8,12 +8,29 @@ package main
 import (
 	"os"
 	"os/signal"
+	"path/filepath"
 
+	"github.com/BigOokie/skywire-wing-commander/src/utils"
 	"github.com/BigOokie/skywire-wing-commander/src/wcconfig"
 	"github.com/BigOokie/skywire-wing-commander/src/wcconst"
 
 	log "github.com/sirupsen/logrus"
 )
+
+// loadConfig manages the configuration load specifics
+// offloading the detail from the `main()` funct
+func loadConfig() (config wcconfig.Config, err error) {
+	log.Debugln("loadConfig: Start")
+	// Load configuration
+	config, err = wcconfig.LoadConfigParameters("config", filepath.Join(utils.UserHome(), ".wingcommander"), map[string]interface{}{
+		"telegram.debug":          false,
+		"monitor.intervalsec":     10,
+		"monitor.heartbeatintmin": 120,
+		"skymanager.address":      "127.0.0.1:8000",
+	})
+	log.Debugln("loadConfig: Complete")
+	return
+}
 
 func main() {
 	// Setup OS Notification for Interupt or Kill signal - to cleanly terminate the app
@@ -26,13 +43,7 @@ func main() {
 	log.Infoln("Skywire Wing Commander Telegram Bot - Starting.")
 	defer log.Infoln("Skywire Wing Commander Telegram Bot - Stopped.")
 
-	// Load configuration
-	config, err := wcconfig.LoadConfigParameters("config", "$HOME/.wingcommander", map[string]interface{}{
-		"telegram.debug":          false,
-		"monitor.intervalsec":     10,
-		"monitor.heartbeatintmin": 120,
-		"skymanager.address":      "127.0.0.1:8000",
-	})
+	config, err := loadConfig()
 
 	if err != nil {
 		log.Error(err)
