@@ -43,7 +43,7 @@ func Test_ConfigString(t *testing.T) {
 
 func Test_LoadConfigParameters_BadFileName(t *testing.T) {
 	// Load configuration
-	_, err := LoadConfigParameters("file-does-not-exist", ".", map[string]interface{}{
+	config, err := LoadConfigParameters("file-does-not-exist", ".", map[string]interface{}{
 		"telegram.debug":          false,
 		"monitor.intervalsec":     10,
 		"monitor.heartbeatintmin": 120,
@@ -53,11 +53,15 @@ func Test_LoadConfigParameters_BadFileName(t *testing.T) {
 	if err == nil {
 		t.Error(err)
 	}
+
+	if &config != nil {
+		t.Error("Config should be nil")
+	}
 }
 
-func Test_LoadConfigParameters_GoodFileName(t *testing.T) {
+func Test_LoadConfigParameters_AllParams(t *testing.T) {
 	// Load configuration
-	_, err := LoadConfigParameters("configtest", ".", map[string]interface{}{
+	config, err := LoadConfigParameters("configtest-allparams", "./testdata", map[string]interface{}{
 		"telegram.debug":          false,
 		"monitor.intervalsec":     10,
 		"monitor.heartbeatintmin": 120,
@@ -66,5 +70,27 @@ func Test_LoadConfigParameters_GoodFileName(t *testing.T) {
 
 	if err != nil {
 		t.Error(err)
+	}
+
+	if &config == nil {
+		t.Error("Config should not be nil")
+	}
+}
+
+func Test_LoadConfigParameters_NoDefaultParams(t *testing.T) {
+	// Load configuration
+	config, err := LoadConfigParameters("configtest-nodefaults", "./testdata", map[string]interface{}{
+		"telegram.debug":          false,
+		"monitor.intervalsec":     10,
+		"monitor.heartbeatintmin": 120,
+		"skymanager.address":      "127.0.0.1:8000",
+	})
+
+	if err != nil {
+		t.Error(err)
+	}
+
+	if &config == nil {
+		t.Error("Config should not be nil")
 	}
 }
