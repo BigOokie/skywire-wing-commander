@@ -1,6 +1,6 @@
-#TEST DATA: GOOD ALL PARAMS WITH DEFAULTS COMMENTED OUT
+# TEST DATA: BAD PARAM DATA - APIKEY not enclosed in ""
 [telegram]
-apikey = "BOT-APIKEY-HERE"
+apikey = BOT-APIKEY-HERE
 chatid = 123456789
 admin = "@USERNAME"
 #debug = false

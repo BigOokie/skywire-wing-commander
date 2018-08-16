@@ -41,6 +41,13 @@ func Test_ConfigString(t *testing.T) {
 	}
 }
 
+func Test_Config_IsEmpty(t *testing.T) {
+	emptyConfig := Config{}
+	if !IsEmpty(emptyConfig) {
+		t.Error("Expected: Config should be empty")
+	}
+}
+
 func Test_LoadConfigParameters_BadFileName(t *testing.T) {
 	// Load configuration
 	config, err := LoadConfigParameters("file-does-not-exist", ".", map[string]interface{}{
@@ -54,8 +61,8 @@ func Test_LoadConfigParameters_BadFileName(t *testing.T) {
 		t.Error(err)
 	}
 
-	if &config != nil {
-		t.Error("Config should be nil")
+	if !IsEmpty(config) {
+		t.Error("Expected: Config should be empty")
 	}
 }
 
@@ -72,8 +79,8 @@ func Test_LoadConfigParameters_AllParams(t *testing.T) {
 		t.Error(err)
 	}
 
-	if &config == nil {
-		t.Error("Config should not be nil")
+	if IsEmpty(config) {
+		t.Error("Expected: Config should be populated")
 	}
 }
 
@@ -90,7 +97,25 @@ func Test_LoadConfigParameters_NoDefaultParams(t *testing.T) {
 		t.Error(err)
 	}
 
-	if &config == nil {
-		t.Error("Config should not be nil")
+	if IsEmpty(config) {
+		t.Error("Expected: Config should be populated")
+	}
+}
+
+func Test_LoadConfigParameters_BadParamData(t *testing.T) {
+	// Load configuration
+	config, err := LoadConfigParameters("configtest-badparamdata", "./testdata", map[string]interface{}{
+		"telegram.debug":          false,
+		"monitor.intervalsec":     10,
+		"monitor.heartbeatintmin": 120,
+		"skymanager.address":      "127.0.0.1:8000",
+	})
+
+	if err == nil {
+		t.Error(err)
+	}
+
+	if !IsEmpty(config) {
+		t.Error("Expected: Config should be empty")
 	}
 }

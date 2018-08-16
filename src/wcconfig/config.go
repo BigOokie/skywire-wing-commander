@@ -73,6 +73,12 @@ func (c *Config) DebugLogConfig() {
 	log.Debugf("Wing Commander Configuration:\n%s", c.String())
 }
 
+// IsEmpty will compare the current instance of Config against an empty instance
+// and return the result of the comparison
+func IsEmpty(c Config) bool {
+	return (c == (Config{}))
+}
+
 // readConfig attempts to read configuration parameters from the provided
 // file (`filename`) and utilises the provided set of default values
 // If successful it will return a *viper.Viper struct
@@ -94,10 +100,9 @@ func readConfig(filename, pathname string, defaults map[string]interface{}) (*vi
 // configuration defaults.
 // An `error` will be returned if any errors occur.
 // A valid `Config` struct will be returned on success.
-func LoadConfigParameters(filename, pathname string, defaults map[string]interface{}) (Config, error) {
+func LoadConfigParameters(filename, pathname string, defaults map[string]interface{}) (config Config, err error) {
+	//config := Config{}
 	v1, err := readConfig(filename, pathname, defaults)
-
-	config := Config{}
 
 	if err != nil {
 		return config, err
