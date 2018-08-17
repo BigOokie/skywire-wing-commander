@@ -1,11 +1,11 @@
-#Welcome to the contributing overview for **Wing Commander**!
+Welcome to the contributing overview for **Wing Commander**!
 
 
 Until we establish specific guidelines, I quite like the way that the team at [Ghost](https://github.com/TryGhost/Ghost/) go about this.
 
 Please review the guidance provided by [Ghost](https://github.com/TryGhost/Ghost/blob/master/.github/CONTRIBUTING.md) for contributing, and act in this general spirit.
 
-#Contributor License Agreement
+**Contributor License Agreement**
 
 By contributing your code to Wing Commander you grant the author of the Wing Commander project a non-exclusive, irrevocable, worldwide, royalty-free, sublicenseable, transferable license under all of Your relevant intellectual property rights (including copyright, patent, and any other rights), to use, copy, prepare derivative works of, distribute and publicly perform and display the Contributions on any licensing terms, including without limitation:
 (a) open source licenses like the MIT license; and (b) binary, proprietary, or commercial licenses. Except for the licenses granted herein, You reserve all right, title, and interest in and to the Contribution.
