@@ -1,3 +1,8 @@
+// Copyright © 2018 BigOokie
+//
+// Use of this source code is governed by an MIT
+// license that can be found in the LICENSE file.
+
 package main
 
 import (
@@ -13,7 +18,7 @@ import (
 
 // Bot provides management of the interface to the Telegram Bot
 type Bot struct {
-	config                 *wcconfig.Config
+	config                 wcconfig.Config
 	telegram               *tgbotapi.BotAPI
 	skyMgrMonitor          *SkyManagerMonitor
 	commandHandlers        map[string]CommandHandler
@@ -385,12 +390,13 @@ func (bot *Bot) handleMessage(ctx *BotContext) error {
 
 // NewBot will create a new instance of a Bot struct based on the passed Config structure
 // which supplies runtime configuration for the bot.
-func NewBot(config *wcconfig.Config) (*Bot, error) {
+func NewBot(config wcconfig.Config) (*Bot, error) {
 	var bot = Bot{
-		config:               config,
+		config:               wcconfig.Config{},
 		commandHandlers:      make(map[string]CommandHandler),
 		adminCommandHandlers: make(map[string]CommandHandler),
 	}
+	bot.config = config
 	var err error
 
 	bot.skyMgrMonitor = NewMonitor(config.SkyManager.Address)

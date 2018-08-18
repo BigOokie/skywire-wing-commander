@@ -1,0 +1,13 @@
+#TEST DATA: GOOD ALL PARAMS WITH DEFAULTS COMMENTED OUT
+[telegram]
+apikey = "BOT-APIKEY-HERE"
+chatid = 123456789
+admin = "@USERNAME"
+#debug = false
+
+[monitor]
+#intervalsec = 10
+#heartbeatintmin = 120
+
+[skymanager]
+#address="127.0.0.1:8000"
