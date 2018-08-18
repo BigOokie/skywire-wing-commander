@@ -40,14 +40,16 @@ type TelegramParameters struct {
 // SkyManagerParameters struct defines the configuration parameters that
 // are used to manage connectivity with the Skywire Manager
 type SkyManagerParameters struct {
-	Address string `mapstructure:"address"`
+	Address          string `mapstructure:"address"`
+	DiscoveryAddress string `mapstructure:"discoveryaddress"`
 }
 
 // MonitorParameters struct defines the configuration parameters that
 // are used by the Monitor which polls the SkyManager
 type MonitorParameters struct {
-	IntervalSec     time.Duration `mapstructure:"intervalsec"`
-	HeartbeatIntMin time.Duration `mapstructure:"heartbeatintmin"`
+	IntervalSec            time.Duration `mapstructure:"intervalsec"`
+	HeartbeatIntMin        time.Duration `mapstructure:"heartbeatintmin"`
+	DiscoveryMonitorIntMin time.Duration `mapstructure:"discoverymonitorintmin"`
 }
 
 // String is the stringer function for the Config struct
@@ -56,6 +58,7 @@ func (c *Config) String() string {
 		"  twofactorenabled = %v\n" +
 		"[SkyManager]\n" +
 		"  address = \"%s\"\n" +
+		"  discoveryaddress = \"%s\"\n" +
 		"[Telegram]\n" +
 		"  apikey = \"%s\"\n" +
 		"  chatid = %v\n" +
@@ -63,9 +66,10 @@ func (c *Config) String() string {
 		"  debug  = %v\n" +
 		"[Monitor]\n" +
 		"  intervalsec = %v\n" +
-		"  heartbeatintmin = %v\n"
+		"  heartbeatintmin = %v\n" +
+		"  discoverymonitorintmin = 2h0m0s\n"
 
-	return fmt.Sprintf(resultstr, c.WingCommander.TwoFactorEnabled, c.SkyManager.Address, c.Telegram.APIKey, c.Telegram.ChatID, c.Telegram.Admin, c.Telegram.Debug, c.Monitor.IntervalSec, c.Monitor.HeartbeatIntMin)
+	return fmt.Sprintf(resultstr, c.WingCommander.TwoFactorEnabled, c.SkyManager.Address, c.SkyManager.DiscoveryAddress, c.Telegram.APIKey, c.Telegram.ChatID, c.Telegram.Admin, c.Telegram.Debug, c.Monitor.IntervalSec, c.Monitor.HeartbeatIntMin)
 }
 
 // DebugLogConfig will log debug information for the passed Config structure

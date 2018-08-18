@@ -41,10 +41,10 @@ func NewMonitor(manageraddress string) *SkyManagerMonitor {
 	}
 }
 
-// Run starts the SkyManagerMonitor.
+// RunManagerMonitor starts the SkyManagerMonitor monitoring of the local Manager Node.
 // If `ctx` is not nil, the monitor will listen to ctx.Done() and stop monitoring
 // when it recieves the signal.
-func (m *SkyManagerMonitor) Run(runctx context.Context, statusMsgChan chan<- string, pollInt time.Duration) {
+func (m *SkyManagerMonitor) RunManagerMonitor(runctx context.Context, statusMsgChan chan<- string, pollInt time.Duration) {
 	log.Debugf("SkyManagerMonitor Run: Start (Interval: %v)", pollInt)
 	defer log.Debugln("SkyManagerMonitor Run: End")
 

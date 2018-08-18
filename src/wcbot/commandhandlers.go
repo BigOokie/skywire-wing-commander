@@ -49,11 +49,10 @@ func (bot *Bot) handleCommandStart(ctx *BotContext, command, args string) error 
 
 	// Start the Event Monitor - provide cancelContext
 	go bot.monitorEventLoop(cancelContext, ctx, bot.skyMgrMonitor.monitorStatusMsgChan)
-	// Start the monitor - provide cancelContext
-	go bot.skyMgrMonitor.Run(cancelContext, bot.skyMgrMonitor.monitorStatusMsgChan, bot.config.Monitor.IntervalSec)
+	// Start monitoring the local Manager - provide cancelContext
+	go bot.skyMgrMonitor.RunManagerMonitor(cancelContext, bot.skyMgrMonitor.monitorStatusMsgChan, bot.config.Monitor.IntervalSec)
 
 	return bot.Send(ctx, "whisper", "markdown", wcconst.MsgMonitorStart)
-
 }
 
 // Handler for stop command

@@ -23,10 +23,11 @@ func loadConfig() (config wcconfig.Config, err error) {
 	log.Debugln("loadConfig: Start")
 	// Load configuration
 	config, err = wcconfig.LoadConfigParameters("config", filepath.Join(utils.UserHome(), ".wingcommander"), map[string]interface{}{
-		"telegram.debug":          false,
-		"monitor.intervalsec":     10,
-		"monitor.heartbeatintmin": 120,
-		"skymanager.address":      "127.0.0.1:8000",
+		"telegram.debug":                 false,
+		"monitor.intervalsec":            10,
+		"monitor.heartbeatintmin":        120,
+		"monitor.discoverymonitorintmin": 120,
+		"skymanager.address":             "127.0.0.1:8000",
 	})
 	log.Debugln("loadConfig: Complete")
 	return
