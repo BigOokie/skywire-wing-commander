@@ -201,7 +201,7 @@ Shows information and credits about the creator of **Wing Commander** and any ke
 ## Status
 `/status`
 
-Manually request current status of the **Wing Commander** Bot.
+Manually request current status of the **Wing Commander** Bot. The Status message will return the same information that is returned as part of the periodic Heartbeat. Status will also inform you if Monitoring is currently running or not.
 
 ## Show Config
 `/showconfig`
@@ -213,7 +213,8 @@ Show the current runtime configuration for the bot based on the content of the `
 
 **Wing Commander** will start monitoring the **Skyminer** that it is running on.
 Once started, **Wing Commander** will provide notification updates via Telegram when any Node managed by the Skyminer Manager connects or disconnects.
-Additionally, the `/start` command will initiate a heartbeat which will provide a status update on a configurable cycle (interval set in `config.toml`).  The heartbeat will help you to ensure that the bot and/or the Skyminer itself is still running. **If you stop receiving the heartbeat, you need to check whats going on.**
+Additionally, the `/start` command will initiate a Heartbeat which will provide a periodic status update (interval set in `config.toml`).  The Heartbeat will help you to ensure that the bot and/or the Skyminer itself is still running. The Heartbeat also checks that all connected local Nodes are registered with the Discovery Node and reports the count back as part of the Heartbear message.
+**If you stop receiving the Heartbeat, you need to check whats going on.**
 
 ### Heartbeat screenshot
 <img src="assets/images/WingCommander-Heartbeat.png">

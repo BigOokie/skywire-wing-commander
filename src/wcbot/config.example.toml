@@ -1,30 +1,33 @@
-# Skywire Wing Commander example configuration file
+# Wing Commander example configuration file
 # Use this file as a tempate to build your own configuration file
 # and place it in ~/.wingcommander/config.toml
-# Note: Lines begining with a # are comments
+# Default values are commented out
 
 # Telegram configuration
 [telegram]
 # Telegram bot API key (token). This is provided by the @BotFather. The value must be enclosed in " "
-apikey = "YOUR-BOT-API-KEY-HERE"
+apikey = "BOT-APIKEY-HERE"
 # Telegram chatid. Go here to find this: https://api.telegram.org/bot<YourBOTToken>/getUpdates
 # This is an integer field - not a string - dont use " "
-chatid = 0123456789
+chatid = 123456789
 # Your Telegram @USERNAME enclosed in " "
-admin = "YOUR TELEGRAM @USERNAME"
+admin = "@USERNAME"
 # Telegram API debugging (true or false)
-debug = false
+#debug = false
 
 # Skyminer monitor configuration
 # These configurations are used once monitoring is started 
 [monitor]
 # Skyminer polling interval (in seconds). Controls how often the bot will 
 # talk to the Skyminer.
-intervalsec = 10
+#intervalsec = 10
+
 # Bot heartbeat interval (in minutes). Default is 120min (2hrs).
 # Controls the interval that the bot will automatically provide any update
 # via Telegram. This is active once monitoring has started.
-heartbeatintmin = 120
+#heartbeatintmin = 120
+
+discoverymonitorintmin = 1
 
 # Skyminer Manager configuration
 [skymanager]
@@ -32,4 +35,16 @@ heartbeatintmin = 120
 # The bot can be run on a seperate machine to the Manager, but by default
 # it is assumed it will be running on the same machine and that the 
 # Skywire Manager app defaults are in use
-address="127.0.0.1:8000"
+#address="127.0.0.1:8000"
+
+# Skycoin Skywire Discovery Node address
+#discoveryaddress="discovery.skycoin.net:8001"
+
+
+
+
+
+
+
+
+
