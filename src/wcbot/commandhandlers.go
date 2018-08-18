@@ -51,6 +51,8 @@ func (bot *Bot) handleCommandStart(ctx *BotContext, command, args string) error 
 	go bot.monitorEventLoop(cancelContext, ctx, bot.skyMgrMonitor.monitorStatusMsgChan)
 	// Start monitoring the local Manager - provide cancelContext
 	go bot.skyMgrMonitor.RunManagerMonitor(cancelContext, bot.skyMgrMonitor.monitorStatusMsgChan, bot.config.Monitor.IntervalSec)
+	// Start monitoring the local Manager - provide cancelContext
+	//go bot.skyMgrMonitor.RunDiscoveryMonitor(cancelContext, bot.skyMgrMonitor.monitorStatusMsgChan, bot.config.Monitor.DiscoveryMonitorIntMin)
 
 	return bot.Send(ctx, "whisper", "markdown", wcconst.MsgMonitorStart)
 }
@@ -71,7 +73,6 @@ func (bot *Bot) handleCommandStop(ctx *BotContext, command, args string) error {
 
 	log.Debug(wcconst.MsgMonitorNotRunning)
 	return bot.Send(ctx, "whisper", "markdown", wcconst.MsgMonitorNotRunning)
-
 }
 
 // Handler for status command
@@ -79,7 +80,9 @@ func (bot *Bot) handleCommandStatus(ctx *BotContext, command, args string) error
 	log.Debug("Handle command /status")
 
 	if bot.skyMgrMonitor.IsRunning() {
-		return bot.Send(ctx, "whisper", "markdown", fmt.Sprintf(wcconst.MsgStatus, bot.skyMgrMonitor.GetConnectedNodeCount()))
+		return bot.Send(ctx, "whisper", "markdown",
+			fmt.Sprintf(wcconst.MsgStatus,
+				bot.skyMgrMonitor.GetConnectedNodeCount(), bot.skyMgrMonitor.ConnectedDiscNodeCount()))
 	} else {
 		return bot.Send(ctx, "whisper", "markdown", wcconst.MsgMonitorNotRunning)
 	}
@@ -117,7 +120,8 @@ func (bot *Bot) monitorEventLoop(runctx context.Context, botctx *BotContext, sta
 		// Heartbeat ticker event
 		case <-tickerHB.C:
 			log.Debug("Bot.monitorEventLoop - Heartbeat event")
-			bot.Send(botctx, "whisper", "markdown", fmt.Sprintf(wcconst.MsgHeartbeat, bot.skyMgrMonitor.GetConnectedNodeCount()))
+			bot.Send(botctx, "whisper", "markdown", fmt.Sprintf(wcconst.MsgHeartbeat,
+				bot.skyMgrMonitor.GetConnectedNodeCount(), bot.skyMgrMonitor.ConnectedDiscNodeCount()))
 
 		// Context has been cancelled. Shutdown
 		case <-runctx.Done():

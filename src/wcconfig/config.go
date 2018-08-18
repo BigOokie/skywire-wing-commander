@@ -67,9 +67,12 @@ func (c *Config) String() string {
 		"[Monitor]\n" +
 		"  intervalsec = %v\n" +
 		"  heartbeatintmin = %v\n" +
-		"  discoverymonitorintmin = 2h0m0s\n"
+		"  discoverymonitorintmin = %v\n"
 
-	return fmt.Sprintf(resultstr, c.WingCommander.TwoFactorEnabled, c.SkyManager.Address, c.SkyManager.DiscoveryAddress, c.Telegram.APIKey, c.Telegram.ChatID, c.Telegram.Admin, c.Telegram.Debug, c.Monitor.IntervalSec, c.Monitor.HeartbeatIntMin)
+	return fmt.Sprintf(resultstr, c.WingCommander.TwoFactorEnabled, c.SkyManager.Address,
+		c.SkyManager.DiscoveryAddress, c.Telegram.APIKey, c.Telegram.ChatID,
+		c.Telegram.Admin, c.Telegram.Debug, c.Monitor.IntervalSec, c.Monitor.HeartbeatIntMin,
+		c.Monitor.DiscoveryMonitorIntMin)
 }
 
 // DebugLogConfig will log debug information for the passed Config structure
@@ -119,6 +122,7 @@ func LoadConfigParameters(filename, pathname string, defaults map[string]interfa
 	// Validate and adjust any configuration parameters
 	config.Monitor.IntervalSec = config.Monitor.IntervalSec * time.Second
 	config.Monitor.HeartbeatIntMin = config.Monitor.HeartbeatIntMin * time.Minute
+	config.Monitor.DiscoveryMonitorIntMin = config.Monitor.DiscoveryMonitorIntMin * time.Minute
 
 	// Check if the Admin user is prefixed with `@`
 	if !strings.HasPrefix(config.Telegram.Admin, "@") {

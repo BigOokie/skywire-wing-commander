@@ -42,11 +42,15 @@ const (
 
 	MsgShowConfig = "*Wing Commander Configuration*\n%s\n"
 
+	MsgErrorGetNodes     = "⚠️ An error occurred getting the list of Nodes from the Manager."
+	MsgErrorGetDiscNodes = "⚠️ An error occurred checking Discovery Node connections."
+
 	MsgConnectedNodes = "*Connected Nodes:* %v"
+	MsgDiscConnNodes  = "*Discovery Connected Nodes:* %v"
 	// Status cmd message
-	MsgStatus = "*Wing Commander* Ready and reporting for duty 👍\n" + MsgConnectedNodes
+	MsgStatus = "*Wing Commander* Ready and reporting for duty 👍\n" + MsgConnectedNodes + "\n" + MsgDiscConnNodes
 	// Heartbeat message
-	MsgHeartbeat = "*Wing Commander Heatbeat* ❣️\n" + MsgConnectedNodes
+	MsgHeartbeat = "*Wing Commander Heatbeat* ❣️\n" + MsgConnectedNodes + "\n" + MsgDiscConnNodes
 
 	// Node Connect/Disconnect Event Messages
 	MsgNodeConnected    = "*Node Connected:* %s\n\n" + MsgConnectedNodes
