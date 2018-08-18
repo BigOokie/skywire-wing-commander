@@ -7,7 +7,7 @@ package wcconst
 
 // Define constants used by the application
 const (
-	BotVersion = "v0.2.0-beta.2"
+	BotVersion = "v0.2.0-beta.3"
 
 	// Bot command messages:
 	// Help message
