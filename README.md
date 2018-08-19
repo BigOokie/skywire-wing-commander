@@ -292,4 +292,5 @@ Alternatively, the discussion associated with the reported issue with the offici
 This is not my job, but I enjoy building things for the **Skyfleet** community. If you find my work useful, please consider donating to support it.
 ```
 Skycoin:    ES5LccJDhBCK275APmW9tmQNEgiYwTFKQF
+Bitcoin:    1KedLdhvUubRMLVxw8XQWoEBMkvHvf8aGt 
 ```
