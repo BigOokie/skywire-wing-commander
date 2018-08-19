@@ -4,8 +4,9 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [Unreleased] 
+## [v0.2.0-beta.4] - 2018-08-19
 ### Added
+- Added `/checkupdate` command. Requests the Bot to check GitHub to determine if a new version is available. The Bot will report back its findings. Note: This command does not perform the upgrade.
 ### Changed
 ### Deprecated
 ### Removed
@@ -14,7 +15,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [v0.2.0-beta.3] - 2018-08-18
 ### Added
-- Added monitoring of the Skywire Discovery Node to ensure local Nodes are connected. The connection of all locally connected Nodes are now checked as part of the routine Heartbeat cycle. The Heartbeat status message will report both the number of locally connected Nodes (Nodes connected to the local Manager) as well as the number of these Nodes that are currently registered with the Discovery Node. This feature is intended to help the Skyfleet community preserve their Node up-times and remain elegible for monthly Testnet rewards.
+- Added monitoring of the Skywire Discovery Server to ensure local Nodes are connected. The connection of all locally connected Nodes are now checked as part of the routine Heartbeat cycle. The Heartbeat status message will report both the number of locally connected Nodes (Nodes connected to the local Manager) as well as the number of these Nodes that are currently registered with the Discovery Server. This feature is intended to help the Skyfleet community preserve their Node up-times and remain elegible for monthly Testnet rewards.
 - Added error reporting notifications to report when the Bot is unable to connect to the local manager. This error notification will be reported each time the local Manager Node is polled (default 10sec).
 ### Changed
 ### Deprecated

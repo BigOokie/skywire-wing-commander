@@ -189,7 +189,7 @@ This section outlines the Telegram Bot commands that are currently supported by 
 - [Show Config](#showconfig)
 - [Start](#start)
 - [Stop](#stop)
-- [Check Updates(#check-updates)]
+- [Check Updates](#check-updates)]
 
 ## Help
 `/help`
@@ -216,7 +216,7 @@ Show the current runtime configuration for the bot based on the content of the `
 
 **Wing Commander** will start monitoring the **Skyminer** that it is running on.
 Once started, **Wing Commander** will provide notification updates via Telegram when any Node managed by the Skyminer Manager connects or disconnects.
-Additionally, the `/start` command will initiate a Heartbeat which will provide a periodic status update (interval set in `config.toml`).  The Heartbeat will help you to ensure that the bot and/or the Skyminer itself is still running. The Heartbeat also checks that all connected local Nodes are registered with the Discovery Node and reports the count back as part of the Heartbear message.
+Additionally, the `/start` command will initiate a Heartbeat which will provide a periodic status update (interval set in `config.toml`).  The Heartbeat will help you to ensure that the bot and/or the Skyminer itself is still running. The Heartbeat also checks that all connected local Nodes are registered with the Discovery Server and reports the count back as part of the Heartbear message.
 **If you stop receiving the Heartbeat, you need to check whats going on.**
 
 ### Heartbeat screenshot
@@ -232,6 +232,8 @@ Additionally, the `/start` command will initiate a Heartbeat which will provide 
 `/checkupdate`
 
 **Wing Commander** will check the GitHub repository to determine if there are updates available or not and will report back the findings.
+
+**Note:** This command will not perform the upgrade. At this point you must still perform the upgrade. This provides information of the availablity of a new version only.
 
 ***
 

@@ -10,6 +10,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/BigOokie/skywire-wing-commander/src/utils"
 	"github.com/BigOokie/skywire-wing-commander/src/wcconst"
 
 	log "github.com/sirupsen/logrus"
@@ -91,21 +92,15 @@ func (bot *Bot) handleCommandStatus(ctx *BotContext, command, args string) error
 // Handler for help CheckUpdate
 func (bot *Bot) handleCommandCheckUpdate(ctx *BotContext, command, args string) error {
 	log.Debug("Handle command /checkupdate")
-	bot.Send(ctx, "whisper", "markdown", "Checking update...")
+	bot.Send(ctx, "whisper", "markdown", "Checking for updates...")
 
-	result, err := CheckUpdate()
-
-	if err != nil {
-		log.Error(err)
-		return bot.Send(ctx, "whisper", "markdown", "Error checking update.")
-	}
-
-	if string(result) == "true" {
-		log.Debugln("CheckUpdate: Update available.")
-		return bot.Send(ctx, "whisper", "markdown", "Updates available.")
+	updateAvailable, updateMsg := utils.UpdateAvailable("BigOokie", "skywire-wing-commander", wcconst.BotVersion)
+	if updateAvailable {
+		return bot.Send(ctx, "whisper", "markdown",
+			fmt.Sprintf("*Update available:* %s", updateMsg))
 	} else {
-		log.Debugln("CheckUpdate: No updates available.")
-		return bot.Send(ctx, "whisper", "markdown", "No updates available.")
+		return bot.Send(ctx, "whisper", "markdown",
+			fmt.Sprintf("*Up to date:* %s", updateMsg))
 	}
 }
 
