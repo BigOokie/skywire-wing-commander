@@ -83,7 +83,7 @@ func (g *GithubTag) Fetch() (*FetchResponse, error) {
 
 	// Create a client
 	client := g.newClient()
-	tags, resp, err := client.Repositories.ListTags(g.Owner, g.Repository, nil)
+	tags, resp, err := client.Repositories.ListTags(nil, g.Owner, g.Repository, nil)
 	if err != nil {
 		return fr, err
 	}
