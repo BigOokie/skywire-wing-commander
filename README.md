@@ -3,6 +3,8 @@
 
 **Note:** The Skycoin Cloud included in the logo above is the property of the [Skycoin project](https://skycoin.net), and has been used here with permission of the Skycoin project.
 
+![GitHub (pre-)release](https://img.shields.io/github/release/BigOokie/skywire-wing-commander/all.svg)
+![GitHub](https://img.shields.io/github/license/BigOokie/skywire-wing-commander.svg)
 [![Go Report Card](https://goreportcard.com/badge/github.com/BigOokie/skywire-wing-commander)](https://goreportcard.com/report/github.com/BigOokie/skywire-wing-commander)
 [![Coverage Status](https://coveralls.io/repos/github/BigOokie/skywire-wing-commander/badge.svg?branch=master)](https://coveralls.io/github/BigOokie/skywire-wing-commander?branch=master)
 
@@ -157,14 +159,15 @@ cd $GOPATH/bin
 ### Automatic restart 
 Use the following commands to setup an automatic startup script to check and restart the **Wing Commander** bot incase the Manager Node goes offline.
 ```sh 
-cd $GOPATH/src/github.com/BigOokie/skywire-wing-commander/src/wcbot
-chmod +x wcstart.sh 
+cp $GOPATH/src/github.com/BigOokie/skywire-wing-commander/src/wcbot/wcstart.sh /etc/init.d/wcstart.sh
+cd /etc/init.d
+chmod 755 wcstart.sh 
 crontab -e 
 ```
 Go to the bottom of the file and enter the following:
 
 ```sh
-@reboot /go/src/github.com/BigOokie/skywire-wing-commander/src/wcbot/wcstart.sh
+@reboot /etc/init.d/wcstart.sh
 ```
 Then press `CTRL+O` & `ENTER` to Save, then press `CTRL+X` to Exit.
 
@@ -201,7 +204,7 @@ Shows information and credits about the creator of **Wing Commander** and any ke
 ## Status
 `/status`
 
-Manually request current status of the **Wing Commander** Bot.
+Manually request current status of the **Wing Commander** Bot. The Status message will return the same information that is returned as part of the periodic Heartbeat. Status will also inform you if Monitoring is currently running or not.
 
 ## Show Config
 `/showconfig`
@@ -213,7 +216,8 @@ Show the current runtime configuration for the bot based on the content of the `
 
 **Wing Commander** will start monitoring the **Skyminer** that it is running on.
 Once started, **Wing Commander** will provide notification updates via Telegram when any Node managed by the Skyminer Manager connects or disconnects.
-Additionally, the `/start` command will initiate a heartbeat which will provide a status update on a configurable cycle (interval set in `config.toml`).  The heartbeat will help you to ensure that the bot and/or the Skyminer itself is still running. **If you stop receiving the heartbeat, you need to check whats going on.**
+Additionally, the `/start` command will initiate a Heartbeat which will provide a periodic status update (interval set in `config.toml`).  The Heartbeat will help you to ensure that the bot and/or the Skyminer itself is still running. The Heartbeat also checks that all connected local Nodes are registered with the Discovery Node and reports the count back as part of the Heartbear message.
+**If you stop receiving the Heartbeat, you need to check whats going on.**
 
 ### Heartbeat screenshot
 <img src="assets/images/WingCommander-Heartbeat.png">

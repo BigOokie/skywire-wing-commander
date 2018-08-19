@@ -1,9 +1,13 @@
+// Copyright © 2018 BigOokie
+//
+// Use of this source code is governed by an MIT
+// license that can be found in the LICENSE file.
+
 package wcconst
 
 // Define constants used by the application
 const (
-	// BotVersion defines the SEMVER for the app. This MUST be bumped on each release.
-	BotVersion = "v0.2.0-beta.2"
+	BotVersion = "v0.2.0-beta.3"
 
 	// ScriptPath defines the path to the Scripts folder
 	ScriptPath = "/src/github.com/BigOokie/skywire-wing-commander/src/scripts/"
@@ -42,11 +46,15 @@ const (
 
 	MsgShowConfig = "*Wing Commander Configuration*\n%s\n"
 
+	MsgErrorGetNodes     = "⚠️ An error occurred getting the list of Nodes from the Manager."
+	MsgErrorGetDiscNodes = "⚠️ An error occurred checking Discovery Node connections."
+
 	MsgConnectedNodes = "*Connected Nodes:* %v"
+	MsgDiscConnNodes  = "*Discovery Connected Nodes:* %v"
 	// Status cmd message
-	MsgStatus = "*Wing Commander* Ready and reporting for duty 👍\n" + MsgConnectedNodes
+	MsgStatus = "*Wing Commander* Ready and reporting for duty 👍\n" + MsgConnectedNodes + "\n" + MsgDiscConnNodes
 	// Heartbeat message
-	MsgHeartbeat = "*Wing Commander Heatbeat* ❣️\n" + MsgConnectedNodes
+	MsgHeartbeat = "*Wing Commander Heatbeat* ❣️\n" + MsgConnectedNodes + "\n" + MsgDiscConnNodes
 
 	// Node Connect/Disconnect Event Messages
 	MsgNodeConnected    = "*Node Connected:* %s\n\n" + MsgConnectedNodes
