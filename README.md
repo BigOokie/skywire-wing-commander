@@ -3,6 +3,8 @@
 
 **Note:** The Skycoin Cloud included in the logo above is the property of the [Skycoin project](https://skycoin.net), and has been used here with permission of the Skycoin project.
 
+![GitHub (pre-)release](https://img.shields.io/github/release/BigOokie/skywire-wing-commander/all.svg)
+![GitHub](https://img.shields.io/github/license/BigOokie/skywire-wing-commander.svg)
 [![Go Report Card](https://goreportcard.com/badge/github.com/BigOokie/skywire-wing-commander)](https://goreportcard.com/report/github.com/BigOokie/skywire-wing-commander)
 [![Coverage Status](https://coveralls.io/repos/github/BigOokie/skywire-wing-commander/badge.svg?branch=master)](https://coveralls.io/github/BigOokie/skywire-wing-commander?branch=master)
 
