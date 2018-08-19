@@ -2,14 +2,6 @@
 
 
 [[projects]]
-  digest = "1:b16fbfbcc20645cb419f78325bb2e85ec729b338e996a228124d68931a6f2a37"
-  name = "github.com/BurntSushi/toml"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "b26d9c308763d68093482582cea63d69be07a0f0"
-  version = "v0.3.0"
-
-[[projects]]
   digest = "1:abeb38ade3f32a92943e5be54f55ed6d6e3b6602761d74b4aab4c9dd45c18abd"
   name = "github.com/fsnotify/fsnotify"
   packages = ["."]
@@ -24,6 +16,30 @@
   pruneopts = "UT"
   revision = "6592d9cc0a499ad2d5f574fde80a2b5c5cc3b4f5"
   version = "v1.0.1"
+
+[[projects]]
+  digest = "1:f3fb942d9a52aff79191a8318317147ab76ca609bced931b8be9ab1825569993"
+  name = "github.com/google/go-github"
+  packages = ["github"]
+  pruneopts = "UT"
+  revision = "747f93dd9b489bd56f7442b3c42bfea12800a75b"
+  version = "v17.0.0"
+
+[[projects]]
+  branch = "master"
+  digest = "1:a63cff6b5d8b95638bfe300385d93b2a6d9d687734b863da8e09dc834510a690"
+  name = "github.com/google/go-querystring"
+  packages = ["query"]
+  pruneopts = "UT"
+  revision = "53e6ce116135b80d037921a7fdd5138cf32d7a8a"
+
+[[projects]]
+  branch = "master"
+  digest = "1:32c0e96a63bd093eccf37db757fb314be5996f34de93969321c2cbef893a7bd6"
+  name = "github.com/hashicorp/go-version"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "270f2f71b1ee587f3b609f00f422b76a6b28f348"
 
 [[projects]]
   branch = "master"
@@ -120,6 +136,14 @@
   version = "v1.1.0"
 
 [[projects]]
+  digest = "1:a61ba87c99e93863d5c7ec18330c7cb31453165808e6eff0b74fbdccd194723f"
+  name = "github.com/tcnksm/go-latest"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "86500ab1363a867dafe16905b5b85293a0d838eb"
+  version = "0.1.1"
+
+[[projects]]
   digest = "1:420817f94b6c172dabb8a054d0b2d257d7437a87c7c8c7ee432bc008a577fc46"
   name = "github.com/technoweenie/multipartstreamer"
   packages = ["."]
@@ -134,6 +158,17 @@
   packages = ["ssh/terminal"]
   pruneopts = "UT"
   revision = "56440b844dfe139a8ac053f4ecac0b20b79058f4"
+
+[[projects]]
+  branch = "master"
+  digest = "1:d4a222552c8c79ed76e1b234593c3eaaad2c40dfa55ab69bbdcaa3173c4b500f"
+  name = "golang.org/x/net"
+  packages = [
+    "html",
+    "html/atom",
+  ]
+  pruneopts = "UT"
+  revision = "aaf60122140d3fcf75376d319f0554393160eb50"
 
 [[projects]]
   branch = "master"
@@ -181,10 +216,10 @@
   analyzer-name = "dep"
   analyzer-version = 1
   input-imports = [
-    "github.com/BurntSushi/toml",
     "github.com/go-test/deep",
     "github.com/sirupsen/logrus",
     "github.com/spf13/viper",
+    "github.com/tcnksm/go-latest",
     "gopkg.in/telegram-bot-api.v4",
   ]
   solver-name = "gps-cdcl"
