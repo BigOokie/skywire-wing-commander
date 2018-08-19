@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [Unreleased] 
+### Added
+### Changed
+### Deprecated
+### Removed
+### Fixed
+### Security
+
 ## [v0.2.0-beta.3] - 2018-08-18
 ### Added
 - Added monitoring of the Skywire Discovery Node to ensure local Nodes are connected. The connection of all locally connected Nodes are now checked as part of the routine Heartbeat cycle. The Heartbeat status message will report both the number of locally connected Nodes (Nodes connected to the local Manager) as well as the number of these Nodes that are currently registered with the Discovery Node. This feature is intended to help the Skyfleet community preserve their Node up-times and remain elegible for monthly Testnet rewards.
