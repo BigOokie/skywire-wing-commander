@@ -118,8 +118,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 [Unreleased]: 
 https://github.com/BigOokie/Skywire-Wing-Commander/compare/master...dev
+[v0.2.0-beta.4]: 
+https://github.com/BigOokie/Skywire-Wing-Commander/compare/v0.2.0-beta.3...v0.2.0-beta.4
 [v0.2.0-beta.3]: 
-https://github.com/BigOokie/Skywire-Wing-Commander/compare/v0.2.0-beta.1...v0.2.0-beta.3
+https://github.com/BigOokie/Skywire-Wing-Commander/compare/v0.2.0-beta.2...v0.2.0-beta.3
 [v0.2.0-beta.2]: 
 https://github.com/BigOokie/Skywire-Wing-Commander/compare/v0.2.0-beta.1...v0.2.0-beta.2
 [v0.2.0-beta.1]: 
