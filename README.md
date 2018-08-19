@@ -267,6 +267,8 @@ curl: (60) SSL certificate problem: unable to get local issuer certificate
 ```
 
 ## Date-Time set incorrectly
+There is a [known issue (#77)](https://github.com/skycoin/skywire/issues/77) with the official Skywire images relating to management of date time.
+
 If the Date-time on your Node is set incorrectly you will get certificate issues as well.
 If you get the following error messages (when running interactivly) you need to check the date on your node.
 ```sh
@@ -283,6 +285,8 @@ Change your system date with this command (replacing the example date and time w
 ```sh
 timedatectl set-time '2018-08-10 11:57'
 ```
+
+Alternatively, the discussion associated with the reported issue with the official Skyminer images on GitHub provides guidance on resolving this and can be found here: https://github.com/skycoin/skywire/issues/77
 
 # Donations
 This is not my job, but I enjoy building things for the **Skyfleet** community. If you find my work useful, please consider donating to support it.
