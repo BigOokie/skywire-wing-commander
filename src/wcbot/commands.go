@@ -66,4 +66,10 @@ var commands = Commands{
 		"checkupdate",
 		(*Bot).handleCommandCheckUpdate,
 	},
+	/*
+		Command{
+			false,
+			"update",
+			(*Bot).handleCommandDoUpdate,
+		},*/
 }

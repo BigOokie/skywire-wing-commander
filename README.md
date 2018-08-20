@@ -24,6 +24,7 @@
     - [Update and Rebuild](#update-and-rebuild)
     - [Configuration](#configuration)
 - [Running Wing Commander](#running-wing-commander)
+    - [Check if Wing Commander is Running](#check-if-wing-commander-is-running)
     - [Background process](#background-process)
     - [Forground Process](#forground-process)
     - [Automatic restart](#automatic-restart)
@@ -142,11 +143,21 @@ In the example above, `"chat":{"id":000000000` is what you are looking for, and 
 
 ## Running Wing Commander
 
+### Check if Wing Commander is running
+The following command can be used to determine if and instance of **Wing Commander** is already running on your system:
+```sh
+pgrep wcbot
+```
+If an instance of **Wing Commander** (`wcbot`) is already running, its process id will be returned. If you need to kill this instance, then you can use the following command:
+```sh
+kill {process-id}
+```
+
 ### Background process
 To run **Wing Commander** as a background process (detached from the terminal):
 ```sh
 cd $GOPATH/bin
-nohup ./wcbot /dev/null 2>&1 & echo $! > wcbot.pid &
+nohup ./wcbot /dev/null 2>&1 & echo $! > wcbot.pid& > /dev/null
 ```
 
 ### Forground process
@@ -159,7 +170,7 @@ cd $GOPATH/bin
 ### Automatic restart 
 Use the following commands to setup an automatic startup script to check and restart the **Wing Commander** bot incase the Manager Node goes offline.
 ```sh 
-cp $GOPATH/src/github.com/BigOokie/skywire-wing-commander/src/wcbot/wcstart.sh /etc/init.d/wcstart.sh
+cp $GOPATH/src/github.com/BigOokie/skywire-wing-commander/src/scripts/wcstart.sh /etc/init.d/wcstart.sh
 cd /etc/init.d
 chmod 755 wcstart.sh 
 crontab -e 

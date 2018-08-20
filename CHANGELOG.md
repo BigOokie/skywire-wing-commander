@@ -6,10 +6,18 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 ### Added
+- Added new shell script: `/src/wcstop.sh`. This shell script can be used to stop the **Wing Commander** process. Usage: `sh ./wcstop.sh`
 ### Changed
+- Moved location of several shell scripts. All shell scripts now reside in the `/src/scripts` folder. If you use these scripts previously, please take note and update any references or dependencies you may have:
+    - `/src/wcbot/wcbuildconfig.sh` -> `/src/scripts/wcbuildconfig.sh`
+    - `/src/wcbot/wcstart.sh` -> `/src/scripts/wcstart.sh`
+
 ### Deprecated
+- The shell script `wc-checkupdate.sh` is depricated and is likely not to function any more. It will likely be removed in later releases. Update checks are now performed within the Bot application.
 ### Removed
 ### Fixed
+- Fixed an issue with the `wcstart.sh` shell script. Previously this was echoing information to the command line and the user had to press `ENTER` to continue back to the terminal prompt. The shell script now returns the user to the terminal prompt once it compeltes.
+- The `wc-update.sh` script has been revised for use with automatic updates (WIP - still in testing).
 ### Security
 
 ## [v0.2.0-beta.4] - 2018-08-19

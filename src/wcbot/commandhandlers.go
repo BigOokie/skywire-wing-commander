@@ -8,6 +8,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"os/exec"
 	"time"
 
 	"github.com/BigOokie/skywire-wing-commander/src/utils"
@@ -96,11 +97,33 @@ func (bot *Bot) handleCommandCheckUpdate(ctx *BotContext, command, args string) 
 
 	updateAvailable, updateMsg := utils.UpdateAvailable("BigOokie", "skywire-wing-commander", wcconst.BotVersion)
 	if updateAvailable {
-		return bot.Send(ctx, "whisper", "markdown",
-			fmt.Sprintf("*Update available:* %s", updateMsg))
+		return bot.Send(ctx, "whisper", "markdown", fmt.Sprintf("*Update available:* %s", updateMsg))
 	} else {
-		return bot.Send(ctx, "whisper", "markdown",
-			fmt.Sprintf("*Up to date:* %s", updateMsg))
+		return bot.Send(ctx, "whisper", "markdown", fmt.Sprintf("*Up-to-date:* %s", updateMsg))
+	}
+}
+
+// Handler for help DoUpdate
+func (bot *Bot) handleCommandDoUpdate(ctx *BotContext, command, args string) error {
+	log.Debug("Handle command /update")
+	bot.Send(ctx, "whisper", "markdown", "Checking for updates...")
+
+	updateAvailable, _ := utils.UpdateAvailable("BigOokie", "skywire-wing-commander", wcconst.BotVersion)
+	if updateAvailable {
+		log.Debugln("Update available. Performing update. The bot will be restarted during this process...")
+		bot.Send(ctx, "whisper", "markdown", "*Update available. Performing update.* The bot will be restarted during this process...")
+		log.Debugln("Running update command:")
+		cmd := exec.Command("sh", "$GOPATH/src/github.com/BigOokie/skywire-wing-commander/src/scripts/wc-update.sh")
+		out, err := cmd.CombinedOutput()
+		if err != nil {
+			log.Errorf("handleCommandDoUpdate: cmd.CombinedOutput() failed with '%s'\n", err)
+			return bot.Send(ctx, "whisper", "markdown", "Update failed.")
+		}
+		log.Errorf("handleCommandDoUpdate: Completed:\n%s\n", string(out))
+		return bot.Send(ctx, "whisper", "markdown", "Update ok.")
+
+	} else {
+		return bot.Send(ctx, "whisper", "markdown", "*Already up-to-date.*")
 	}
 }
 
