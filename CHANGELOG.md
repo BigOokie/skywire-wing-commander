@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Added
+### Changed
+### Deprecated
+### Removed
+### Fixed
+### Security
+
 ## [v0.2.0-beta.4] - 2018-08-19
 ### Added
 - Added `/checkupdate` command. Requests the Bot to check GitHub to determine if a new version is available. The Bot will report back its findings. Note: This command does not perform the upgrade.
