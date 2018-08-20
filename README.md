@@ -98,7 +98,7 @@ go install -v ./...
 ## Configuration
 You MUST provide a valid configuration file for the bot or it will not launch. The config file must reside in the following location `$HOME\.wingcommander\config.toml`
 
-Refer to the following example configuration file: [config.example.toml](\src\wcbot\config.example.toml). 
+Refer to the following example configuration file: [config.example.toml](src/wcbot/config.example.toml ).
 
 It is recommended to copy the example configuration file to `$HOME\.wingcommander\config.toml`. Use the example file as a template and edit the details as needed. 
 
