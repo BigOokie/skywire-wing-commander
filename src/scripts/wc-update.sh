@@ -8,9 +8,10 @@ go install ./... 2>> /tmp/wingcommander_install_errors.log
 
 echo "Kill Wing Commander Process..."
 cd ${GOPATH}/bin
-[[ -f wcbot.pid ]] && pkill -F wcbot.pid && rm wcbot.pid
+pkill -F wcbot.pid
+rm wcbot.pid
 
 echo "Restarting Wing Commander..."
-./wcbot /dev/null 2>&1 & echo $! > wcbot.pid &
+nohup ./wcbot /dev/null 2>&1 & echo $! > wcbot.pid& > /dev/null
 
 echo "Wing Commander updated and restarted"

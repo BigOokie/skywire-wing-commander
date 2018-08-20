@@ -4,4 +4,4 @@
 export GOPATH=$HOME/go
 
 cd $GOPATH/bin
-[[ -f wcbot.pid ]] && pkill -F wcbot.pid && rm wcbot.pid
+nohup ./wcbot /dev/null 2>&1 & echo $! > wcbot.pid& > /dev/null
