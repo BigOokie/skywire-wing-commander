@@ -106,7 +106,7 @@ func (bot *Bot) handleCommandCheckUpdate(ctx *BotContext, command, args string) 
 // Handler for help DoUpdate
 func (bot *Bot) handleCommandDoUpdate(ctx *BotContext, command, args string) error {
 	log.Debug("Handle command /update")
-	bot.Send(ctx, "whisper", "markdown", "Checking for updates...")
+	bot.Send(ctx, "whisper", "markdown", "*Checking for updates...*")
 
 	updateAvailable, _ := utils.UpdateAvailable("BigOokie", "skywire-wing-commander", wcconst.BotVersion)
 	if updateAvailable {
