@@ -118,7 +118,7 @@ func (bot *Bot) handleCommandDoUpdate(ctx *BotContext, command, args string) err
 
 		var cmd *exec.Cmd
 		var gopath = os.Getenv("GOPATH")
-		var scriptPath = "/src/github.com/BigOokie/skywire-wing-commander/scripts/"
+		var scriptPath = "/src/github.com/BigOokie/skywire-wing-commander/src/scripts/"
 		osName := runtime.GOOS
 		if osName == "windows" {
 			log.Debugln("Automatic updates not supported on Windows at this time.")
