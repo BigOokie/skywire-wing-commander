@@ -1,9 +1,16 @@
 #!/bin/bash
 
+cd ${GOPATH}/src/github.com/skycoin/skywire
+git reset --hard > /dev/null 2>&1
+git clean -f -d > /dev/null 2>&1
+git pull origin master > /dev/null 2>&1
+
+
 echo "Updating Wing Commander..."
 cd ${GOPATH}/src/github.com/BigOokie/skywire-wing-commander
-git reset --hard
-git pull origin master
+git reset --hard > /dev/null 2>&1
+git clean -f -d > /dev/null 2>&1
+git pull origin master > /dev/null 2>&1
 go install ./... 2>> /tmp/wingcommander_install_errors.log
 
 echo "Kill Wing Commander Process..."

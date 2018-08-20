@@ -118,14 +118,15 @@ func (bot *Bot) handleCommandDoUpdate(ctx *BotContext, command, args string) err
 
 		var cmd *exec.Cmd
 		var gopath = os.Getenv("GOPATH")
-		var scriptPath = "/src/github.com/BigOokie/skywire-wing-commander/src/scripts/"
+		var scriptPath = "/src/github.com/BigOokie/skywire-wing-commander/src/scripts/wc-update.sh"
 		osName := runtime.GOOS
 		if osName == "windows" {
 			log.Debugln("Automatic updates not supported on Windows at this time.")
 			return bot.Send(ctx, "whisper", "markdown", "Automatic updates not supported on Windows at this time.")
 		}
 
-		cmd = exec.Command(filepath.Join(gopath, fmt.Sprintf("%s%s", scriptPath, "wc-update.sh")))
+		log.Debugf("handleCommandDoUpdate: Running %s", filepath.Join(gopath, scriptPath))
+		cmd = exec.Command(filepath.Join(gopath, scriptPath))
 		out, err := cmd.CombinedOutput()
 		if err != nil {
 			log.Errorf("Update failed: %s", err)
@@ -133,17 +134,6 @@ func (bot *Bot) handleCommandDoUpdate(ctx *BotContext, command, args string) err
 		}
 		log.Debugf("Update succeeded. %s", out)
 		return bot.Send(ctx, "whisper", "markdown", "Update succeeded.")
-
-		/*
-			cmd := exec.Command("/bin/bash $GOPATH/src/github.com/BigOokie/skywire-wing-commander/src/scripts/wc-update.sh")
-			out, err := cmd.CombinedOutput()
-			if err != nil {
-				log.Errorf("handleCommandDoUpdate: cmd.CombinedOutput() failed with '%s'\n", err)
-				return bot.Send(ctx, "whisper", "markdown", "Update failed.")
-			}
-			log.Errorf("handleCommandDoUpdate: Completed:\n%s\n", string(out))
-			return bot.Send(ctx, "whisper", "markdown", "Update ok.")
-		*/
 
 	} else {
 		return bot.Send(ctx, "whisper", "markdown", "*Already up-to-date.*")
