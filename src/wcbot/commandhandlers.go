@@ -126,7 +126,7 @@ func (bot *Bot) handleCommandDoUpdate(ctx *BotContext, command, args string) err
 		}
 
 		log.Debugf("handleCommandDoUpdate: Running %s", filepath.Join(gopath, scriptPath))
-		cmd = exec.Command(filepath.Join(gopath, scriptPath))
+		cmd = exec.Command("/bin/bash", filepath.Join(gopath, scriptPath))
 		out, err := cmd.CombinedOutput()
 		if err != nil {
 			log.Errorf("Update failed: %s", err)
