@@ -111,9 +111,9 @@ func (bot *Bot) handleCommandDoUpdate(ctx *BotContext, command, args string) err
 	updateAvailable, _ := utils.UpdateAvailable("BigOokie", "skywire-wing-commander", wcconst.BotVersion)
 	if updateAvailable {
 		log.Debugln("Update available. Performing update. The bot will be restarted during this process...")
-		bot.Send(ctx, "whisper", "markdown", "*Update available. Performing update.* The bot will be restarted during this process...")
+		bot.Send(ctx, "whisper", "markdown", "*Update available. Performing update...* The Bot will be restarted if the update is successful...")
 		log.Debugln("Running update command:")
-		cmd := exec.Command("sh", "$GOPATH/src/github.com/BigOokie/skywire-wing-commander/src/scripts/wc-update.sh")
+		cmd := exec.Command("/bin/sh", "$GOPATH/src/github.com/BigOokie/skywire-wing-commander/src/scripts/wc-update.sh")
 		out, err := cmd.CombinedOutput()
 		if err != nil {
 			log.Errorf("handleCommandDoUpdate: cmd.CombinedOutput() failed with '%s'\n", err)
