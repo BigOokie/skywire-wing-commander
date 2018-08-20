@@ -15,3 +15,5 @@ echo "Restarting Wing Commander..."
 nohup ./wcbot /dev/null 2>&1 & echo $! > wcbot.pid& > /dev/null
 
 echo "Wing Commander updated and restarted"
+
+exit 0
