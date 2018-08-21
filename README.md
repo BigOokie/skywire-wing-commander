@@ -147,7 +147,7 @@ The `@BotFather` allows you to revoke and re-issue you Bots APIKey at any time. 
 
 If you feel that you need to revoke and re-issue your Bots APIKey, initiate a chat in Telegram with the `@BotFater`. Issue the command `/mybots`. 
 
-<img src="assets/images/BotFather-Help.png">
+<img src="assets/images/BotFather-Help.png" width=300>
 
 The `@BotFather` will provide a listing of your Bots for you to choose from. Select the Bot you wish to revoke and re-issue the APIKey for. The `@BotFather` will then present an options menu for the selected Bot. On this list should be an option `API Token`. Selecting this will display your Bots current `API Token` (`APIKey`). An option will also be presented to `Revoke current token`. Selecting this will revoke the current token and re-issue a new one. You will be returned to the set of options and you will need to select `API Token` again to view (and copy) the newlu=y issued `API Token`.
 
