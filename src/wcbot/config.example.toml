@@ -27,7 +27,7 @@ admin = "@USERNAME"
 # via Telegram. This is active once monitoring has started.
 #heartbeatintmin = 120
 
-discoverymonitorintmin = 1
+#discoverymonitorintmin = 1
 
 # Skyminer Manager configuration
 [skymanager]
