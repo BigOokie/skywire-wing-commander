@@ -24,6 +24,7 @@
     - [Update and Rebuild](#update-and-rebuild)
     - [Configuration](#configuration)
 - [Running Wing Commander](#running-wing-commander)
+    - [Command line flags](#command-line-flags)
     - [Background process](#background-process)
     - [Forground Process](#forground-process)
     - [Automatic restart](#automatic-restart)
@@ -141,6 +142,11 @@ An example of the `JSON` output is as follows:
 In the example above, `"chat":{"id":000000000` is what you are looking for, and specifically the `id` which in this example is `000000000`.
 
 ## Running Wing Commander
+
+### Command line flags
+**Wing Commander** supports the following command line flags:
+- `-v` - Output the version of Wing Commander to the terminal. Wing Commander will exit on completion.
+- `-config` - Output the runtime configuration to the terminal. Wing Commander will exit on completion.
 
 ### Background process
 To run **Wing Commander** as a background process (detached from the terminal):
