@@ -33,7 +33,7 @@ admin = "@USERNAME"
 # The bot can be run on a seperate machine to the Manager, but by default
 # it is assumed it will be running on the same machine and that the 
 # Skywire Manager app defaults are in use
-#address = "127.0.0.1:8000"
+#address="127.0.0.1:8000"
 
 # Skycoin Skywire Discovery Node address
-#discoveryaddress = "discovery.skycoin.net:8001"
+#discoveryaddress="discovery.skycoin.net:8001"
