@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [v0.2.0-beta.5] - TBA
+## [v0.2.0-beta.5] - 2018-08-21
 ### Added
 - Added command line flag `-v` to check Wing Commander version.
 - Added command line flag `-config` to dump the Wing Commander configuration to the command line.
