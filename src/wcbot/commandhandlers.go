@@ -8,6 +8,10 @@ package main
 import (
 	"context"
 	"fmt"
+	"os"
+	"os/exec"
+	"path/filepath"
+	"runtime"
 	"time"
 
 	"github.com/BigOokie/skywire-wing-commander/src/utils"
@@ -96,11 +100,43 @@ func (bot *Bot) handleCommandCheckUpdate(ctx *BotContext, command, args string) 
 
 	updateAvailable, updateMsg := utils.UpdateAvailable("BigOokie", "skywire-wing-commander", wcconst.BotVersion)
 	if updateAvailable {
-		return bot.Send(ctx, "whisper", "markdown",
-			fmt.Sprintf("*Update available:* %s", updateMsg))
+		return bot.Send(ctx, "whisper", "markdown", fmt.Sprintf("*Update available:* %s", updateMsg))
 	} else {
-		return bot.Send(ctx, "whisper", "markdown",
-			fmt.Sprintf("*Up to date:* %s", updateMsg))
+		return bot.Send(ctx, "whisper", "markdown", fmt.Sprintf("*Up-to-date:* %s", updateMsg))
+	}
+}
+
+// Handler for help DoUpdate
+func (bot *Bot) handleCommandDoUpdate(ctx *BotContext, command, args string) error {
+	log.Debug("Handle command /update")
+	bot.Send(ctx, "whisper", "markdown", "*Checking for updates...*")
+
+	updateAvailable, _ := utils.UpdateAvailable("BigOokie", "skywire-wing-commander", wcconst.BotVersion)
+	if updateAvailable {
+		log.Debugln("*Update available. Performing update...* The Bot will be restarted if the update is successful...")
+		bot.Send(ctx, "whisper", "markdown", "*Update available. Performing update...* The Bot will be restarted if the update is successful...")
+
+		var cmd *exec.Cmd
+		var gopath = os.Getenv("GOPATH")
+		var scriptPath = "/src/github.com/BigOokie/skywire-wing-commander/src/scripts/wc-update.sh"
+		osName := runtime.GOOS
+		if osName == "windows" {
+			log.Debugln("Automatic updates not supported on Windows at this time.")
+			return bot.Send(ctx, "whisper", "markdown", "Automatic updates not supported on Windows at this time.")
+		}
+
+		log.Debugf("handleCommandDoUpdate: Running %s", filepath.Join(gopath, scriptPath))
+		cmd = exec.Command("/bin/bash", filepath.Join(gopath, scriptPath))
+		out, err := cmd.CombinedOutput()
+		if err != nil {
+			log.Errorf("Update failed: %s", err)
+			return bot.Send(ctx, "whisper", "markdown", "Automatic update failed.")
+		}
+		log.Debugf("Update succeeded. %s", out)
+		return bot.Send(ctx, "whisper", "markdown", "Update succeeded.")
+
+	} else {
+		return bot.Send(ctx, "whisper", "markdown", "*Already up-to-date.*")
 	}
 }
 
