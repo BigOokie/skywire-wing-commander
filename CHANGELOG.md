@@ -12,7 +12,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Deprecated
 ### Removed
 ### Fixed
-- Fixed issue with `/showconfig` command.
+- Fixed issue with `/showconfig` command. This command now sends the configuration information to Telegram in plain-text. Previously the message was being sent using markdown which appears to have caused issued on some systems (due to special characters in the configuration data).
 ### Security
 
 ## [v0.2.0-beta.4] - 2018-08-19
