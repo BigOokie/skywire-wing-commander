@@ -15,6 +15,7 @@ import (
 	"github.com/BigOokie/skywire-wing-commander/src/utils"
 	"github.com/BigOokie/skywire-wing-commander/src/wcconfig"
 	"github.com/BigOokie/skywire-wing-commander/src/wcconst"
+	"github.com/marcsauter/single"
 
 	log "github.com/sirupsen/logrus"
 )
@@ -69,6 +70,15 @@ func main() {
 	if dumpConfigFlag {
 		return
 	}
+
+	s := single.New("wing-commander")
+	if err := s.CheckLock(); err != nil && err == single.ErrAlreadyRunning {
+		log.Fatal("Another instance of Wing Commander is already running, exiting")
+	} else if err != nil {
+		// Another error occurred, might be worth handling it as well
+		log.Fatalf("Failed to acquire exclusive app lock: %v", err)
+	}
+	defer s.TryUnlock()
 
 	log.Infoln("Skywire Wing Commander Telegram Bot - Starting.")
 	defer log.Infoln("Skywire Wing Commander Telegram Bot - Stopped.")
