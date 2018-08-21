@@ -8,7 +8,9 @@ A big Thank You! to all contibutors that have helped to make **Wing Commander** 
 - **[Cryptovinnie](https://github.com/Cryptovinnie)**
     - Autorestart script, Auto config generator script, documentation review, feedback and updates.
 - **@GoldXT**
-    - Ad-hoc testing discovery of issue #10.
+    - Early adoptor and ad-hoc testing discovery of issue #10.
 - **@Moojie**
     - Documentation review and feedback.
+- **@AnthonyRichard**
+    - Early adoptor and ad-hoc testing and discovery of issue #22
 

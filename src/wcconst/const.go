@@ -7,7 +7,8 @@ package wcconst
 
 // Define constants used by the application
 const (
-	BotVersion = "v0.2.0-beta.4"
+	BotVersion    = "v0.2.0-beta.5"
+	BotAppVersion = "Wing Commander " + BotVersion
 
 	// ScriptPath defines the path to the Scripts folder
 	ScriptPath = "/src/github.com/BigOokie/skywire-wing-commander/src/scripts/"
@@ -44,7 +45,7 @@ const (
 		"*Donations most welcome* 👍\n" +
 		"*Skycoin:* ES5LccJDhBCK275APmW9tmQNEgiYwTFKQF"
 
-	MsgShowConfig = "*Wing Commander Configuration*\n%s\n"
+	MsgShowConfig = "Wing Commander Configuration\n%s\n"
 
 	MsgErrorGetNodes     = "⚠️ An error occurred getting the list of Nodes from the Manager."
 	MsgErrorGetDiscNodes = "⚠️ An error occurred checking Discovery Node connections."
