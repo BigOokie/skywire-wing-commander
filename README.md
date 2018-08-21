@@ -23,6 +23,7 @@
     - [Install and Build](#install-and-build)
     - [Update and Rebuild](#update-and-rebuild)
     - [Configuration](#configuration)
+    - [Reset Bot APIKey](#rest-bot-apikey)
 - [Running Wing Commander](#running-wing-commander)
     - [Command line flags](#command-line-flags)
     - [Background process](#background-process)
@@ -141,6 +142,17 @@ An example of the `JSON` output is as follows:
 ```
 In the example above, `"chat":{"id":000000000` is what you are looking for, and specifically the `id` which in this example is `000000000`.
 
+## Reset Bot APIKey
+The `@BotFather` allows you to revoke and re-issue you Bots APIKey at any time. I won't cover this in great detail here (refer to the documentation provided by Telegram) - but will provide a breif over view of it.
+
+If you feel that you need to revoke and re-issue your Bots APIKey, initiate a chat in Telegram with the `@BotFater`. Issue the command `/mybots`. 
+
+<img src="assets/images/BotFather-Help.png">
+
+The `@BotFather` will provide a listing of your Bots for you to choose from. Select the Bot you wish to revoke and re-issue the APIKey for. The `@BotFather` will then present an options menu for the selected Bot. On this list should be an option `API Token`. Selecting this will display your Bots current `API Token` (`APIKey`). An option will also be presented to `Revoke current token`. Selecting this will revoke the current token and re-issue a new one. You will be returned to the set of options and you will need to select `API Token` again to view (and copy) the newlu=y issued `API Token`.
+
+Remember, if you revoke and re-issue your Bots `API Token`, you must update your `config.toml` with the new value - otherwise the Bot will not authenticate to Telegram.
+
 ## Running Wing Commander
 
 ### Command line flags
@@ -149,14 +161,14 @@ In the example above, `"chat":{"id":000000000` is what you are looking for, and 
 - `-config` - Output the runtime configuration to the terminal. Wing Commander will exit on completion.
 
 ### Background process
-To run **Wing Commander** as a background process (detached from the terminal):
+To run **Wing Commander** as a background process (detached from the terminal). This option is recommended for normal use.
 ```sh
 cd $GOPATH/bin
 nohup ./wcbot /dev/null 2>&1 & echo $! > wcbot.pid &
 ```
 
 ### Forground process
-To run **Wing Commander** as a foreground process (debug info logged to the terminal):
+To run **Wing Commander** as a foreground process (debug info logged to the terminal). This option is recommended when debugging, or when changes have been made to the `config.toml` and you wish to test them. Once you have confirmed everything is ok and as expected, I suggest running the Bot in the background as per the instructions above.
 ```sh
 cd $GOPATH/bin
 ./wcbot
