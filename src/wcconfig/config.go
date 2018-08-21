@@ -57,12 +57,12 @@ func (c *Config) String() string {
 	resultstr := "[WingCommander]\n" +
 		"  twofactorenabled = %v\n" +
 		"[SkyManager]\n" +
-		"  address = \"%s\"\n" +
-		"  discoveryaddress = \"%s\"\n" +
+		"  address = %q\n" +
+		"  discoveryaddress = %q\n" +
 		"[Telegram]\n" +
-		"  apikey = \"%s\"\n" +
+		"  apikey = %q\n" +
 		"  chatid = %v\n" +
-		"  admin  = \"%s\"\n" +
+		"  admin  = %q\n" +
 		"  debug  = %v\n" +
 		"[Monitor]\n" +
 		"  intervalsec = %v\n" +

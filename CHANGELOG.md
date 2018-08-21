@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v0.2.0-beta.5] - TBA
+### Added
+- Added command line flag `-v` to check Wing Commander version.
+- Added command line flag `-config` to dump the Wing Commander configuration to the command line.
+### Changed
+### Deprecated
+### Removed
+### Fixed
+- Fixed issue with `/showconfig` command.
+### Security
+
 ## [v0.2.0-beta.4] - 2018-08-19
 ### Added
 - Added `/checkupdate` command. Requests the Bot to check GitHub to determine if a new version is available. The Bot will report back its findings. Note: This command does not perform the upgrade.
@@ -118,6 +129,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 [Unreleased]: 
 https://github.com/BigOokie/Skywire-Wing-Commander/compare/master...dev
+[v0.2.0-beta.5]: 
+https://github.com/BigOokie/Skywire-Wing-Commander/compare/v0.2.0-beta.4...v0.2.0-beta.5
 [v0.2.0-beta.4]: 
 https://github.com/BigOokie/Skywire-Wing-Commander/compare/v0.2.0-beta.3...v0.2.0-beta.4
 [v0.2.0-beta.3]: 

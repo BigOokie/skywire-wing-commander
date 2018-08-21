@@ -6,6 +6,8 @@
 package main
 
 import (
+	"flag"
+	"fmt"
 	"os"
 	"os/signal"
 	"path/filepath"
@@ -16,6 +18,9 @@ import (
 
 	log "github.com/sirupsen/logrus"
 )
+
+var versionFlag bool
+var dumpConfigFlag bool
 
 // loadConfig manages the configuration load specifics
 // offloading the detail from the `main()` funct
@@ -34,7 +39,19 @@ func loadConfig() (config wcconfig.Config, err error) {
 	return
 }
 
+func parseFlags() {
+	flag.BoolVar(&versionFlag, "v", false, "print current version")
+	flag.BoolVar(&dumpConfigFlag, "config", false, "print current config")
+	flag.Parse()
+}
+
 func main() {
+	parseFlags()
+	if versionFlag {
+		fmt.Println(wcconst.BotAppVersion)
+		return
+	}
+
 	// Setup OS Notification for Interupt or Kill signal - to cleanly terminate the app
 	osSignal := make(chan os.Signal, 1)
 	signal.Notify(osSignal, os.Interrupt, os.Kill)
@@ -42,15 +59,19 @@ func main() {
 	// Setup Log Formatter
 	log.SetFormatter(&log.TextFormatter{})
 	log.SetLevel(log.DebugLevel)
-	log.Infoln("Skywire Wing Commander Telegram Bot - Starting.")
-	defer log.Infoln("Skywire Wing Commander Telegram Bot - Stopped.")
 
 	config, err := loadConfig()
-
 	if err != nil {
 		log.Error(err)
 		return
 	}
+
+	if dumpConfigFlag {
+		return
+	}
+
+	log.Infoln("Skywire Wing Commander Telegram Bot - Starting.")
+	defer log.Infoln("Skywire Wing Commander Telegram Bot - Stopped.")
 
 	// Initiate a new Bot instance
 	log.Infoln("Initiating Bot instance.")
