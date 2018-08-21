@@ -27,8 +27,6 @@ admin = "@USERNAME"
 # via Telegram. This is active once monitoring has started.
 #heartbeatintmin = 120
 
-#discoverymonitorintmin = 1
-
 # Skyminer Manager configuration
 [skymanager]
 # IP:PORT for where the Skyminer Manager node is located.
@@ -39,12 +37,3 @@ admin = "@USERNAME"
 
 # Skycoin Skywire Discovery Node address
 #discoveryaddress="discovery.skycoin.net:8001"
-
-
-
-
-
-
-
-
-
