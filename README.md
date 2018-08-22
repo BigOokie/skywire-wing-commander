@@ -23,7 +23,7 @@
     - [Install and Build](#install-and-build)
     - [Update and Rebuild](#update-and-rebuild)
     - [Configuration](#configuration)
-    - [Reset Bot APIKey](#rest-bot-apikey)
+    - [Reset Bot APIKey](#reset-bot-apikey)
 - [Running Wing Commander](#running-wing-commander)
     - [Command line flags](#command-line-flags)
     - [Background process](#background-process)
@@ -159,12 +159,14 @@ Remember, if you revoke and re-issue your Bots `API Token`, you must update your
 **Wing Commander** supports the following command line flags:
 - `-v` - Output the version of Wing Commander to the terminal. Wing Commander will exit on completion.
 - `-config` - Output the runtime configuration to the terminal. Wing Commander will exit on completion.
+- `-help` - Output application help information, including command line flag and Telegram commands
+- `-about` - Output information about the application. Same as the `/about` telegram command.
 
 ### Background process
 To run **Wing Commander** as a background process (detached from the terminal). This option is recommended for normal use.
 ```sh
 cd $GOPATH/bin
-nohup ./wcbot /dev/null 2>&1 & echo $! > wcbot.pid &
+nohup ./wcbot /dev/null 2>&1 & echo $! > wcbot.pid&
 ```
 
 ### Forground process
@@ -190,12 +192,24 @@ Go to the bottom of the file and enter the following:
 Then press `CTRL+O` & `ENTER` to Save, then press `CTRL+X` to Exit.
 
 ## Stopping Wing Commander 
+To stop **Wing Commander** when started in background mode (using the commands above) use the following:
 ```sh
 cd $GOPATH/bin
 pkill -F wcbot.pid
 ```
 
 Alternatively, if you are running **Wing Commander** interactively from the command line, you can press `CTRL+C` to shut it down gracefully.
+
+Additionally, you can always use the following command to determine if an instance of **Wing Commander** is running on your machine or not:
+```sh
+pgrep wcbot
+```
+If an instance of **Wing Commander** is running, the command will return its process id - otherwise there will be no return value.
+
+To kill the instance based on its process id (provided by `pgrep`) use the following command:
+```sh
+kill {process-id}
+```
 
 ***
 

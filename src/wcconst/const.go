@@ -13,9 +13,17 @@ const (
 	// ScriptPath defines the path to the Scripts folder
 	ScriptPath = "/src/github.com/BigOokie/skywire-wing-commander/src/scripts/"
 
+	MsgCmdLineHelp = "Wing Commander Help\n" +
+		"Command line flags:\n" +
+		"  -v       display application version information.\n" +
+		"  -config  display application configuration information.\n" +
+		"  -help    display this message.\n" +
+		"  -about   display information about the application and its author.\n\n\n" +
+		MsgHelpShort
+
 	// Bot command messages:
 	// Help message
-	MsgHelpShort = "*Usage:*\n" +
+	MsgHelpShort = "*Telegram Usage:*\n" +
 		"- /help - show this message\n" +
 		"- /about - show information and credits about my creator and any contributors\n" +
 		"- /status - ask how I'm going.. and if I'm still running\n" +
