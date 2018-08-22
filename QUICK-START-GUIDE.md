@@ -1,4 +1,4 @@
- # Skywire Wing Commander - Quick Start Guide
+ # Wing Commander - Quick Start Guide
 
 <img src="assets/icons/WingCommanderLogoFull-600x600.png" width=250 height=250>
 
@@ -10,7 +10,7 @@ Welcome to the **Wing Commander** Quick Start Guide. There will be very little c
 ## The Commands You Need
 This section presents all the commands you need, in the order you need them. Remember this is a Quick-Start Guide, and there are a lot of assumptions that you have pre-requisits installed and generally required things are all in order.
 
-Lines starting with `##` are comments and provided to assist with understanding what stage your at:
+Lines starting with `##` are comments and provided to assist with understanding. If you get an error at any point, please refer back to the main [Readme](README.md).
 
 ```sh
 ## Setup the repository folder
@@ -47,5 +47,5 @@ cd $GOPATH/bin
 ./wcbot -v
 
 ## Run the Bot in Background mode (safe to exit the terminal session)
-nohup ./wcbot /dev/null 2>&1 & echo $! > wcbot.pid &
+nohup ./wcbot /dev/null 2>&1 & echo $! > wcbot.pid&
 ```

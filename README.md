@@ -1,4 +1,4 @@
-# Skywire Wing Commander
+# Wing Commander
 <img src="assets/icons/WingCommanderLogoFull-600x600.png" width=250 height=250>
 
 **Note:** The Skycoin Cloud included in the logo above is the property of the [Skycoin project](https://skycoin.net), and has been used here with permission of the Skycoin project.
