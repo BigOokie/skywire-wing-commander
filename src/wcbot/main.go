@@ -20,7 +20,6 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-var appInstance *single.Single
 var config wcconfig.Config
 
 // loadConfig manages the configuration load specifics
@@ -85,10 +84,13 @@ func initLogging() {
 	log.SetLevel(log.DebugLevel)
 }
 
+// initAppInstace will attempt to initalise an instance of the application.
+// A FATAL error will occur causing the application to exit if another instance
+// of the application is detected as already running.
 func initAppInstance() (s *single.Single) {
-	s = single.New("wing-commander")
+	s = single.New(wcconst.AppInstanceID)
 	if err := s.CheckLock(); err != nil && err == single.ErrAlreadyRunning {
-		log.Fatal("Another instance of Wing Commander is already running, exiting")
+		log.Fatal(wcconst.MsgAppInstErr)
 	} else if err != nil {
 		// Another error occurred, might be worth handling it as well
 		log.Fatalf("Failed to acquire exclusive app lock: %v", err)
