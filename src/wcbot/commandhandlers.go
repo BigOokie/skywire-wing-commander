@@ -49,7 +49,7 @@ func (bot *Bot) handleCommandStart(ctx *BotContext, command, args string) error 
 
 	log.Debug(wcconst.MsgMonitorStart)
 	cancelContext, cancelFunc := context.WithCancel(context.Background())
-	bot.skyMgrMonitor.CancelFunc = cancelFunc
+	bot.skyMgrMonitor.SetCancelFunc(cancelFunc)
 	bot.skyMgrMonitor.monitorStatusMsgChan = make(chan string)
 
 	// Start the Event Monitor - provide cancelContext
@@ -68,8 +68,8 @@ func (bot *Bot) handleCommandStop(ctx *BotContext, command, args string) error {
 
 	if bot.skyMgrMonitor.IsRunning() {
 		log.Debug(wcconst.MsgMonitorStop)
-		bot.skyMgrMonitor.CancelFunc()
-		bot.skyMgrMonitor.CancelFunc = nil
+		bot.skyMgrMonitor.DoCancelFunc()
+		bot.skyMgrMonitor.SetCancelFunc(nil)
 		close(bot.skyMgrMonitor.monitorStatusMsgChan)
 		bot.skyMgrMonitor.monitorStatusMsgChan = nil
 		log.Debug(wcconst.MsgMonitorStopped)
