@@ -1,34 +1,36 @@
-#!/bin/bash
+#!/bin/sh
 
-GOBIN_DIR=/usr/local/skywire-go
-
-echo "Updating SkyWire..."
-cd ${GOBIN_DIR}/src/github.com/skycoin/skywire
+echo "Updating Wing Commander..."
+cd ${GOPATH}/src/github.com/BigOokie/skywire-wing-commander
 git reset --hard
 git pull origin master
-cd ${GOBIN_DIR}/src/github.com/skycoin/skywire/cmd
-# [[ -d ${GOBIN_DIR}/pkg/linux_arm64/github.com/skycoin ]] && rm -rf ${GOBIN_DIR}/pkg/linux_arm64/github.com/skycoin
-go install ./... 2>> /tmp/skywire_install_errors.log
+go install -v  ./... 2>> /tmp/wingcommander_install_errors.log
 
-echo "Updating SkyWire Script..."
-cd /usr/local/skywire-script
-git reset --hard
-git pull origin master
+echo "Checking for Wing Commander Process..."
+cd ${GOPATH}/bin
 
-echo "Updating SkyWire Web..."
-cd /usr/local/skywire-static
-[[ -d skywire-manager ]] && cd skywire-manager
-git reset --hard
-git pull origin master
+WCPID = pgrep wcbot
 
-echo "Updating SkyWire Screen..."
-cd /usr/local/skywire-script
-cp -f screen/10-header /etc/update-motd.d/
-cp -f screen/99-point-to-faq /etc/update-motd.d/
+if [$WCPID = ""]; then
+    echo "Wing Commander does not appear to be running."
+else
+    echo "Wing Commander process identifed " $WCPID
+    echo "Terminating the process"
+    kill  $WCPID
+fi
 
-echo "Kill SkyWire Process..."
-[[ -f /tmp/skywire-pids/manager.pid ]] && pkill -F /tmp/skywire-pids/manager.pid && rm -rf /tmp/skywire-pids/manager.pid
-[[ -f /tmp/skywire-pids/node.pid ]] && pkill -F /tmp/skywire-pids/node.pid && rm -rf /tmp/skywire-pids/node.pid
+echo "Check Wing Commander Version."
+./wcbot -v
 
-echo "Rebooting..."
-reboot
+echo "Starting Wing Commander (background)..."
+nohup ./wcbot /dev/null 2>&1 & echo $! > wcbot.pid&
+
+echo "Checking Wing Commander started..."
+WCPID = pgrep wcbot
+
+if [$WCPID = ""]; then
+    echo "Wing Commander does not appear to be running."
+else
+    echo "Wing Commander process identifed " $WCPID
+    echo "Wing Commander updated and restarted"
+fi
