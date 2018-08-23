@@ -108,7 +108,6 @@ func readConfig(filename, pathname string, defaults map[string]interface{}) (*vi
 // An `error` will be returned if any errors occur.
 // A valid `Config` struct will be returned on success.
 func LoadConfigParameters(filename, pathname string, defaults map[string]interface{}) (config Config, err error) {
-	//config := Config{}
 	v1, err := readConfig(filename, pathname, defaults)
 
 	if err != nil {

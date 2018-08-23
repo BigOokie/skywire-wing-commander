@@ -31,9 +31,11 @@ func (bot *Bot) handleCommandAbout(ctx *BotContext, command, args string) error 
 // Handler for showconfig command
 func (bot *Bot) handleCommandShowConfig(ctx *BotContext, command, args string) error {
 	log.Debug("Handle command /showconfig")
-	err := bot.Send(ctx, "whisper", "text", fmt.Sprintf(wcconst.MsgShowConfig, bot.config.String()))
+	err := bot.Send(ctx, "whisper", "markdown", fmt.Sprintf(wcconst.MsgShowConfig, bot.config.String()))
 	if err != nil {
 		log.Error("handleCommandShowConfig::Send: %s", err)
+		log.Debug("handleCommandShowConfig::Send - Attempting to resend as text")
+		err = bot.Send(ctx, "whisper", "text", fmt.Sprintf(wcconst.MsgShowConfig, bot.config.String()))
 	}
 	return err
 }

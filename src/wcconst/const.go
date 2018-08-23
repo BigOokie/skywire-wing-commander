@@ -59,7 +59,8 @@ const (
 		"*Donations most welcome* 👍\n" +
 		"*Skycoin:* ES5LccJDhBCK275APmW9tmQNEgiYwTFKQF"
 
-	MsgShowConfig = "Wing Commander Configuration\n%s\n"
+	MsgShowConfig = "Wing Commander Configuration\n" +
+		"```\n%s\n```\n"
 
 	MsgErrorGetNodes     = "⚠️ An error occurred getting the list of Nodes from the Manager."
 	MsgErrorGetDiscNodes = "⚠️ An error occurred checking Discovery Node connections."
