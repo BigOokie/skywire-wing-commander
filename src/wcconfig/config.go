@@ -75,9 +75,9 @@ func (c *Config) String() string {
 		c.Monitor.DiscoveryMonitorIntMin)
 }
 
-// DebugLogConfig will log debug information for the passed Config structure
-func (c *Config) DebugLogConfig() {
-	log.Debugf("Wing Commander Configuration:\n%s", c.String())
+// PrintConfig will log debug information for the passed Config structure
+func (c *Config) PrintConfig() {
+	log.Printf("Wing Commander Configuration:\n%s", c.String())
 }
 
 // IsEmpty will compare the current instance of Config against an empty instance
@@ -131,6 +131,6 @@ func LoadConfigParameters(filename, pathname string, defaults map[string]interfa
 		log.Warnf("ReadConfig: admin username configuration is not prefixed `@`. Runtime config updated to prevent errors.")
 	}
 
-	config.DebugLogConfig()
+	//config.PrintLogConfig()
 	return config, nil
 }
