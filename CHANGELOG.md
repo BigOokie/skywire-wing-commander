@@ -4,10 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [v0.2.0-beta.6] - TBA
+## [v0.2.0-beta.6] - 2018-08-23
 ### Added
+- Added application instance control to detect and prevent multiple instances of the Bot application from running on the same system. If another instance of the Bot is detected as already running on the local system, then the new instance will report a (fatal) error and refuse to start. Intructions are provided to the user on how to terminate the other instances (if this is required).
 - Added command line flag `-help` which outputs application help to the command line.
-- Added command line flag `-abot` which outputs information about the application ot the command line.
+- Added command line flag `-about` which outputs information about the application ot the command line.
 ### Changed
 ### Deprecated
 ### Removed

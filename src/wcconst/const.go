@@ -7,7 +7,7 @@ package wcconst
 
 // Define constants used by the application
 const (
-	BotVersion    = "v0.2.0-beta.5"
+	BotVersion    = "v0.2.0-beta.6"
 	BotAppVersion = "Wing Commander " + BotVersion
 
 	AppInstanceID = "wing-commander-84F95320-8C2D-4236-9252-A322F01B91A7"
