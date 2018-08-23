@@ -70,6 +70,14 @@
 
 [[projects]]
   branch = "master"
+  digest = "1:950d5564b8f1743737737ea60b9c7518c2dd0435d8f21a702a7b3c3db4aa6462"
+  name = "github.com/marcsauter/single"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "bb0da22c1992c00302f04300beecc5b9b652aecb"
+
+[[projects]]
+  branch = "master"
   digest = "1:5ab79470a1d0fb19b041a624415612f8236b3c06070161a910562f2b2d064355"
   name = "github.com/mitchellh/mapstructure"
   packages = ["."]
@@ -217,6 +225,7 @@
   analyzer-version = 1
   input-imports = [
     "github.com/go-test/deep",
+    "github.com/marcsauter/single",
     "github.com/sirupsen/logrus",
     "github.com/spf13/viper",
     "github.com/tcnksm/go-latest",

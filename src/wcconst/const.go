@@ -10,12 +10,26 @@ const (
 	BotVersion    = "v0.2.0-beta.5"
 	BotAppVersion = "Wing Commander " + BotVersion
 
+	AppInstanceID = "wing-commander-84F95320-8C2D-4236-9252-A322F01B91A7"
+	MsgAppInstErr = "Another instance of Wing Commander has been detected running on this system.\n\n" +
+		"To identify and terminate (kill) ALL instances of Wing Commander on this system, run:\n\n" +
+		"   pgrep wcbot | xargs kill\n\n" +
+		"Exiting\n"
+
 	// ScriptPath defines the path to the Scripts folder
 	ScriptPath = "/src/github.com/BigOokie/skywire-wing-commander/src/scripts/"
 
+	MsgCmdLineHelp = "Wing Commander Help\n" +
+		"Command line flags:\n" +
+		"  -v       display application version information.\n" +
+		"  -config  display application configuration information.\n" +
+		"  -help    display this message.\n" +
+		"  -about   display information about the application and its author.\n\n\n" +
+		MsgHelpShort
+
 	// Bot command messages:
 	// Help message
-	MsgHelpShort = "*Usage:*\n" +
+	MsgHelpShort = "*Telegram Usage:*\n" +
 		"- /help - show this message\n" +
 		"- /about - show information and credits about my creator and any contributors\n" +
 		"- /status - ask how I'm going.. and if I'm still running\n" +

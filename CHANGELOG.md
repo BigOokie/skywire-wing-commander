@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v0.2.0-beta.6] - TBA
+### Added
+- Added command line flag `-help` which outputs application help to the command line.
+- Added command line flag `-abot` which outputs information about the application ot the command line.
+### Changed
+### Deprecated
+### Removed
+### Fixed
+### Security
+
 ## [v0.2.0-beta.5] - 2018-08-21
 ### Added
 - Added command line flag `-v` to check Wing Commander version.
@@ -129,6 +139,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 [Unreleased]: 
 https://github.com/BigOokie/Skywire-Wing-Commander/compare/master...dev
+[v0.2.0-beta.6]: 
+https://github.com/BigOokie/Skywire-Wing-Commander/compare/v0.2.0-beta.5...v0.2.0-beta.6
 [v0.2.0-beta.5]: 
 https://github.com/BigOokie/Skywire-Wing-Commander/compare/v0.2.0-beta.4...v0.2.0-beta.5
 [v0.2.0-beta.4]: 
