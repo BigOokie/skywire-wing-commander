@@ -55,7 +55,9 @@ func (smm *SkyManagerMonitor) GetCancelFunc() func() {
 func (smm *SkyManagerMonitor) DoCancelFunc() {
 	smm.m.Lock()
 	defer smm.m.Unlock()
-	smm.cancelFunc()
+	if smm.cancelFunc != nil {
+		smm.cancelFunc()
+	}
 }
 
 // NewMonitor creates a SkyManagerMonitor which will monitor the provided managerip.

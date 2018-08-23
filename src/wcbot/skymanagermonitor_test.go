@@ -15,7 +15,7 @@ import (
 func Test_NewMonitor(t *testing.T) {
 	expect := &SkyManagerMonitor{
 		ManagerAddress:       "0.0.0.0:8000",
-		CancelFunc:           nil,
+		cancelFunc:           nil,
 		monitorStatusMsgChan: nil,
 		connectedNodes:       make(skynode.NodeInfoMap),
 	}
@@ -30,7 +30,7 @@ func Test_NewMonitor(t *testing.T) {
 func Test_IsRunning(t *testing.T) {
 	expect := &SkyManagerMonitor{
 		ManagerAddress:       "0.0.0.0:8000",
-		CancelFunc:           nil,
+		cancelFunc:           nil,
 		monitorStatusMsgChan: nil,
 		connectedNodes:       make(skynode.NodeInfoMap),
 	}
@@ -39,7 +39,7 @@ func Test_IsRunning(t *testing.T) {
 		t.Fail()
 	}
 
-	_, expect.CancelFunc = context.WithCancel(context.Background())
+	_, expect.cancelFunc = context.WithCancel(context.Background())
 	if !expect.IsRunning() {
 		t.Fail()
 	}
@@ -76,6 +76,41 @@ func Test_GetConnectedNodeCount(t *testing.T) {
 	monitor.connectedNodes = skynode.NodeInfoSliceToMap(nodeSlice)
 
 	if monitor.GetConnectedNodeCount() != 2 {
+		t.Fail()
+	}
+}
+
+func Test_SetCancelFunc(t *testing.T) {
+	testmon := NewMonitor("0.0.0.0:8000")
+	if testmon.cancelFunc != nil {
+		t.Fail()
+	}
+
+	testmon.SetCancelFunc(testmon.DoCancelFunc)
+	if testmon.cancelFunc == nil {
+		t.Fail()
+	}
+
+	testmon.SetCancelFunc(nil)
+	if testmon.cancelFunc != nil {
+		t.Fail()
+	}
+}
+
+func Test_GetCancelFunc(t *testing.T) {
+	testmon := NewMonitor("0.0.0.0:8000")
+
+	if testmon.GetCancelFunc() != nil {
+		t.Fail()
+	}
+
+	testmon.SetCancelFunc(testmon.DoCancelFunc)
+	if testmon.GetCancelFunc() == nil {
+		t.Fail()
+	}
+
+	testmon.SetCancelFunc(nil)
+	if testmon.GetCancelFunc() != nil {
 		t.Fail()
 	}
 }
