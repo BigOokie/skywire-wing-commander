@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Deprecated
 ### Removed
 ### Fixed
+- Fixed potential concurrency race condition that could cause the Bot to crash.
 ### Security
 
 ## [v0.2.0-beta.5] - 2018-08-21
