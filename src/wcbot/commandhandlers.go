@@ -93,16 +93,22 @@ func (bot *Bot) handleCommandStatus(ctx *BotContext, command, args string) error
 
 	// Monitor is running
 	discConnNodes, err := bot.skyMgrMonitor.ConnectedDiscNodeCount()
-	var msg string
-	if err != nil {
-		// Discover Server Error
-		msg = fmt.Sprintf(wcconst.MsgStatus+"\n"+wcconst.MsgErrorGetDiscNodes, bot.skyMgrMonitor.GetConnectedNodeCount(), discConnNodes)
-	} else {
-		// Ok
-		msg = fmt.Sprintf(wcconst.MsgStatus, bot.skyMgrMonitor.GetConnectedNodeCount(), discConnNodes)
-	}
-	return bot.Send(ctx, "whisper", "markdown", msg)
 
+	// Everything is ok
+	status := "👍"
+	statusmsg := ""
+	if err != nil {
+		// Error connecting to Discovery Server
+		status = "⚠️"
+		statusmsg = wcconst.MsgErrorGetDiscNodes
+	} else if bot.skyMgrMonitor.GetConnectedNodeCount() != discConnNodes {
+		// We connected but not all nodes are reported as connected
+		status = "⚠️"
+		statusmsg = wcconst.MsgDiscSomeNodes
+	}
+
+	return bot.Send(ctx, "whisper", "markdown",
+		fmt.Sprintf(wcconst.MsgStatus, status, bot.skyMgrMonitor.GetConnectedNodeCount(), discConnNodes, statusmsg))
 }
 
 // Handler for help CheckUpdate

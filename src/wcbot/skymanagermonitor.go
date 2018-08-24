@@ -140,7 +140,6 @@ func (smm *SkyManagerMonitor) ConnectedDiscNodeCount() (int, error) {
 	if err != nil {
 		log.Errorf("SkyManagerMonitor.RefreshDiscoveryConnectionCount: Error contacting Discovery Server: %v", err)
 		return discConnNodeCount, err
-
 	} else {
 		// Check the local Nodes are connected to Discovery Node
 		//if len(smm.connectedNodes) == 0 {
