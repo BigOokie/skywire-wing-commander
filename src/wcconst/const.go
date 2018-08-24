@@ -72,7 +72,7 @@ const (
 	// Status cmd message
 	MsgStatus = "%v*Wing Commander Status*\n" + MsgConnectedNodes + "\n" + MsgDiscConnNodes + "\n%s"
 	// Heartbeat message
-	MsgHeartbeat = "*Wing Commander Heatbeat* ❣️\n" + MsgConnectedNodes + "\n" + MsgDiscConnNodes
+	MsgHeartbeat = "%v*Wing Commander Heatbeat* ❣️\n" + MsgConnectedNodes + "\n" + MsgDiscConnNodes + "\n%s"
 
 	// Node Connect/Disconnect Event Messages
 	MsgNodeConnected    = "*Node Connected:* %s\n\n" + MsgConnectedNodes

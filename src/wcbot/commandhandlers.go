@@ -159,18 +159,22 @@ func (bot *Bot) monitorEventLoop(runctx context.Context, botctx *BotContext, sta
 			log.Debug("Bot.monitorEventLoop - Heartbeat event")
 
 			discConnNodes, err := bot.skyMgrMonitor.ConnectedDiscNodeCount()
-			var msg string
+
+			// Everything is ok
+			status := "👍"
+			statusmsg := ""
 			if err != nil {
-				// Discover Server Error
-				msg = fmt.Sprintf(wcconst.MsgHeartbeat+"\n"+wcconst.MsgErrorGetDiscNodes,
-					bot.skyMgrMonitor.GetConnectedNodeCount(), discConnNodes)
-			} else {
-				// Ok
-				msg = fmt.Sprintf(wcconst.MsgHeartbeat,
-					bot.skyMgrMonitor.GetConnectedNodeCount(), discConnNodes)
+				// Error connecting to Discovery Server
+				status = "⚠️"
+				statusmsg = wcconst.MsgErrorGetDiscNodes
+			} else if bot.skyMgrMonitor.GetConnectedNodeCount() != discConnNodes {
+				// We connected but not all nodes are reported as connected
+				status = "⚠️"
+				statusmsg = wcconst.MsgDiscSomeNodes
 			}
 
-			bot.Send(botctx, "whisper", "markdown", msg)
+			bot.Send(botctx, "whisper", "markdown",
+				fmt.Sprintf(wcconst.MsgHeartbeat, status, bot.skyMgrMonitor.GetConnectedNodeCount(), discConnNodes, statusmsg))
 
 		// Context has been cancelled. Shutdown
 		case <-runctx.Done():
