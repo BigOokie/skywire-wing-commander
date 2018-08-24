@@ -136,18 +136,22 @@ func (smm *SkyManagerMonitor) ConnectedDiscNodeCount() (int, error) {
 	defer log.Debugln("SkyManagerMonitor::RefreshDiscoveryConnectionCount: End")
 	discConnNodeCount := 0
 
+	// Check the local Nodes are connected to Discovery Node
+	if smm.GetConnectedNodeCount() == 0 {
+		log.Debug("SkyManagerMonitor.RefreshDiscoveryConnectionCount: Connected Node list is empty. No work to do.")
+		return discConnNodeCount, nil
+	}
+
 	discNodes, err := getAllNodesList(smm.DiscoveryAddress)
 	if err != nil {
 		log.Errorf("SkyManagerMonitor.RefreshDiscoveryConnectionCount: Error contacting Discovery Server: %v", err)
 		return discConnNodeCount, err
+	} else if len(discNodes) == 0 {
+		log.Debugln("SkyManagerMonitor.RefreshDiscoveryConnectionCount: Empty Discovery Server Node List.")
+		return discConnNodeCount, nil
 	} else {
-		// Check the local Nodes are connected to Discovery Node
-		//if len(smm.connectedNodes) == 0 {
-		if smm.GetConnectedNodeCount() == 0 {
-			log.Debug("SkyManagerMonitor.RefreshDiscoveryConnectionCount: Connected Node list is empty. No work to do.")
-			return discConnNodeCount, nil
-		}
-
+		log.Debugf("SkyManagerMonitor.RefreshDiscoveryConnectionCount: Discovery Node Returned %v Nodes.", len(discNodes))
+		// Nodes were returned from the Discovery Server
 		smm.m.Lock()
 		defer smm.m.Unlock()
 
