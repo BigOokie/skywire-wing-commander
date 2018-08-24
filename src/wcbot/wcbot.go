@@ -399,7 +399,7 @@ func NewBot(config wcconfig.Config) (*Bot, error) {
 	bot.config = config
 	var err error
 
-	bot.skyMgrMonitor = NewMonitor(config.SkyManager.Address)
+	bot.skyMgrMonitor = NewMonitor(config.SkyManager.Address, config.SkyManager.DiscoveryAddress)
 
 	if bot.telegram, err = tgbotapi.NewBotAPI(config.Telegram.APIKey); err != nil {
 		return nil, fmt.Errorf("Failed to initialize Telegram API: %v", err)

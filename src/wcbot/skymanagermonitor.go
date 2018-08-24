@@ -20,13 +20,14 @@ import (
 )
 
 const (
-	managerAPIGetAllConnectedNodes = "/conn/getAll"
+	managerAPIGetAllConnectedNodes = "conn/getAll"
 )
 
 // SkyManagerMonitor is used to monitor a Sky Manager and provide messages to the
 // main process when specific events are detected.
 type SkyManagerMonitor struct {
 	ManagerAddress       string
+	DiscoveryAddress     string
 	cancelFunc           func()
 	monitorStatusMsgChan chan string
 	connectedNodes       skynode.NodeInfoMap
@@ -61,9 +62,10 @@ func (smm *SkyManagerMonitor) DoCancelFunc() {
 }
 
 // NewMonitor creates a SkyManagerMonitor which will monitor the provided managerip.
-func NewMonitor(manageraddress string) *SkyManagerMonitor {
+func NewMonitor(manageraddress, discoveryaddress string) *SkyManagerMonitor {
 	return &SkyManagerMonitor{
 		ManagerAddress:       manageraddress,
+		DiscoveryAddress:     discoveryaddress,
 		cancelFunc:           nil,
 		monitorStatusMsgChan: nil,
 		connectedNodes:       make(skynode.NodeInfoMap),
@@ -98,6 +100,7 @@ func (smm *SkyManagerMonitor) RunManagerMonitor(runctx context.Context, statusMs
 	}
 }
 
+/*
 // RunDiscoveryMonitor starts the SkyManagerMonitor monitoring of the Skywire Discovery Node.
 // If `ctx` is not nil, the monitor will listen to ctx.Done() and stop monitoring
 // when it recieves the signal.
@@ -124,23 +127,26 @@ func (smm *SkyManagerMonitor) RunDiscoveryMonitor(runctx context.Context, status
 		}
 	}
 }
+*/
 
 // ConnectedDiscNodeCount returns a count the locally Managed Nodes that are connected to the
 // Discovery Node
-func (smm *SkyManagerMonitor) ConnectedDiscNodeCount() int {
-	log.Debug("SkyManagerMonitor::RefreshDiscoveryConnectionCound: Start")
-	defer log.Debugln("SkyManagerMonitor::RefreshDiscoveryConnectionCound: End")
+func (smm *SkyManagerMonitor) ConnectedDiscNodeCount() (int, error) {
+	log.Debug("SkyManagerMonitor::RefreshDiscoveryConnectionCount: Start")
+	defer log.Debugln("SkyManagerMonitor::RefreshDiscoveryConnectionCount: End")
 	discConnNodeCount := 0
 
-	discNodes, err := getAllNodesList(smm.ManagerAddress)
+	discNodes, err := getAllNodesList(smm.DiscoveryAddress)
 	if err != nil {
-		log.Error(err)
+		log.Errorf("SkyManagerMonitor.RefreshDiscoveryConnectionCount: Error contacting Discovery Server: %v", err)
+		return discConnNodeCount, err
+
 	} else {
 		// Check the local Nodes are connected to Discovery Node
 		//if len(smm.connectedNodes) == 0 {
 		if smm.GetConnectedNodeCount() == 0 {
-			log.Debug("SkyManagerMonitor.RefreshDiscoveryConnectionCound: Connected Node list is empty. No work to do.")
-			return discConnNodeCount
+			log.Debug("SkyManagerMonitor.RefreshDiscoveryConnectionCount: Connected Node list is empty. No work to do.")
+			return discConnNodeCount, nil
 		}
 
 		smm.m.Lock()
@@ -154,17 +160,16 @@ func (smm *SkyManagerMonitor) ConnectedDiscNodeCount() int {
 			_, hasKey := discNodeMap[v.Key]
 			if hasKey {
 				// Node Key found in the Discover Node Map
-				log.Debugf("SkyManagerMonitor.RefreshDiscoveryConnectionCound: Node Connected:\n%s\n", v.FmtString())
+				log.Debugf("SkyManagerMonitor.RefreshDiscoveryConnectionCount: Node Connected:\n%s\n", v.FmtString())
 				discConnNodeCount++
 			} else {
-				log.Debugf("SkyManagerMonitor.RefreshDiscoveryConnectionCound: Node Not Connected:\n%s\n", v.FmtString())
+				log.Debugf("SkyManagerMonitor.RefreshDiscoveryConnectionCount: Node Not Connected:\n%s\n", v.FmtString())
 			}
 		}
 
-		msg := fmt.Sprintf("%d Nodes Connected to Discovery", discConnNodeCount)
-		log.Debugln(msg)
+		log.Debugf("%d Nodes Connected to Discovery", discConnNodeCount)
 	}
-	return discConnNodeCount
+	return discConnNodeCount, nil
 }
 
 // IsRunning determines if the SkyMgrMonitor is running or not.
@@ -202,6 +207,7 @@ func getAllNodesList(managerAddr string) (cns skynode.NodeInfoSlice, err error) 
 	client := &http.Client{}
 	client.Timeout = time.Second * 30
 	apiURL := fmt.Sprintf("http://%s/%s", managerAddr, managerAPIGetAllConnectedNodes)
+	log.Debugln(apiURL)
 
 	req, err := http.NewRequest(http.MethodGet, apiURL, nil)
 	if err != nil {
@@ -290,13 +296,13 @@ func (smm *SkyManagerMonitor) maintainConnectedNodesList(newcns skynode.NodeInfo
 // as connected to the Discovery Node, we need to raise an alert using the provided statusMsgChan
 //TODO: Refactor this. We are doing the same thing as in other functions essentially. We need to restucture this (but later)
 func (smm *SkyManagerMonitor) checkNodeDiscoveryConnection(disccns skynode.NodeInfoSlice, statusMsgChan chan<- string) {
-	smm.m.Lock()
-	defer smm.m.Unlock()
-
-	if len(smm.connectedNodes) == 0 {
+	if smm.GetConnectedNodeCount() == 0 {
 		log.Debug("SkyManagerMonitor.checkNodeDiscoveryConnection: Connected Node list is empty. No work to do.")
 		return
 	}
+
+	smm.m.Lock()
+	defer smm.m.Unlock()
 
 	// Make sure the disccns structure is not nil, and return if it is (do nothing)
 	if disccns == nil {
