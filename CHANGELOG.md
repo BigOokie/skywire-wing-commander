@@ -150,6 +150,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 [Unreleased]: 
 https://github.com/BigOokie/Skywire-Wing-Commander/compare/master...dev
+[v0.2.0-beta.7]: 
+https://github.com/BigOokie/Skywire-Wing-Commander/compare/v0.2.0-beta.6...v0.2.0-beta.7
 [v0.2.0-beta.6]: 
 https://github.com/BigOokie/Skywire-Wing-Commander/compare/v0.2.0-beta.5...v0.2.0-beta.6
 [v0.2.0-beta.5]: 
