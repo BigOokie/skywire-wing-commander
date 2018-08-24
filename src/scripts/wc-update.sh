@@ -14,7 +14,7 @@ WCPID=$(pgrep wcbot)
 if [ "$WCPID" =  "" ]; then
     echo "Wing Commander does not appear to be running."
 else
-    echo "Wing Commander process identifed: $WCPID"
+    echo "Wing Commander process identified: $WCPID"
     echo "Terminating the process"
     kill  ${WCPID}
 fi
