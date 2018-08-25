@@ -33,6 +33,8 @@ type SkyManagerMonitor struct {
 	connectedNodes       skynode.NodeInfoMap
 	discConnNodeCount    int
 	m                    sync.Mutex
+	updateStarted        bool
+	updateMsgChan        chan string
 }
 
 // SetCancelFunc is a thread-safe function for setting the cancelFunc
@@ -61,6 +63,22 @@ func (smm *SkyManagerMonitor) DoCancelFunc() {
 	}
 }
 
+// GetUpdateStarted is a thread-safe function for checking if the
+// updateStarted flag has been set
+func (smm *SkyManagerMonitor) GetUpdateStarted() bool {
+	smm.m.Lock()
+	defer smm.m.Unlock()
+	return smm.updateStarted
+}
+
+// SetUpdateStarted is a thread-safe function for setting the
+// updateStarted flag has been set
+func (smm *SkyManagerMonitor) SetUpdateStarted(flag bool) {
+	smm.m.Lock()
+	defer smm.m.Unlock()
+	smm.updateStarted = flag
+}
+
 // NewMonitor creates a SkyManagerMonitor which will monitor the provided managerip.
 func NewMonitor(manageraddress, discoveryaddress string) *SkyManagerMonitor {
 	return &SkyManagerMonitor{
@@ -70,6 +88,8 @@ func NewMonitor(manageraddress, discoveryaddress string) *SkyManagerMonitor {
 		monitorStatusMsgChan: nil,
 		connectedNodes:       make(skynode.NodeInfoMap),
 		discConnNodeCount:    0,
+		updateStarted:        false,
+		updateMsgChan:        nil,
 	}
 }
 

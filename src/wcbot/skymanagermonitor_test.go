@@ -19,6 +19,8 @@ func Test_NewMonitor(t *testing.T) {
 		cancelFunc:           nil,
 		monitorStatusMsgChan: nil,
 		connectedNodes:       make(skynode.NodeInfoMap),
+		updateStarted:        false,
+		updateMsgChan:        nil,
 	}
 
 	actual := NewMonitor("0.0.0.0:8000", "1.1.1.1:80")
@@ -35,6 +37,8 @@ func Test_IsRunning(t *testing.T) {
 		cancelFunc:           nil,
 		monitorStatusMsgChan: nil,
 		connectedNodes:       make(skynode.NodeInfoMap),
+		updateStarted:        false,
+		updateMsgChan:        nil,
 	}
 
 	if expect.IsRunning() {

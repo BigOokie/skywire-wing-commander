@@ -64,3 +64,7 @@ func UpdateAvailable(ownername, reponame, versiontag string) (result bool, updat
 	log.Infof("UpdateAvailable: %s", updateMsg)
 	return
 }
+
+func DoUpgrade() bool {
+	return false
+}

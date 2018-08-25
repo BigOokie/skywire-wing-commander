@@ -126,6 +126,21 @@ func (bot *Bot) handleCommandCheckUpdate(ctx *BotContext, command, args string) 
 	}
 }
 
+// Handler for help DoUpdate
+func (bot *Bot) handleCommandDoUpdate(ctx *BotContext, command, args string) error {
+	log.Debug("Handle command /update")
+	bot.Send(ctx, "whisper", "markdown", "Initiating update...")
+
+	updateAvailable, updateMsg := utils.UpdateAvailable("BigOokie", "skywire-wing-commander", wcconst.BotVersion)
+	if updateAvailable {
+		return bot.Send(ctx, "whisper", "markdown",
+			fmt.Sprintf("*Update available:* %s", updateMsg))
+	} else {
+		return bot.Send(ctx, "whisper", "markdown",
+			fmt.Sprintf("*Up to date:* %s", updateMsg))
+	}
+}
+
 func (bot *Bot) handleDirectMessageFallback(ctx *BotContext, text string) (bool, error) {
 	errmsg := fmt.Sprintf("Sorry, I only take commands. '%s' is not a command.\n\n%s", text, wcconst.MsgHelpShort)
 	log.Debugf(errmsg)
