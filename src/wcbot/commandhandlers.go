@@ -70,10 +70,7 @@ func (bot *Bot) handleCommandStop(ctx *BotContext, command, args string) error {
 
 	if bot.skyMgrMonitor.IsRunning() {
 		log.Debug(wcconst.MsgMonitorStop)
-		bot.skyMgrMonitor.DoCancelFunc()
-		bot.skyMgrMonitor.SetCancelFunc(nil)
-		close(bot.skyMgrMonitor.monitorStatusMsgChan)
-		bot.skyMgrMonitor.monitorStatusMsgChan = nil
+		bot.skyMgrMonitor.StopManagerMonitor()
 		log.Debug(wcconst.MsgMonitorStopped)
 		return bot.Send(ctx, "whisper", "markdown", wcconst.MsgMonitorStop)
 	}

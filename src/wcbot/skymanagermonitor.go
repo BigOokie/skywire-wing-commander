@@ -120,6 +120,22 @@ func (smm *SkyManagerMonitor) RunManagerMonitor(runctx context.Context, statusMs
 	}
 }
 
+// StopManagerMonitor stops the SkyManagerMonitor monitoring of the local Manager Node.
+// If `ctx` is not nil, the monitor will listen to ctx.Done() and stop monitoring
+// when it recieves the signal.
+func (smm *SkyManagerMonitor) StopManagerMonitor() {
+	log.Debugln("SkyManagerMonitor::StopManagerMonitor: Start")
+	defer log.Debugln("SkyManagerMonitor::StopManagerMonitor: End")
+
+	if smm.IsRunning() {
+		smm.DoCancelFunc()
+		smm.SetCancelFunc(nil)
+		close(smm.monitorStatusMsgChan)
+		smm.monitorStatusMsgChan = nil
+		log.Debug(wcconst.MsgMonitorStopped)
+	}
+}
+
 /*
 // RunDiscoveryMonitor starts the SkyManagerMonitor monitoring of the Skywire Discovery Node.
 // If `ctx` is not nil, the monitor will listen to ctx.Done() and stop monitoring
