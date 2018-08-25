@@ -15,12 +15,13 @@ import (
 func Test_NewMonitor(t *testing.T) {
 	expect := &SkyManagerMonitor{
 		ManagerAddress:       "0.0.0.0:8000",
-		CancelFunc:           nil,
+		DiscoveryAddress:     "1.1.1.1:80",
+		cancelFunc:           nil,
 		monitorStatusMsgChan: nil,
 		connectedNodes:       make(skynode.NodeInfoMap),
 	}
 
-	actual := NewMonitor("0.0.0.0:8000")
+	actual := NewMonitor("0.0.0.0:8000", "1.1.1.1:80")
 
 	if diff := deep.Equal(expect, actual); diff != nil {
 		t.Error(diff)
@@ -30,7 +31,8 @@ func Test_NewMonitor(t *testing.T) {
 func Test_IsRunning(t *testing.T) {
 	expect := &SkyManagerMonitor{
 		ManagerAddress:       "0.0.0.0:8000",
-		CancelFunc:           nil,
+		DiscoveryAddress:     "0.0.0.0:8000",
+		cancelFunc:           nil,
 		monitorStatusMsgChan: nil,
 		connectedNodes:       make(skynode.NodeInfoMap),
 	}
@@ -39,14 +41,14 @@ func Test_IsRunning(t *testing.T) {
 		t.Fail()
 	}
 
-	_, expect.CancelFunc = context.WithCancel(context.Background())
+	_, expect.cancelFunc = context.WithCancel(context.Background())
 	if !expect.IsRunning() {
 		t.Fail()
 	}
 }
 
 func Test_GetConnectedNodeCount(t *testing.T) {
-	monitor := NewMonitor("0.0.0.0:8000")
+	monitor := NewMonitor("0.0.0.0:8000", "1.1.1.1:80")
 
 	if monitor.GetConnectedNodeCount() != 0 {
 		t.Fail()
@@ -76,6 +78,41 @@ func Test_GetConnectedNodeCount(t *testing.T) {
 	monitor.connectedNodes = skynode.NodeInfoSliceToMap(nodeSlice)
 
 	if monitor.GetConnectedNodeCount() != 2 {
+		t.Fail()
+	}
+}
+
+func Test_SetCancelFunc(t *testing.T) {
+	testmon := NewMonitor("0.0.0.0:8000", "1.1.1.1:80")
+	if testmon.cancelFunc != nil {
+		t.Fail()
+	}
+
+	testmon.SetCancelFunc(testmon.DoCancelFunc)
+	if testmon.cancelFunc == nil {
+		t.Fail()
+	}
+
+	testmon.SetCancelFunc(nil)
+	if testmon.cancelFunc != nil {
+		t.Fail()
+	}
+}
+
+func Test_GetCancelFunc(t *testing.T) {
+	testmon := NewMonitor("0.0.0.0:8000", "1.1.1.1:80")
+
+	if testmon.GetCancelFunc() != nil {
+		t.Fail()
+	}
+
+	testmon.SetCancelFunc(testmon.DoCancelFunc)
+	if testmon.GetCancelFunc() == nil {
+		t.Fail()
+	}
+
+	testmon.SetCancelFunc(nil)
+	if testmon.GetCancelFunc() != nil {
 		t.Fail()
 	}
 }

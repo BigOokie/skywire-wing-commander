@@ -7,15 +7,29 @@ package wcconst
 
 // Define constants used by the application
 const (
-	BotVersion    = "v0.2.0-beta.5"
+	BotVersion    = "v0.2.0-beta.7"
 	BotAppVersion = "Wing Commander " + BotVersion
+
+	AppInstanceID = "wing-commander-84F95320-8C2D-4236-9252-A322F01B91A7"
+	MsgAppInstErr = "Another instance of Wing Commander has been detected running on this system.\n\n" +
+		"To identify and terminate (kill) ALL instances of Wing Commander on this system, run:\n\n" +
+		"   pgrep wcbot | xargs kill\n\n" +
+		"Exiting\n"
 
 	// ScriptPath defines the path to the Scripts folder
 	ScriptPath = "/src/github.com/BigOokie/skywire-wing-commander/src/scripts/"
 
+	MsgCmdLineHelp = "Wing Commander Help\n" +
+		"Command line flags:\n" +
+		"  -v       display application version information.\n" +
+		"  -config  display application configuration information.\n" +
+		"  -help    display this message.\n" +
+		"  -about   display information about the application and its author.\n\n\n" +
+		MsgHelpShort
+
 	// Bot command messages:
 	// Help message
-	MsgHelpShort = "*Usage:*\n" +
+	MsgHelpShort = "*Telegram Usage:*\n" +
 		"- /help - show this message\n" +
 		"- /about - show information and credits about my creator and any contributors\n" +
 		"- /status - ask how I'm going.. and if I'm still running\n" +
@@ -45,17 +59,20 @@ const (
 		"*Donations most welcome* 👍\n" +
 		"*Skycoin:* ES5LccJDhBCK275APmW9tmQNEgiYwTFKQF"
 
-	MsgShowConfig = "Wing Commander Configuration\n%s\n"
+	MsgShowConfig = "Wing Commander Configuration\n" +
+		"```\n%s\n```\n"
 
-	MsgErrorGetNodes     = "⚠️ An error occurred getting the list of Nodes from the Manager."
-	MsgErrorGetDiscNodes = "⚠️ An error occurred checking Discovery Node connections."
+	MsgErrorGetNodes     = "⚠️ Problem getting connected Nodes from the Manager."
+	MsgErrorGetDiscNodes = "Problem checking the Discovery Server."
+	MsgDiscSomeNodes     = "Some Nodes are not connected to the Discovery Server."
 
 	MsgConnectedNodes = "*Connected Nodes:* %v"
 	MsgDiscConnNodes  = "*Discovery Connected Nodes:* %v"
+
 	// Status cmd message
-	MsgStatus = "*Wing Commander* Ready and reporting for duty 👍\n" + MsgConnectedNodes + "\n" + MsgDiscConnNodes
+	MsgStatus = "%v*Wing Commander Status*\n" + MsgConnectedNodes + "\n" + MsgDiscConnNodes + "\n%s"
 	// Heartbeat message
-	MsgHeartbeat = "*Wing Commander Heatbeat* ❣️\n" + MsgConnectedNodes + "\n" + MsgDiscConnNodes
+	MsgHeartbeat = "%v*Wing Commander Heatbeat* ❣️\n" + MsgConnectedNodes + "\n" + MsgDiscConnNodes + "\n%s"
 
 	// Node Connect/Disconnect Event Messages
 	MsgNodeConnected    = "*Node Connected:* %s\n\n" + MsgConnectedNodes

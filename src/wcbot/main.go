@@ -15,19 +15,21 @@ import (
 	"github.com/BigOokie/skywire-wing-commander/src/utils"
 	"github.com/BigOokie/skywire-wing-commander/src/wcconfig"
 	"github.com/BigOokie/skywire-wing-commander/src/wcconst"
+	"github.com/marcsauter/single"
 
 	log "github.com/sirupsen/logrus"
 )
 
-var versionFlag bool
+var config wcconfig.Config
 var dumpConfigFlag bool
 
 // loadConfig manages the configuration load specifics
 // offloading the detail from the `main()` funct
-func loadConfig() (config wcconfig.Config, err error) {
+func loadConfig() (c wcconfig.Config) {
 	log.Debugln("loadConfig: Start")
+	defer log.Debugln("loadConfig: Complete")
 	// Load configuration
-	config, err = wcconfig.LoadConfigParameters("config", filepath.Join(utils.UserHome(), ".wingcommander"), map[string]interface{}{
+	c, err := wcconfig.LoadConfigParameters("config", filepath.Join(utils.UserHome(), ".wingcommander"), map[string]interface{}{
 		"telegram.debug":                 false,
 		"monitor.intervalsec":            10,
 		"monitor.heartbeatintmin":        120,
@@ -35,40 +37,85 @@ func loadConfig() (config wcconfig.Config, err error) {
 		"skymanager.address":             "127.0.0.1:8000",
 		"skymanager.discoveryaddress":    "discovery.skycoin.net:8001",
 	})
-	log.Debugln("loadConfig: Complete")
+
+	if err != nil {
+		log.Fatalf("Error loading configuration: %s", err)
+		return
+	}
 	return
 }
 
-func parseFlags() {
+func processCmdLineFlags() {
+	var versionFlag, helpFlag, aboutFlag bool
+
 	flag.BoolVar(&versionFlag, "v", false, "print current version")
 	flag.BoolVar(&dumpConfigFlag, "config", false, "print current config")
+	flag.BoolVar(&helpFlag, "help", false, "print application help")
+	flag.BoolVar(&aboutFlag, "about", false, "print application information")
 	flag.Parse()
+
+	// if version cmd line flag `-v` then print version info and exit
+	if versionFlag {
+		fmt.Println(wcconst.BotAppVersion)
+		fmt.Println("")
+		os.Exit(0)
+	}
+
+	// if help cmd line flag `-help` then print version info and exit
+	if helpFlag {
+		fmt.Println(wcconst.MsgCmdLineHelp)
+		fmt.Println("")
+		os.Exit(0)
+	}
+
+	// if about cmd line flag `-about` then print version info and exit
+	if aboutFlag {
+		fmt.Println(wcconst.MsgAbout)
+		fmt.Println("")
+		os.Exit(0)
+	}
+}
+
+func initLogging() {
+	// Setup Log Formatter
+	log.SetFormatter(&log.TextFormatter{})
+	log.SetLevel(log.DebugLevel)
+}
+
+// initAppInstace will attempt to initalise an instance of the application.
+// A FATAL error will occur causing the application to exit if another instance
+// of the application is detected as already running.
+func initAppInstance() (s *single.Single) {
+	s = single.New(wcconst.AppInstanceID)
+	if err := s.CheckLock(); err != nil && err == single.ErrAlreadyRunning {
+		log.Fatal(wcconst.MsgAppInstErr)
+	} else if err != nil {
+		// Another error occurred, might be worth handling it as well
+		log.Fatalf("Failed to acquire exclusive app lock: %v", err)
+	}
+	return
 }
 
 func main() {
-	parseFlags()
-	if versionFlag {
-		fmt.Println(wcconst.BotAppVersion)
-		return
+	processCmdLineFlags()
+
+	// Setup and initalise application logging
+	initLogging()
+
+	// Check and setup application instance control. Only allow a single instance to run
+	appInstance := initAppInstance()
+	defer appInstance.TryUnlock()
+
+	// Load configuration
+	config := loadConfig()
+	config.PrintConfig()
+	if dumpConfigFlag {
+		os.Exit(0)
 	}
 
 	// Setup OS Notification for Interupt or Kill signal - to cleanly terminate the app
 	osSignal := make(chan os.Signal, 1)
 	signal.Notify(osSignal, os.Interrupt, os.Kill)
-
-	// Setup Log Formatter
-	log.SetFormatter(&log.TextFormatter{})
-	log.SetLevel(log.DebugLevel)
-
-	config, err := loadConfig()
-	if err != nil {
-		log.Error(err)
-		return
-	}
-
-	if dumpConfigFlag {
-		return
-	}
 
 	log.Infoln("Skywire Wing Commander Telegram Bot - Starting.")
 	defer log.Infoln("Skywire Wing Commander Telegram Bot - Stopped.")
