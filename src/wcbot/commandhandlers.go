@@ -51,13 +51,13 @@ func (bot *Bot) handleCommandStart(ctx *BotContext, command, args string) error 
 
 	log.Debug(wcconst.MsgMonitorStart)
 	cancelContext, cancelFunc := context.WithCancel(context.Background())
-	bot.skyMgrMonitor.SetCancelFunc(cancelFunc)
+	//bot.skyMgrMonitor.SetCancelFunc(cancelFunc)
 	bot.skyMgrMonitor.monitorStatusMsgChan = make(chan string)
 
 	// Start the Event Monitor - provide cancelContext
 	go bot.monitorEventLoop(cancelContext, ctx, bot.skyMgrMonitor.monitorStatusMsgChan)
 	// Start monitoring the local Manager - provide cancelContext
-	go bot.skyMgrMonitor.RunManagerMonitor(cancelContext, bot.skyMgrMonitor.monitorStatusMsgChan, bot.config.Monitor.IntervalSec)
+	go bot.skyMgrMonitor.RunManagerMonitor(cancelContext, cancelFunc, bot.skyMgrMonitor.monitorStatusMsgChan, bot.config.Monitor.IntervalSec)
 	// Start monitoring the local Manager - provide cancelContext
 	//go bot.skyMgrMonitor.RunDiscoveryMonitor(cancelContext, bot.skyMgrMonitor.monitorStatusMsgChan, bot.config.Monitor.DiscoveryMonitorIntMin)
 
@@ -68,15 +68,15 @@ func (bot *Bot) handleCommandStart(ctx *BotContext, command, args string) error 
 func (bot *Bot) handleCommandStop(ctx *BotContext, command, args string) error {
 	log.Debug("Handle command /stop")
 
-	if bot.skyMgrMonitor.IsRunning() {
-		log.Debug(wcconst.MsgMonitorStop)
-		bot.skyMgrMonitor.StopManagerMonitor()
-		log.Debug(wcconst.MsgMonitorStopped)
-		return bot.Send(ctx, "whisper", "markdown", wcconst.MsgMonitorStop)
+	if !bot.skyMgrMonitor.IsRunning() {
+		log.Debug(wcconst.MsgMonitorNotRunning)
+		return bot.Send(ctx, "whisper", "markdown", wcconst.MsgMonitorNotRunning)
 	}
 
-	log.Debug(wcconst.MsgMonitorNotRunning)
-	return bot.Send(ctx, "whisper", "markdown", wcconst.MsgMonitorNotRunning)
+	log.Debug(wcconst.MsgMonitorStop)
+	bot.skyMgrMonitor.StopManagerMonitor()
+	log.Debug(wcconst.MsgMonitorStopped)
+	return bot.Send(ctx, "whisper", "markdown", wcconst.MsgMonitorStop)
 }
 
 // Handler for status command
