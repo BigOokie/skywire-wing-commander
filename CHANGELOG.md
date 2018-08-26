@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [v0.2.0-beta.8] - TBA
 ### Added
+- Added (**Beta**) autoupdate shell script [scripts/wc-update.sh](https://github.com/BigOokie/skywire-wing-commander/blob/dev/scripts/wc-update.sh). This shell script was published recently on the project [wiki](https://github.com/BigOokie/skywire-wing-commander/wiki) to gain feedback from the community. Feedback at this point indicates the script is extreamly useful and as such has now been incorporated into the scripts provided by the project. Please refer to the [Autoupdate Script](https://github.com/BigOokie/skywire-wing-commander/wiki/Autoupdate-Script) page on the project wiki for more information.
 ### Changed
 - Structure of the project now follows (wip) the pricipals outlines in [golang-standard - project-layout](https://github.com/golang-standards/project-layout) and [Package Oriented Design](https://www.ardanlabs.com/blog/2017/02/package-oriented-design.html). This is a structural change to the physical layout of the project repository - so a large number of files have changed, moved or may no longer exist.
 - Changed location of the following files:
