@@ -7,10 +7,13 @@ package main
 
 import (
 	"flag"
+	"fmt"
+	"os"
 	"path/filepath"
 
 	"github.com/BigOokie/skywire-wing-commander/internal/utils"
 	"github.com/BigOokie/skywire-wing-commander/internal/wcconfig"
+	"github.com/BigOokie/skywire-wing-commander/internal/wcconst"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -29,8 +32,8 @@ type wcBotApp struct {
 // loadConfig manages the configuration load specifics
 // offloading the detail from the `main()` funct
 func (ba *wcBotApp) loadConfig() (c wcconfig.Config) {
-	log.Debugln("loadConfig: Start")
-	defer log.Debugln("loadConfig: Complete")
+	log.Debugln("wcBotApp.loadConfig: Start")
+	defer log.Debugln("wcBotApp.loadConfig: Complete")
 	// Load configuration
 	c, err := wcconfig.LoadConfigParameters("config", filepath.Join(utils.UserHome(), ".wingcommander"), map[string]interface{}{
 		"telegram.debug":                 false,
@@ -42,7 +45,7 @@ func (ba *wcBotApp) loadConfig() (c wcconfig.Config) {
 	})
 
 	if err != nil {
-		log.Fatalf("Error loading configuration: %s", err)
+		log.Fatalf("wcBotApp.loadConfig: Error loading configuration: %s", err)
 		return
 	}
 	return
@@ -54,32 +57,29 @@ func (cf *cmdlineFlags) parseCmdLineFlags() {
 	flag.BoolVar(&cf.help, "help", false, "print application help")
 	flag.BoolVar(&cf.about, "about", false, "print application information")
 	flag.Parse()
-	/*
-		// if version cmd line flag `-v` then print version info and exit
-		if versionFlag {
-			fmt.Println(wcconst.BotAppVersion)
-			fmt.Println("")
-			os.Exit(0)
-		}
-
-		// if help cmd line flag `-help` then print version info and exit
-		if helpFlag {
-			fmt.Println(wcconst.MsgCmdLineHelp)
-			fmt.Println("")
-			os.Exit(0)
-		}
-
-		// if about cmd line flag `-about` then print version info and exit
-		if aboutFlag {
-			fmt.Println(wcconst.MsgAbout)
-			fmt.Println("")
-			os.Exit(0)
-		}
-	*/
 }
 
 func (cf *cmdlineFlags) handleCmdLineFlags() {
+	// if version cmd line flag `-v` then print version info and exit
+	if cf.version {
+		fmt.Println(wcconst.BotAppVersion)
+		fmt.Println("")
+		os.Exit(0)
+	}
 
+	// if help cmd line flag `-help` then print version info and exit
+	if cf.help {
+		fmt.Println(wcconst.MsgCmdLineHelp)
+		fmt.Println("")
+		os.Exit(0)
+	}
+
+	// if about cmd line flag `-about` then print version info and exit
+	if cf.about {
+		fmt.Println(wcconst.MsgAbout)
+		fmt.Println("")
+		os.Exit(0)
+	}
 }
 
 func (ba *wcBotApp) initLogging() {
