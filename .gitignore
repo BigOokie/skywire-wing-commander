@@ -1,8 +1,9 @@
-## Binary
-src/wcbot/wcbot
-
 ## Local config
 config.toml
 
-.DS_Store
+# Compiled Object files, Static and Dynamic libs (Shared Objects)
+cmd/wcbot/wcbot
 
+# Configs
+.DS_Store
+.vscode
