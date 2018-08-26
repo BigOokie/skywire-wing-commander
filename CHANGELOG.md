@@ -4,10 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [v0.2.0-beta.8] - 2018-08-24
+## [Unreleased]
 ### Added
 ### Changed
 - Structure of the project now follows (wip) the pricipals outlines in [golang-standard - project-layout](https://github.com/golang-standards/project-layout) and [Package Oriented Design](https://www.ardanlabs.com/blog/2017/02/package-oriented-design.html). This is a structural change to the physical layout of the project repository - so a large number of files have changed, moved or may no longer exist.
+- Changed location of the following files:
+    - `config.exampl.toml`. Can now be found in `cmd/wcbot/`.
+    - `wcbuildconfig.sh`. Can now be found in `scripts/`.
+    - `wcstart.sh`. Can now be found in `scripts/`.
 ### Deprecated
 ### Removed
 ### Fixed
@@ -159,6 +163,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 [Unreleased]: 
 https://github.com/BigOokie/Skywire-Wing-Commander/compare/master...dev
+[v0.2.0-beta.7]: 
+https://github.com/BigOokie/Skywire-Wing-Commander/compare/v0.2.0-beta.7...v0.2.0-beta.8
 [v0.2.0-beta.7]: 
 https://github.com/BigOokie/Skywire-Wing-Commander/compare/v0.2.0-beta.6...v0.2.0-beta.7
 [v0.2.0-beta.6]: 

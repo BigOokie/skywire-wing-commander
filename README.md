@@ -101,7 +101,7 @@ go install -v ./...
 ## Configuration
 You MUST provide a valid configuration file for the bot or it will not launch. The config file must reside in the following location `$HOME\.wingcommander\config.toml`
 
-Refer to the following example configuration file: [config.example.toml](src/wcbot/config.example.toml ).
+Refer to the following example configuration file: [config.example.toml](cmd/wcbot/config.example.toml ).
 
 It is recommended to copy the example configuration file to `$HOME\.wingcommander\config.toml`. Use the example file as a template and edit the details as needed. 
 
@@ -110,8 +110,8 @@ The following commands can be used to setup the required folders and copy the ex
 cd ~
 mkdir .wingcommander
 cd .wingcommander
-cp $GOPATH/src/github.com/BigOokie/skywire-wing-commander/src/wcbot/config.example.toml ~/.wingcommander/config.toml
-cp $GOPATH/src/github.com/BigOokie/skywire-wing-commander/src/wcbot/wcbuildconfig.sh ~/.wingcommander/wcbuildconfig.sh
+cp $GOPATH/src/github.com/BigOokie/skywire-wing-commander/cmd/wcbot/config.example.toml ~/.wingcommander/config.toml
+cp $GOPATH/src/github.com/BigOokie/skywire-wing-commander/scripts/wcbuildconfig.sh ~/.wingcommander/wcbuildconfig.sh
 chmod +x wcbuildconfig.sh 
 ```
 Next run to assist you with updating the config file:
@@ -180,7 +180,7 @@ cd $GOPATH/bin
 ### Automatic restart 
 Use the following commands to setup an automatic startup script to check and restart the **Wing Commander** bot incase the Manager Node goes offline.
 ```sh 
-cp $GOPATH/src/github.com/BigOokie/skywire-wing-commander/src/wcbot/wcstart.sh /etc/init.d/wcstart.sh
+cp $GOPATH/src/github.com/BigOokie/skywire-wing-commander/scripts/wcstart.sh /etc/init.d/wcstart.sh
 cd /etc/init.d
 chmod 755 wcstart.sh 
 crontab -e 

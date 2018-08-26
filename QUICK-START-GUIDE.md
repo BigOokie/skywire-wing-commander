@@ -31,10 +31,10 @@ mkdir .wingcommander
 cd .wingcommander
 
 ## Copy the example config file to the new config folder
-cp $GOPATH/src/github.com/BigOokie/skywire-wing-commander/src/wcbot/config.example.toml ~/.wingcommander/config.toml
+cp $GOPATH/src/github.com/BigOokie/skywire-wing-commander/cmd/wcbot/config.example.toml ~/.wingcommander/config.toml
 
 ## Copy the config builder script
-cp $GOPATH/src/github.com/BigOokie/skywire-wing-commander/src/wcbot/wcbuildconfig.sh ~/.wingcommander/wcbuildconfig.sh
+cp $GOPATH/src/github.com/BigOokie/skywire-wing-commander/scripts/wcbuildconfig.sh ~/.wingcommander/wcbuildconfig.sh
 
 ## Run the config builder script. Follow the on-screen instructions.
 ## You will need you API Key from the BotFather
