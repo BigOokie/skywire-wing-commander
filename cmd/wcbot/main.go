@@ -5,7 +5,9 @@
 
 package main
 
-import "github.com/BigOokie/skywire-wing-commander/internal/wcbotapp"
+import (
+	"github.com/BigOokie/skywire-wing-commander/internal/wcbotapp"
+)
 
 func main() {
 	wcbotapp.Run()
