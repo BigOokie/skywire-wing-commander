@@ -1,4 +1,4 @@
-# Project Credits
+# Project Credits and Attibutions
 
 ## Images and Icons
-- "Skycoin-Cloud-White@1x.png" by the [SkyCoin Project](https://skycoin.net)
+- "Skycoin-Cloud-White@1x.png" by the [Skycoin Project](https://www.skycoin.net)

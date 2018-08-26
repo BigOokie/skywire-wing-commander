@@ -1,15 +1,98 @@
-# Changelog
+# Wing Commander Changelog
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [v0.2.0-beta.8] - TBA
+### Added
+- Added (**Beta**) autoupdate shell script [scripts/wc-update.sh](https://github.com/BigOokie/skywire-wing-commander/blob/dev/scripts/wc-update.sh). This shell script was published recently on the project [wiki](https://github.com/BigOokie/skywire-wing-commander/wiki) to gain feedback from the community. Feedback at this point indicates the script is extreamly useful and as such has now been incorporated into the scripts provided by the project. Please refer to the [Autoupdate Script](https://github.com/BigOokie/skywire-wing-commander/wiki/Autoupdate-Script) page on the project wiki for more information.
+### Changed
+- Structure of the project now follows (wip) the pricipals outlines in [golang-standard - project-layout](https://github.com/golang-standards/project-layout) and [Package Oriented Design](https://www.ardanlabs.com/blog/2017/02/package-oriented-design.html). This is a structural change to the physical layout of the project repository - so a large number of files have changed, moved or may no longer exist.
+- Changed location of the following files:
+    - `config.exampl.toml`. Can now be found in `cmd/wcbot/`.
+    - `wcbuildconfig.sh`. Can now be found in `scripts/`.
+    - `wcstart.sh`. Can now be found in `scripts/`.
+### Deprecated
+### Removed
+### Fixed
+### Security
+
+## [v0.2.0-beta.7] - 2018-08-24
 ### Added
 ### Changed
 ### Deprecated
 ### Removed
 ### Fixed
+- Fixed issue with Discovery Server checks. Wing Commander now correctly handles errors when performing checks against the Discovery Server, and will correctly report this to the user via Telegram. Connected Discovery Node count will be set to zero (0) in these instances.
+### Security
+
+## [v0.2.0-beta.6] - 2018-08-23
+### Added
+- Added application instance control to detect and prevent multiple instances of the Bot application from running on the same system. If another instance of the Bot is detected as already running on the local system, then the new instance will report a (fatal) error and refuse to start. Intructions are provided to the user on how to terminate the other instances (if this is required).
+- Added command line flag `-help` which outputs application help to the command line.
+- Added command line flag `-about` which outputs information about the application ot the command line.
+### Changed
+### Deprecated
+### Removed
+### Fixed
+- Fixed potential concurrency race condition that could cause the Bot to crash.
+### Security
+
+## [v0.2.0-beta.5] - 2018-08-21
+### Added
+- Added command line flag `-v` to check Wing Commander version.
+- Added command line flag `-config` to dump the Wing Commander configuration to the command line.
+### Changed
+### Deprecated
+### Removed
+### Fixed
+- Fixed issue with `/showconfig` command. This command now sends the configuration information to Telegram in plain-text. Previously the message was being sent using markdown which appears to have caused issued on some systems (due to special characters in the configuration data).
+### Security
+
+## [v0.2.0-beta.4] - 2018-08-19
+### Added
+- Added `/checkupdate` command. Requests the Bot to check GitHub to determine if a new version is available. The Bot will report back its findings. Note: This command does not perform the upgrade.
+### Changed
+### Deprecated
+### Removed
+### Fixed
+### Security
+
+## [v0.2.0-beta.3] - 2018-08-18
+### Added
+- Added monitoring of the Skywire Discovery Server to ensure local Nodes are connected. The connection of all locally connected Nodes are now checked as part of the routine Heartbeat cycle. The Heartbeat status message will report both the number of locally connected Nodes (Nodes connected to the local Manager) as well as the number of these Nodes that are currently registered with the Discovery Server. This feature is intended to help the Skyfleet community preserve their Node up-times and remain elegible for monthly Testnet rewards.
+- Added error reporting notifications to report when the Bot is unable to connect to the local manager. This error notification will be reported each time the local Manager Node is polled (default 10sec).
+### Changed
+### Deprecated
+### Removed
+### Fixed
+### Security
+
+## [v0.2.0-beta.2] - 2018-08-12
+### Added
+- Added autorestart shell script (`wcstart.sh`). Thanks to @Cryptovinnie
+- Added config file generator shell script (`wcbuildconfig.sh`). Thanks to @Cryptovinnie
+- Added `/showconfig` command. This will ask the Bot to display its current runtime configuration, as stored in the `config.toml` file.
+- Added `/checkupdate` command. This allows the Bot to check for new releases on GitHub and report back the status.
+### Changed
+- `/status` command will now respond differently depending on if the Monitor is currently runing or not (i.e. `/start`). When the Monitor is not running, the responce will indicate this. When the Monitor is running, the responce will indicate the current number of connected Nodes.
+### Deprecated
+### Removed
+### Fixed
+### Security
+
+## [v0.2.0-beta.1] - 2018-08-10
+### Added
+- Code tests.
+- Added list of Contributors [CONTRIBUTORS.md](CONTRIBUTORS.md)
+- Added ability for Bot to compensate for missing `@` on `admin` user in `config.toml`. Previosuly is the admin user was not prefixed with an `@` the Bot would refuse to respond to messages from your user on Telegram. Now the Bot will compensate (the `config.toml` file is unchanged) by updating its runtime configuration to add the missing `@` if required. The Bot will log a warning to notify you.
+### Changed
+- Minor updates to messages generated from Wing Commander.
+### Deprecated
+### Removed
+### Fixed
+- Minor fixes to code and doco based on community feedback during ALPAH release stage.
 ### Security
 
 ## [v0.1.1-alpha.1] - 2018-08-03
@@ -79,14 +162,31 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Fixed
 ### Security
 
-[Unreleased]: https://github.com/BigOokie/Skywire-Wing-Commander/compare/master...dev
+[Unreleased]: 
+https://github.com/BigOokie/Skywire-Wing-Commander/compare/master...dev
+[v0.2.0-beta.7]: 
+https://github.com/BigOokie/Skywire-Wing-Commander/compare/v0.2.0-beta.7...v0.2.0-beta.8
+[v0.2.0-beta.7]: 
+https://github.com/BigOokie/Skywire-Wing-Commander/compare/v0.2.0-beta.6...v0.2.0-beta.7
+[v0.2.0-beta.6]: 
+https://github.com/BigOokie/Skywire-Wing-Commander/compare/v0.2.0-beta.5...v0.2.0-beta.6
+[v0.2.0-beta.5]: 
+https://github.com/BigOokie/Skywire-Wing-Commander/compare/v0.2.0-beta.4...v0.2.0-beta.5
+[v0.2.0-beta.4]: 
+https://github.com/BigOokie/Skywire-Wing-Commander/compare/v0.2.0-beta.3...v0.2.0-beta.4
+[v0.2.0-beta.3]: 
+https://github.com/BigOokie/Skywire-Wing-Commander/compare/v0.2.0-beta.2...v0.2.0-beta.3
+[v0.2.0-beta.2]: 
+https://github.com/BigOokie/Skywire-Wing-Commander/compare/v0.2.0-beta.1...v0.2.0-beta.2
+[v0.2.0-beta.1]: 
+https://github.com/BigOokie/Skywire-Wing-Commander/compare/v0.1.1-alpha.1...v0.2.0-beta.1
 [v0.1.1-alpha.1]:
 https://github.com/BigOokie/Skywire-Wing-Commander/compare/v0.1.0-alpha.1...v0.1.1-alpha.1
 [v0.1.0-alpha.1]:
 https://github.com/BigOokie/Skywire-Wing-Commander/compare/v0.0.3-alpha...v0.1.0-alpha.1
-[v0.0.3-alpha]: https://github.com/BigOokie/Skywire-Wing-Commander/compare/v0.0.2-alpha...v0.0.3-alpha
-[v0.0.2-alpha]: https://github.com/BigOokie/Skywire-Wing-Commander/compare/v0.0.1-alpha...v0.0.2-alpha
-[v0.0.1-alpha]: https://github.com/BigOokie/Skywire-Wing-Commander/commit/70153f0777a3d71bdc15bb4509c0b36ce45e096b
-
-
-
+[v0.0.3-alpha]:
+https://github.com/BigOokie/Skywire-Wing-Commander/compare/v0.0.2-alpha...v0.0.3-alpha
+[v0.0.2-alpha]:
+https://github.com/BigOokie/Skywire-Wing-Commander/compare/v0.0.1-alpha...v0.0.2-alpha
+[v0.0.1-alpha]:
+https://github.com/BigOokie/Skywire-Wing-Commander/commit/70153f0777a3d71bdc15bb4509c0b36ce45e096b
