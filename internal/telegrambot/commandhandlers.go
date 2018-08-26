@@ -124,26 +124,6 @@ func (bot *Bot) handleCommandStatus(ctx *BotContext, command, args string) error
 
 	// Build Status Check Message
 	msg := bot.skyMgrMonitor.BuildConnectionStatusMsg(wcconst.MsgStatus)
-	/*
-		// Monitor is running
-		discConnNodes, err := bot.skyMgrMonitor.ConnectedDiscNodeCount()
-
-		// Everything is ok
-		status := "👍"
-		statusmsg := ""
-		if err != nil {
-			// Error connecting to Discovery Server
-			status = "⚠️"
-			statusmsg = wcconst.MsgErrorGetDiscNodes
-		} else if bot.skyMgrMonitor.GetConnectedNodeCount() != discConnNodes {
-			// We connected but not all nodes are reported as connected
-			status = "⚠️"
-			statusmsg = wcconst.MsgDiscSomeNodes
-		}
-
-		msg := fmt.Sprintf(wcconst.MsgStatus, status, bot.skyMgrMonitor.GetConnectedNodeCount(), discConnNodes, statusmsg)
-		log.Debug(msg)
-	*/
 	err := bot.Send(ctx, "whisper", "markdown", msg)
 	if err != nil {
 		logSendError("Bot.handleCommandStatus", err)
@@ -210,24 +190,6 @@ func (bot *Bot) monitorEventLoop(runctx context.Context, botctx *BotContext, sta
 			log.Debug("Bot.monitorEventLoop - Heartbeat event")
 			// Build Heartbeat Status Message
 			msg := bot.skyMgrMonitor.BuildConnectionStatusMsg(wcconst.MsgHeartbeat)
-			/*
-				discConnNodes, err := bot.skyMgrMonitor.ConnectedDiscNodeCount()
-
-				// Everything is ok
-				status := "👍"
-				statusmsg := ""
-				if err != nil {
-					// Error connecting to Discovery Server
-					status = "⚠️"
-					statusmsg = wcconst.MsgErrorGetDiscNodes
-				} else if bot.skyMgrMonitor.GetConnectedNodeCount() != discConnNodes {
-					// We connected but not all nodes are reported as connected
-					status = "⚠️"
-					statusmsg = wcconst.MsgDiscSomeNodes
-				}
-
-				msg := fmt.Sprintf(wcconst.MsgHeartbeat, status, bot.skyMgrMonitor.GetConnectedNodeCount(), discConnNodes, statusmsg)
-			*/
 			log.Debug(msg)
 			err := bot.Send(botctx, "whisper", "markdown", msg)
 			if err != nil {
