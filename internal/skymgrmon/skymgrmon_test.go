@@ -2,13 +2,13 @@
 //
 // Use of this source code is governed by an MIT
 // license that can be found in the LICENSE file.
-package main
+package skymgrmon
 
 import (
 	"context"
 	"testing"
 
-	"github.com/BigOokie/skywire-wing-commander/src/skynode"
+	"github.com/BigOokie/skywire-wing-commander/internal/skynode"
 	"github.com/go-test/deep"
 )
 

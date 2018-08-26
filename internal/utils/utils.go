@@ -10,6 +10,7 @@ import (
 	"os"
 	"runtime"
 
+	"github.com/marcsauter/single"
 	log "github.com/sirupsen/logrus"
 	latest "github.com/tcnksm/go-latest"
 )
@@ -62,5 +63,23 @@ func UpdateAvailable(ownername, reponame, versiontag string) (result bool, updat
 		updateMsg = fmt.Sprintf("v%s is the latest version.", res.Current)
 	}
 	log.Infof("UpdateAvailable: %s", updateMsg)
+	return
+}
+
+// InitAppInstance will attempt to initalise an instance of the application based on the provided value of appID.
+// A FATAL error will occur causing the application to exit if another instance
+// of the application is detected as already running.
+func InitAppInstance(appID string) (s *single.Single) {
+	s = single.New(appID)
+	if err := s.CheckLock(); err != nil && err == single.ErrAlreadyRunning {
+		msgAppInstErr := "Another instance of Wing Commander has been detected running on this system.\n\n" +
+			"To identify and terminate (kill) ALL instances of Wing Commander on this system, run:\n\n" +
+			"   pgrep wcbot | xargs kill\n\n" +
+			"Exiting\n"
+		log.Fatal(msgAppInstErr)
+	} else if err != nil {
+		// Another error occurred, might be worth handling it as well
+		log.Fatalf("Failed to acquire exclusive app lock: %v", err)
+	}
 	return
 }

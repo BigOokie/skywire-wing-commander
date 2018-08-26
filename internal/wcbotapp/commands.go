@@ -3,7 +3,7 @@
 // Use of this source code is governed by an MIT
 // license that can be found in the LICENSE file.
 
-package main
+package wcbotapp
 
 // Command struct is used to define a Telegram Bot command, including
 // if its an Admin only command, the string command (i.e. `/start`) and

@@ -3,7 +3,7 @@
 // Use of this source code is governed by an MIT
 // license that can be found in the LICENSE file.
 
-package main
+package wcbotapp
 
 import (
 	"flag"
@@ -12,11 +12,9 @@ import (
 	"os/signal"
 	"path/filepath"
 
-	"github.com/BigOokie/skywire-wing-commander/src/utils"
-	"github.com/BigOokie/skywire-wing-commander/src/wcconfig"
-	"github.com/BigOokie/skywire-wing-commander/src/wcconst"
-	"github.com/marcsauter/single"
-
+	"github.com/BigOokie/skywire-wing-commander/internal/utils"
+	"github.com/BigOokie/skywire-wing-commander/internal/wcconfig"
+	"github.com/BigOokie/skywire-wing-commander/internal/wcconst"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -82,28 +80,14 @@ func initLogging() {
 	log.SetLevel(log.DebugLevel)
 }
 
-// initAppInstace will attempt to initalise an instance of the application.
-// A FATAL error will occur causing the application to exit if another instance
-// of the application is detected as already running.
-func initAppInstance() (s *single.Single) {
-	s = single.New(wcconst.AppInstanceID)
-	if err := s.CheckLock(); err != nil && err == single.ErrAlreadyRunning {
-		log.Fatal(wcconst.MsgAppInstErr)
-	} else if err != nil {
-		// Another error occurred, might be worth handling it as well
-		log.Fatalf("Failed to acquire exclusive app lock: %v", err)
-	}
-	return
-}
-
-func main() {
+func Run() {
 	processCmdLineFlags()
 
 	// Setup and initalise application logging
 	initLogging()
 
 	// Check and setup application instance control. Only allow a single instance to run
-	appInstance := initAppInstance()
+	appInstance := utils.InitAppInstance(wcconst.AppInstanceID)
 	defer appInstance.TryUnlock()
 
 	// Load configuration

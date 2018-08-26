@@ -3,16 +3,15 @@
 // Use of this source code is governed by an MIT
 // license that can be found in the LICENSE file.
 
-package main
+package wcbotapp
 
 import (
 	"context"
 	"fmt"
 	"time"
 
-	"github.com/BigOokie/skywire-wing-commander/src/utils"
-	"github.com/BigOokie/skywire-wing-commander/src/wcconst"
-
+	"github.com/BigOokie/skywire-wing-commander/internal/utils"
+	"github.com/BigOokie/skywire-wing-commander/internal/wcconst"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -52,14 +51,14 @@ func (bot *Bot) handleCommandStart(ctx *BotContext, command, args string) error 
 	log.Debug(wcconst.MsgMonitorStart)
 	cancelContext, cancelFunc := context.WithCancel(context.Background())
 	bot.skyMgrMonitor.SetCancelFunc(cancelFunc)
-	bot.skyMgrMonitor.monitorStatusMsgChan = make(chan string)
+	monitorStatusMsgChan := make(chan string)
 
 	// Start the Event Monitor - provide cancelContext
-	go bot.monitorEventLoop(cancelContext, ctx, bot.skyMgrMonitor.monitorStatusMsgChan)
+	go bot.monitorEventLoop(cancelContext, ctx, monitorStatusMsgChan)
 	// Start monitoring the local Manager - provide cancelContext
-	go bot.skyMgrMonitor.RunManagerMonitor(cancelContext, bot.skyMgrMonitor.monitorStatusMsgChan, bot.config.Monitor.IntervalSec)
+	go bot.skyMgrMonitor.RunManagerMonitor(cancelContext, monitorStatusMsgChan, bot.config.Monitor.IntervalSec)
 	// Start monitoring the local Manager - provide cancelContext
-	//go bot.skyMgrMonitor.RunDiscoveryMonitor(cancelContext, bot.skyMgrMonitor.monitorStatusMsgChan, bot.config.Monitor.DiscoveryMonitorIntMin)
+	//go bot.skyMgrMonitor.RunDiscoveryMonitor(cancelContext, monitorStatusMsgChan, bot.config.Monitor.DiscoveryMonitorIntMin)
 
 	return bot.Send(ctx, "whisper", "markdown", wcconst.MsgMonitorStart)
 }
@@ -70,10 +69,7 @@ func (bot *Bot) handleCommandStop(ctx *BotContext, command, args string) error {
 
 	if bot.skyMgrMonitor.IsRunning() {
 		log.Debug(wcconst.MsgMonitorStop)
-		bot.skyMgrMonitor.DoCancelFunc()
-		bot.skyMgrMonitor.SetCancelFunc(nil)
-		close(bot.skyMgrMonitor.monitorStatusMsgChan)
-		bot.skyMgrMonitor.monitorStatusMsgChan = nil
+		bot.skyMgrMonitor.StopManagerMonitor()
 		log.Debug(wcconst.MsgMonitorStopped)
 		return bot.Send(ctx, "whisper", "markdown", wcconst.MsgMonitorStop)
 	}
