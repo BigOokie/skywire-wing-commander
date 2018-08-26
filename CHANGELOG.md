@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [v0.2.0-beta.8] - TBA
 ### Added
 ### Changed
 - Structure of the project now follows (wip) the pricipals outlines in [golang-standard - project-layout](https://github.com/golang-standards/project-layout) and [Package Oriented Design](https://www.ardanlabs.com/blog/2017/02/package-oriented-design.html). This is a structural change to the physical layout of the project repository - so a large number of files have changed, moved or may no longer exist.
