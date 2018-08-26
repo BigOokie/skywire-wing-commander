@@ -2,7 +2,7 @@
 A big Thank You! to all contibutors that have helped to make **Wing Commander** even better:
 
 - **[BigOokie](https://github.com/BigOokie)**
-    - Original concept, design, code and documentation.
+    - Lead developer. Original concept, design, code and documentation.
 - **[Asgaror](https://github.com/Asgaror)**
     - Documentation review, feedback and updates.
 - **[Cryptovinnie](https://github.com/Cryptovinnie)**

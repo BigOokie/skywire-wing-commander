@@ -3,15 +3,16 @@
 // Use of this source code is governed by an MIT
 // license that can be found in the LICENSE file.
 
-package main
+package telegrambot
 
 import (
 	"fmt"
 	"strconv"
 	"strings"
 
-	"github.com/BigOokie/skywire-wing-commander/src/wcconfig"
-	"github.com/BigOokie/skywire-wing-commander/src/wcconst"
+	"github.com/BigOokie/skywire-wing-commander/internal/skymgrmon"
+	"github.com/BigOokie/skywire-wing-commander/internal/wcconfig"
+	"github.com/BigOokie/skywire-wing-commander/internal/wcconst"
 	log "github.com/sirupsen/logrus"
 	"gopkg.in/telegram-bot-api.v4"
 )
@@ -20,7 +21,7 @@ import (
 type Bot struct {
 	config                 wcconfig.Config
 	telegram               *tgbotapi.BotAPI
-	skyMgrMonitor          *SkyManagerMonitor
+	skyMgrMonitor          *skymgrmon.SkyManagerMonitor
 	commandHandlers        map[string]CommandHandler
 	adminCommandHandlers   map[string]CommandHandler
 	privateMessageHandlers []MessageHandler
@@ -399,7 +400,7 @@ func NewBot(config wcconfig.Config) (*Bot, error) {
 	bot.config = config
 	var err error
 
-	bot.skyMgrMonitor = NewMonitor(config.SkyManager.Address, config.SkyManager.DiscoveryAddress)
+	bot.skyMgrMonitor = skymgrmon.NewMonitor(config.SkyManager.Address, config.SkyManager.DiscoveryAddress)
 
 	if bot.telegram, err = tgbotapi.NewBotAPI(config.Telegram.APIKey); err != nil {
 		return nil, fmt.Errorf("Failed to initialize Telegram API: %v", err)

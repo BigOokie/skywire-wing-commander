@@ -3,7 +3,7 @@
 // Use of this source code is governed by an MIT
 // license that can be found in the LICENSE file.
 
-package main
+package skymgrmon
 
 import (
 	"context"
@@ -14,8 +14,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/BigOokie/skywire-wing-commander/src/skynode"
-	"github.com/BigOokie/skywire-wing-commander/src/wcconst"
+	"github.com/BigOokie/skywire-wing-commander/internal/skynode"
+	"github.com/BigOokie/skywire-wing-commander/internal/wcconst"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -29,7 +29,7 @@ type SkyManagerMonitor struct {
 	ManagerAddress       string
 	DiscoveryAddress     string
 	cancelFunc           func()
-	monitorStatusMsgChan chan string
+	monitorStatusMsgChan chan<- string
 	connectedNodes       skynode.NodeInfoMap
 	discConnNodeCount    int
 	m                    sync.Mutex
@@ -101,6 +101,8 @@ func (smm *SkyManagerMonitor) RunManagerMonitor(runctx context.Context, doCancel
 	defer log.Debugln("SkyManagerMonitor::RunManagerMonitor: End")
 	smm.SetCancelFunc(doCancelFunc)
 
+	smm.monitorStatusMsgChan = statusMsgChan
+
 	ticker := time.NewTicker(pollInt)
 
 	for {
@@ -121,6 +123,7 @@ func (smm *SkyManagerMonitor) RunManagerMonitor(runctx context.Context, doCancel
 	}
 }
 
+<<<<<<< HEAD:src/wcbot/skymanagermonitor.go
 // StopManagerMonitor stops the SkyManagerMonitor monitoring of the local Manager Node.
 // If `ctx` is not nil, the monitor will listen to ctx.Done() and stop monitoring
 // when it recieves the signal.
@@ -128,12 +131,23 @@ func (smm *SkyManagerMonitor) StopManagerMonitor() {
 	log.Debugln("SkyManagerMonitor::StopManagerMonitor: Start")
 	defer log.Debugln("SkyManagerMonitor::StopManagerMonitor: End")
 
+=======
+// StopManagerMonitor starts the SkyManagerMonitor monitoring of the local Manager Node.
+// If `ctx` is not nil, the monitor will listen to ctx.Done() and stop monitoring
+// when it recieves the signal.
+func (smm *SkyManagerMonitor) StopManagerMonitor() {
+	log.Debugln("SkyManagerMonitor::SkyManagerMonitor: Start")
+	defer log.Debugln("SkyManagerMonitor::SkyManagerMonitor: End")
+>>>>>>> dev:internal/skymgrmon/skymgrmon.go
 	if smm.IsRunning() {
 		smm.DoCancelFunc()
 		smm.SetCancelFunc(nil)
 		close(smm.monitorStatusMsgChan)
 		smm.monitorStatusMsgChan = nil
+<<<<<<< HEAD:src/wcbot/skymanagermonitor.go
 		log.Debug(wcconst.MsgMonitorStopped)
+=======
+>>>>>>> dev:internal/skymgrmon/skymgrmon.go
 	}
 }
 

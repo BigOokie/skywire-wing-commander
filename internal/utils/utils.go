@@ -10,6 +10,8 @@ import (
 	"os"
 	"runtime"
 
+	"github.com/BigOokie/skywire-wing-commander/internal/wcconst"
+	"github.com/marcsauter/single"
 	log "github.com/sirupsen/logrus"
 	latest "github.com/tcnksm/go-latest"
 )
@@ -65,6 +67,21 @@ func UpdateAvailable(ownername, reponame, versiontag string) (result bool, updat
 	return
 }
 
+<<<<<<< HEAD:src/utils/utils.go
 func DoUpgrade() bool {
 	return false
+=======
+// InitAppInstance will attempt to initalise an instance of the application based on the provided value of appID.
+// A FATAL error will occur causing the application to exit if another instance
+// of the application is detected as already running.
+func InitAppInstance(appID string) (s *single.Single) {
+	s = single.New(appID)
+	if err := s.CheckLock(); err != nil && err == single.ErrAlreadyRunning {
+		log.Fatal(wcconst.MsgAppInstErr)
+	} else if err != nil {
+		// Another error occurred, might be worth handling it as well
+		log.Fatalf("Failed to acquire exclusive app lock: %v", err)
+	}
+	return
+>>>>>>> dev:internal/utils/utils.go
 }

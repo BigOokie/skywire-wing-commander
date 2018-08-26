@@ -7,10 +7,11 @@ package wcconst
 
 // Define constants used by the application
 const (
-	BotVersion    = "v0.2.0-beta.7"
+	BotVersion    = "v0.2.0-beta.8"
 	BotAppVersion = "Wing Commander " + BotVersion
 
 	AppInstanceID = "wing-commander-84F95320-8C2D-4236-9252-A322F01B91A7"
+
 	MsgAppInstErr = "Another instance of Wing Commander has been detected running on this system.\n\n" +
 		"To identify and terminate (kill) ALL instances of Wing Commander on this system, run:\n\n" +
 		"   pgrep wcbot | xargs kill\n\n" +
