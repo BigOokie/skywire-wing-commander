@@ -50,22 +50,12 @@ func (bot *Bot) handleCommandStart(ctx *BotContext, command, args string) error 
 
 	log.Debug(wcconst.MsgMonitorStart)
 	cancelContext, cancelFunc := context.WithCancel(context.Background())
-<<<<<<< HEAD:src/wcbot/commandhandlers.go
-	//bot.skyMgrMonitor.SetCancelFunc(cancelFunc)
-	bot.skyMgrMonitor.monitorStatusMsgChan = make(chan string)
-=======
-	bot.skyMgrMonitor.SetCancelFunc(cancelFunc)
 	monitorStatusMsgChan := make(chan string)
->>>>>>> dev:internal/telegrambot/commandhandlers.go
 
 	// Start the Event Monitor - provide cancelContext
 	go bot.monitorEventLoop(cancelContext, ctx, monitorStatusMsgChan)
 	// Start monitoring the local Manager - provide cancelContext
-<<<<<<< HEAD:src/wcbot/commandhandlers.go
-	go bot.skyMgrMonitor.RunManagerMonitor(cancelContext, cancelFunc, bot.skyMgrMonitor.monitorStatusMsgChan, bot.config.Monitor.IntervalSec)
-=======
-	go bot.skyMgrMonitor.RunManagerMonitor(cancelContext, monitorStatusMsgChan, bot.config.Monitor.IntervalSec)
->>>>>>> dev:internal/telegrambot/commandhandlers.go
+	go bot.skyMgrMonitor.RunManagerMonitor(cancelContext, cancelFunc, monitorStatusMsgChan, bot.config.Monitor.IntervalSec)
 	// Start monitoring the local Manager - provide cancelContext
 	//go bot.skyMgrMonitor.RunDiscoveryMonitor(cancelContext, monitorStatusMsgChan, bot.config.Monitor.DiscoveryMonitorIntMin)
 
@@ -76,17 +66,9 @@ func (bot *Bot) handleCommandStart(ctx *BotContext, command, args string) error 
 func (bot *Bot) handleCommandStop(ctx *BotContext, command, args string) error {
 	log.Debug("Handle command /stop")
 
-<<<<<<< HEAD:src/wcbot/commandhandlers.go
 	if !bot.skyMgrMonitor.IsRunning() {
 		log.Debug(wcconst.MsgMonitorNotRunning)
 		return bot.Send(ctx, "whisper", "markdown", wcconst.MsgMonitorNotRunning)
-=======
-	if bot.skyMgrMonitor.IsRunning() {
-		log.Debug(wcconst.MsgMonitorStop)
-		bot.skyMgrMonitor.StopManagerMonitor()
-		log.Debug(wcconst.MsgMonitorStopped)
-		return bot.Send(ctx, "whisper", "markdown", wcconst.MsgMonitorStop)
->>>>>>> dev:internal/telegrambot/commandhandlers.go
 	}
 
 	log.Debug(wcconst.MsgMonitorStop)

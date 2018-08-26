@@ -123,7 +123,6 @@ func (smm *SkyManagerMonitor) RunManagerMonitor(runctx context.Context, doCancel
 	}
 }
 
-<<<<<<< HEAD:src/wcbot/skymanagermonitor.go
 // StopManagerMonitor stops the SkyManagerMonitor monitoring of the local Manager Node.
 // If `ctx` is not nil, the monitor will listen to ctx.Done() and stop monitoring
 // when it recieves the signal.
@@ -131,23 +130,12 @@ func (smm *SkyManagerMonitor) StopManagerMonitor() {
 	log.Debugln("SkyManagerMonitor::StopManagerMonitor: Start")
 	defer log.Debugln("SkyManagerMonitor::StopManagerMonitor: End")
 
-=======
-// StopManagerMonitor starts the SkyManagerMonitor monitoring of the local Manager Node.
-// If `ctx` is not nil, the monitor will listen to ctx.Done() and stop monitoring
-// when it recieves the signal.
-func (smm *SkyManagerMonitor) StopManagerMonitor() {
-	log.Debugln("SkyManagerMonitor::SkyManagerMonitor: Start")
-	defer log.Debugln("SkyManagerMonitor::SkyManagerMonitor: End")
->>>>>>> dev:internal/skymgrmon/skymgrmon.go
 	if smm.IsRunning() {
 		smm.DoCancelFunc()
 		smm.SetCancelFunc(nil)
 		close(smm.monitorStatusMsgChan)
 		smm.monitorStatusMsgChan = nil
-<<<<<<< HEAD:src/wcbot/skymanagermonitor.go
 		log.Debug(wcconst.MsgMonitorStopped)
-=======
->>>>>>> dev:internal/skymgrmon/skymgrmon.go
 	}
 }
 
