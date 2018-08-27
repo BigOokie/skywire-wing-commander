@@ -366,3 +366,30 @@ func (smm *SkyManagerMonitor) GetConnectedNodeCount() int {
 	}
 	return len(smm.connectedNodes)
 }
+
+// BuildConnectionStatusMsg returns a formatted status message regarding
+// the current connection status with the Discovery Server
+func (smm *SkyManagerMonitor) BuildConnectionStatusMsg(msgTitle string) string {
+	log.Debug("SkyManagerMonitor.DiscoveryConnectionStatusMsg: Start")
+	defer log.Debug("SkyManagerMonitor.DiscoveryConnectionStatusMsg: End")
+
+	discConnNodes, err := smm.ConnectedDiscNodeCount()
+
+	// Assume everything is ok
+	status := "👍"
+	statusmsg := ""
+	// Check for errors
+	if err != nil {
+		// Error connecting to Discovery Sefrver
+		status = "⚠️"
+		statusmsg = wcconst.MsgErrorGetDiscNodes
+	} else if smm.GetConnectedNodeCount() != discConnNodes {
+		// We connected but not all nodes are reported as connected
+		status = "⚠️"
+		statusmsg = wcconst.MsgDiscSomeNodes
+	}
+
+	msg := fmt.Sprintf(msgTitle, status, smm.GetConnectedNodeCount(), discConnNodes, statusmsg)
+	log.Debugf("SkyManagerMonitor.DiscoveryConnectionStatusMsg: %s", msg)
+	return msg
+}

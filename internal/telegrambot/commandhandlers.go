@@ -15,16 +15,28 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+func logSendError(from string, err error) {
+	log.Errorf("%s - Error: %v", from, err)
+}
+
 // Handler for help command
 func (bot *Bot) handleCommandHelp(ctx *BotContext, command, args string) error {
 	log.Debug("Handle command /help")
-	return bot.Send(ctx, "whisper", "markdown", fmt.Sprintf(wcconst.MsgHelp, bot.config.Telegram.Admin))
+	err := bot.Send(ctx, "whisper", "markdown", fmt.Sprintf(wcconst.MsgHelp, bot.config.Telegram.Admin))
+	if err != nil {
+		logSendError("Bot.handleCommandHelp", err)
+	}
+	return err
 }
 
 // Handler for about command
 func (bot *Bot) handleCommandAbout(ctx *BotContext, command, args string) error {
 	log.Debug("Handle command /about")
-	return bot.Send(ctx, "whisper", "markdown", wcconst.MsgAbout)
+	err := bot.Send(ctx, "whisper", "markdown", wcconst.MsgAbout)
+	if err != nil {
+		logSendError("Bot.handleCommandAbout", err)
+	}
+	return err
 }
 
 // Handler for showconfig command
@@ -32,9 +44,12 @@ func (bot *Bot) handleCommandShowConfig(ctx *BotContext, command, args string) e
 	log.Debug("Handle command /showconfig")
 	err := bot.Send(ctx, "whisper", "markdown", fmt.Sprintf(wcconst.MsgShowConfig, bot.config.String()))
 	if err != nil {
-		log.Error("handleCommandShowConfig::Send: %s", err)
-		log.Debug("handleCommandShowConfig::Send - Attempting to resend as text")
+		logSendError("Bot.handleCommandShowConfig (Send):", err)
+		log.Debug("Bot.handleCommandShowConfig: Attempting to resend as text.")
 		err = bot.Send(ctx, "whisper", "text", fmt.Sprintf(wcconst.MsgShowConfig, bot.config.String()))
+		if err != nil {
+			logSendError("Bot.handleCommandShowConfig (Resend as Text):", err)
+		}
 	}
 	return err
 }
@@ -45,7 +60,11 @@ func (bot *Bot) handleCommandStart(ctx *BotContext, command, args string) error 
 
 	if bot.skyMgrMonitor.IsRunning() {
 		log.Debug(wcconst.MsgMonitorAlreadyStarted)
-		return bot.Send(ctx, "whisper", "markdown", wcconst.MsgMonitorAlreadyStarted)
+		err := bot.Send(ctx, "whisper", "markdown", wcconst.MsgMonitorAlreadyStarted)
+		if err != nil {
+			logSendError("Bot.handleCommandStart", err)
+		}
+		return err
 	}
 
 	log.Debug(wcconst.MsgMonitorStart)
@@ -60,7 +79,11 @@ func (bot *Bot) handleCommandStart(ctx *BotContext, command, args string) error 
 	// Start monitoring the local Manager - provide cancelContext
 	//go bot.skyMgrMonitor.RunDiscoveryMonitor(cancelContext, monitorStatusMsgChan, bot.config.Monitor.DiscoveryMonitorIntMin)
 
-	return bot.Send(ctx, "whisper", "markdown", wcconst.MsgMonitorStart)
+	err := bot.Send(ctx, "whisper", "markdown", wcconst.MsgMonitorStart)
+	if err != nil {
+		logSendError("Bot.handleCommandStart", err)
+	}
+	return err
 }
 
 // Handler for stop command
@@ -71,11 +94,19 @@ func (bot *Bot) handleCommandStop(ctx *BotContext, command, args string) error {
 		log.Debug(wcconst.MsgMonitorStop)
 		bot.skyMgrMonitor.StopManagerMonitor()
 		log.Debug(wcconst.MsgMonitorStopped)
-		return bot.Send(ctx, "whisper", "markdown", wcconst.MsgMonitorStop)
+		err := bot.Send(ctx, "whisper", "markdown", wcconst.MsgMonitorStop)
+		if err != nil {
+			logSendError("Bot.handleCommandStop", err)
+		}
+		return err
 	}
 
 	log.Debug(wcconst.MsgMonitorNotRunning)
-	return bot.Send(ctx, "whisper", "markdown", wcconst.MsgMonitorNotRunning)
+	err := bot.Send(ctx, "whisper", "markdown", wcconst.MsgMonitorNotRunning)
+	if err != nil {
+		logSendError("Bot.handleCommandStop", err)
+	}
+	return err
 }
 
 // Handler for status command
@@ -84,42 +115,43 @@ func (bot *Bot) handleCommandStatus(ctx *BotContext, command, args string) error
 
 	if !bot.skyMgrMonitor.IsRunning() {
 		// Monitor not running
-		return bot.Send(ctx, "whisper", "markdown", wcconst.MsgMonitorNotRunning)
+		err := bot.Send(ctx, "whisper", "markdown", wcconst.MsgMonitorNotRunning)
+		if err != nil {
+			logSendError("Bot.handleCommandStatus", err)
+		}
+		return err
 	}
 
-	// Monitor is running
-	discConnNodes, err := bot.skyMgrMonitor.ConnectedDiscNodeCount()
-
-	// Everything is ok
-	status := "👍"
-	statusmsg := ""
+	// Build Status Check Message
+	msg := bot.skyMgrMonitor.BuildConnectionStatusMsg(wcconst.MsgStatus)
+	err := bot.Send(ctx, "whisper", "markdown", msg)
 	if err != nil {
-		// Error connecting to Discovery Server
-		status = "⚠️"
-		statusmsg = wcconst.MsgErrorGetDiscNodes
-	} else if bot.skyMgrMonitor.GetConnectedNodeCount() != discConnNodes {
-		// We connected but not all nodes are reported as connected
-		status = "⚠️"
-		statusmsg = wcconst.MsgDiscSomeNodes
+		logSendError("Bot.handleCommandStatus", err)
 	}
-
-	return bot.Send(ctx, "whisper", "markdown",
-		fmt.Sprintf(wcconst.MsgStatus, status, bot.skyMgrMonitor.GetConnectedNodeCount(), discConnNodes, statusmsg))
+	return err
 }
 
 // Handler for help CheckUpdate
 func (bot *Bot) handleCommandCheckUpdate(ctx *BotContext, command, args string) error {
 	log.Debug("Handle command /checkupdate")
-	bot.Send(ctx, "whisper", "markdown", "Checking for updates...")
+	err := bot.Send(ctx, "whisper", "markdown", "Checking for updates...")
+	if err != nil {
+		logSendError("Bot.handleCommandCheckUpdate", err)
+		// Return if an error has occurred
+		return err
+	}
 
 	updateAvailable, updateMsg := utils.UpdateAvailable("BigOokie", "skywire-wing-commander", wcconst.BotVersion)
 	if updateAvailable {
-		return bot.Send(ctx, "whisper", "markdown",
-			fmt.Sprintf("*Update available:* %s", updateMsg))
+		err = bot.Send(ctx, "whisper", "markdown", fmt.Sprintf("*Update available:* %s", updateMsg))
 	} else {
-		return bot.Send(ctx, "whisper", "markdown",
-			fmt.Sprintf("*Up to date:* %s", updateMsg))
+		err = bot.Send(ctx, "whisper", "markdown", fmt.Sprintf("*Up to date:* %s", updateMsg))
 	}
+
+	if err != nil {
+		logSendError("Bot.handleCommandCheckUpdate", err)
+	}
+	return err
 }
 
 func (bot *Bot) handleDirectMessageFallback(ctx *BotContext, text string) (bool, error) {
@@ -148,29 +180,21 @@ func (bot *Bot) monitorEventLoop(runctx context.Context, botctx *BotContext, sta
 		// Monitor Status Message
 		case msg := <-statusMsgChan:
 			log.Debugf("Bot.monitorEventLoop: Status event: %s", msg)
-			bot.Send(botctx, "whisper", "markdown", msg)
+			err := bot.Send(botctx, "whisper", "markdown", msg)
+			if err != nil {
+				logSendError("Bot.monitorEventLoop", err)
+			}
 
 		// Heartbeat ticker event
 		case <-tickerHB.C:
 			log.Debug("Bot.monitorEventLoop - Heartbeat event")
-
-			discConnNodes, err := bot.skyMgrMonitor.ConnectedDiscNodeCount()
-
-			// Everything is ok
-			status := "👍"
-			statusmsg := ""
+			// Build Heartbeat Status Message
+			msg := bot.skyMgrMonitor.BuildConnectionStatusMsg(wcconst.MsgHeartbeat)
+			log.Debug(msg)
+			err := bot.Send(botctx, "whisper", "markdown", msg)
 			if err != nil {
-				// Error connecting to Discovery Server
-				status = "⚠️"
-				statusmsg = wcconst.MsgErrorGetDiscNodes
-			} else if bot.skyMgrMonitor.GetConnectedNodeCount() != discConnNodes {
-				// We connected but not all nodes are reported as connected
-				status = "⚠️"
-				statusmsg = wcconst.MsgDiscSomeNodes
+				logSendError("Bot.handleCommandStatus", err)
 			}
-
-			bot.Send(botctx, "whisper", "markdown",
-				fmt.Sprintf(wcconst.MsgHeartbeat, status, bot.skyMgrMonitor.GetConnectedNodeCount(), discConnNodes, statusmsg))
 
 		// Context has been cancelled. Shutdown
 		case <-runctx.Done():
