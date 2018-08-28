@@ -37,7 +37,8 @@ const (
 		"- /showconfig - display runtime configuration (from config.toml)\n" +
 		"- /start - start activly monitoring your Skyminer. Once started, notifications will be sent to you for events that occur. A heartbeat will also be initiated to let you know if the bot and the Miner are still running.\n" +
 		"- /stop - stop monitoring your Skyminer. Once stopped, I won't send any more notifications\n" +
-		"- /checkupdate - check GitHub for new updates."
+		"- /checkupdate - check GitHub for new updates." +
+		"- /uptime - dynamically generate a link to the Skywirenc.com site to check uptime for locally connected Nodes"
 
 	MsgHelp = "*Wing Commander* here. I will help you to manage and monitor your Skyminer and its Nodes.\n\n" +
 		MsgHelpShort +

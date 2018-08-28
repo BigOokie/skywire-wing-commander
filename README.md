@@ -270,6 +270,12 @@ Additionally, the `/start` command will initiate a Heartbeat which will provide 
 
 ***
 
+## Uptime
+`/uptime`
+**Wing Commander** will dynamically generate a URL request to the [skywirenc.com](https://skywirenc.com) site for the currently connected local Nodes. The user will be presented with a hyperlink button in Telegram that they can click to be taken to the site to check their nodes uptime.
+
+Quite deliberatly, we have avoided attempting to compute uptime indipendantly. We prefer to utilise the same central source to remove ambiguity and potential for drift in calculations.
+
 # Known Issues
 The following section outlines some known issues that need to be taken into consideration by anyone running this software:
 - DNS level blocking/filtering of Telegram API domain on the Skywire nodes (or routers). [More detail provided below](#opendns-errors).
