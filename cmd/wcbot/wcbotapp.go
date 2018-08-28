@@ -31,7 +31,7 @@ type wcBotApp struct {
 
 // loadConfig manages the configuration load specifics
 // offloading the detail from the `main()` funct
-func (ba *wcBotApp) loadConfig() (c wcconfig.Config) {
+func (ba *wcBotApp) loadConfig() {
 	log.Debugln("wcBotApp.loadConfig: Start")
 	defer log.Debugln("wcBotApp.loadConfig: Complete")
 	// Load configuration
@@ -48,7 +48,7 @@ func (ba *wcBotApp) loadConfig() (c wcconfig.Config) {
 		log.Fatalf("wcBotApp.loadConfig: Error loading configuration: %s", err)
 		return
 	}
-	return
+	ba.config = c
 }
 
 func (cf *cmdlineFlags) parseCmdLineFlags() {

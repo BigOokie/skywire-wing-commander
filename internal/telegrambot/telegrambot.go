@@ -328,6 +328,7 @@ func (bot *Bot) Send(ctx *BotContext, mode, format, text string) error {
 	return err
 }
 
+// SendReplyKeyboard will send a reply using the provided keyboard
 func (bot *Bot) SendReplyKeyboard(ctx *BotContext, kb tgbotapi.ReplyKeyboardMarkup) error {
 	var msg tgbotapi.MessageConfig
 
@@ -340,7 +341,10 @@ func (bot *Bot) SendReplyKeyboard(ctx *BotContext, kb tgbotapi.ReplyKeyboardMark
 	return err
 }
 
+// SendReplyInlineKeyboard will send a reply using the provided inline keyboard
 func (bot *Bot) SendReplyInlineKeyboard(ctx *BotContext, kb tgbotapi.InlineKeyboardMarkup) error {
+	log.Debug("Bot.SendReplyInlineKeyboard: Start")
+	defer log.Debug("Bot.SendReplyInlineKeyboard: End")
 	var msg tgbotapi.MessageConfig
 
 	msg = tgbotapi.NewMessage(int64(ctx.message.From.ID), ctx.message.Text)
@@ -446,6 +450,8 @@ func NewBot(config wcconfig.Config) (*Bot, error) {
 
 	bot.setCommandHandlers()
 
+	//bot.SendMainMenuMessage()
+
 	return &bot, nil
 }
 
@@ -466,6 +472,23 @@ func (bot *Bot) handleUpdate(update *tgbotapi.Update) error {
 	}
 
 	return bot.handleMessage(&ctx)
+}
+
+// SendMainMenuMessage will send a main menu message
+func (bot *Bot) SendMainMenuMessage(update tgbotapi.Update) (tgbotapi.Message, error) {
+	buttons := make([]tgbotapi.InlineKeyboardButton, 0)
+	buttons = append(buttons, tgbotapi.NewInlineKeyboardButtonData("help", "mainmenu-btn-help"))
+	buttons = append(buttons, tgbotapi.NewInlineKeyboardButtonData("about", "mainmenu-btn-about"))
+	buttons = append(buttons, tgbotapi.NewInlineKeyboardButtonData("start", "mainmenu-btn-start"))
+	buttons = append(buttons, tgbotapi.NewInlineKeyboardButtonData("stop", "mainmenu-btn-stop"))
+	buttons = append(buttons, tgbotapi.NewInlineKeyboardButtonData("status", "mainmenu-btn-status"))
+	buttons = append(buttons, tgbotapi.NewInlineKeyboardButtonData("checkupdate", "mainmenu-btn-checkupdate"))
+	markup := tgbotapi.NewInlineKeyboardMarkup(buttons)
+	messageTxt := "Wing Commander: How can I help?"
+	msg := tgbotapi.NewMessage(int64(update.Message.From.ID), messageTxt)
+	msg.ReplyMarkup = markup
+
+	return bot.telegram.Send(msg)
 }
 
 // Start will start the Bot running - the main duty being to monitor for and handle messages

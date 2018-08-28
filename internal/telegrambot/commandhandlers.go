@@ -13,6 +13,7 @@ import (
 	"github.com/BigOokie/skywire-wing-commander/internal/utils"
 	"github.com/BigOokie/skywire-wing-commander/internal/wcconst"
 	log "github.com/sirupsen/logrus"
+	"gopkg.in/telegram-bot-api.v4"
 )
 
 func logSendError(from string, err error) {
@@ -116,9 +117,11 @@ func (bot *Bot) handleCommandStatus(ctx *BotContext, command, args string) error
 	if !bot.skyMgrMonitor.IsRunning() {
 		// Monitor not running
 		err := bot.Send(ctx, "whisper", "markdown", wcconst.MsgMonitorNotRunning)
+
 		if err != nil {
 			logSendError("Bot.handleCommandStatus", err)
 		}
+
 		return err
 	}
 
@@ -151,6 +154,67 @@ func (bot *Bot) handleCommandCheckUpdate(ctx *BotContext, command, args string) 
 	if err != nil {
 		logSendError("Bot.handleCommandCheckUpdate", err)
 	}
+	return err
+}
+
+// Handler for nodes command
+func (bot *Bot) handleCommandListNodes(ctx *BotContext, command, args string) error {
+	log.Debug("Handle command /listnodes")
+
+	if bot.skyMgrMonitor.GetConnectedNodeCount() == 0 {
+		log.Debug("Bot.handleCommandListNodes: No connected Nodes.")
+		err := bot.Send(ctx, "whisper", "markdown", "No connected Nodes.")
+		if err != nil {
+			logSendError("Bot.handleCommandListNodes", err)
+		}
+		return err
+	}
+
+	var replyKeyboard tgbotapi.InlineKeyboardMarkup
+	var keyboard [][]tgbotapi.InlineKeyboardButton
+	var btnrow []tgbotapi.InlineKeyboardButton
+	var btn tgbotapi.InlineKeyboardButton
+
+	// Iterate the connectedNodes and build a keyboard with one button
+	// containing the Node Key per row
+	nodeMap := bot.skyMgrMonitor.GetConnectedNodes()
+	log.Debugf("Bot.handleCommandListNodes: Node Count %v", len(nodeMap))
+	for _, v := range nodeMap {
+		log.Debugf("Bot.handleCommandListNodes: Creating button for Node: %s", v.Key)
+		btn = tgbotapi.NewInlineKeyboardButtonData(v.Key, v.Key)
+		btnrow = tgbotapi.NewInlineKeyboardRow(btn)
+		keyboard = append(keyboard, btnrow)
+	}
+
+	replyKeyboard = tgbotapi.InlineKeyboardMarkup{
+		InlineKeyboard: keyboard,
+	}
+
+	/*
+
+		var nodeListKB = tgbotapi.NewReplyKeyboard(
+			tgbotapi.NewKeyboardButtonRow(
+				tgbotapi.NewKeyboardButton("1"),
+				tgbotapi.NewKeyboardButton("2"),
+				tgbotapi.NewKeyboardButton("3"),
+			),
+			tgbotapi.NewKeyboardButtonRow(
+				tgbotapi.NewKeyboardButton("4"),
+				tgbotapi.NewKeyboardButton("5"),
+				tgbotapi.NewKeyboardButton("6"),
+			),
+		)
+	*/
+
+	// Mark the keyboard as one time use. The keyboard will be hidden
+	// once a button is selected
+	//nodeListKB.OneTimeKeyboard = true
+
+	err := bot.SendReplyInlineKeyboard(ctx, replyKeyboard)
+	if err != nil {
+		log.Error(err)
+	}
+
 	return err
 }
 

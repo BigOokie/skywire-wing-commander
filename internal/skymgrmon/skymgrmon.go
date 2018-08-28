@@ -393,3 +393,9 @@ func (smm *SkyManagerMonitor) BuildConnectionStatusMsg(msgTitle string) string {
 	log.Debugf("SkyManagerMonitor.DiscoveryConnectionStatusMsg: %s", msg)
 	return msg
 }
+
+// GetConnectedNodes returns a NodeInfoMap containing the list of currently
+// connected local Nodes
+func (smm *SkyManagerMonitor) GetConnectedNodes() skynode.NodeInfoMap {
+	return smm.connectedNodes
+}
