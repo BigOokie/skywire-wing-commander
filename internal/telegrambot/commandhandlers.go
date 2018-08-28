@@ -14,6 +14,7 @@ import (
 	"github.com/BigOokie/skywire-wing-commander/internal/utils"
 	"github.com/BigOokie/skywire-wing-commander/internal/wcconst"
 	log "github.com/sirupsen/logrus"
+	"gopkg.in/telegram-bot-api.v4"
 )
 
 func logSendError(from string, err error) {
@@ -69,6 +70,10 @@ func (bot *Bot) handleCommandGetUptimeLink(ctx *BotContext, command, args string
 		uptimeURL = "https://skywirenc.com/"
 	}
 	log.Debugf("Bot.handleCommandGetUptimeLink: uptimeURL: %s", uptimeURL)
+
+	uptimeURLBtn := tgbotapi.NewInlineKeyboardButtonURL("Check Node Uptime", uptimeURL)
+	kbRow := tgbotapi.NewInlineKeyboardRow(uptimeURLBtn)
+	kb := tgbotapi.NewInlineKeyboardMarkup(kbRow)
 
 	err := bot.Send(ctx, "whisper", "text", uptimeURL)
 	if err != nil {
