@@ -69,13 +69,15 @@ func (bot *Bot) handleCommandGetUptimeLink(ctx *BotContext, command, args string
 	} else {
 		uptimeURL = "https://skywirenc.com/"
 	}
+	msg := fmt.Sprintf("Skywirenc.com (%v Nodes)", bot.skyMgrMonitor.GetConnectedNodeCount())
+	log.Debugf("Bot.handleCommandGetUptimeLink: %s", msg)
 	log.Debugf("Bot.handleCommandGetUptimeLink: uptimeURL: %s", uptimeURL)
 
-	uptimeURLBtn := tgbotapi.NewInlineKeyboardButtonURL("Check Node Uptime", uptimeURL)
+	uptimeURLBtn := tgbotapi.NewInlineKeyboardButtonURL(msg, uptimeURL)
 	kbRow := tgbotapi.NewInlineKeyboardRow(uptimeURLBtn)
 	kb := tgbotapi.NewInlineKeyboardMarkup(kbRow)
 
-	err := bot.Send(ctx, "whisper", "text", uptimeURL)
+	err := bot.SendReplyInlineKeyboard(ctx, kb, "Check Node uptime here:")
 	if err != nil {
 		logSendError("Bot.handleCommandGetUptimeLink", err)
 	}
