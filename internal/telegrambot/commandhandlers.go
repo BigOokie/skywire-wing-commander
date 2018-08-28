@@ -8,6 +8,7 @@ package telegrambot
 import (
 	"context"
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/BigOokie/skywire-wing-commander/internal/utils"
@@ -50,6 +51,28 @@ func (bot *Bot) handleCommandShowConfig(ctx *BotContext, command, args string) e
 		if err != nil {
 			logSendError("Bot.handleCommandShowConfig (Resend as Text):", err)
 		}
+	}
+	return err
+}
+
+// Handler for uptime command
+func (bot *Bot) handleCommandGetUptimeLink(ctx *BotContext, command, args string) error {
+	log.Debug("Handle command /uptime")
+	//https://skywirenc.com/?key_list={node1-id}%2C{node2-id}%2C{node3-id}....etc
+
+	var uptimeURL string
+
+	if bot.skyMgrMonitor.IsRunning() {
+		// Add Node Keys as parameters to the URL Query
+		uptimeURL = fmt.Sprintf("https://skywirenc.com/?key_list=%s", strings.Join(bot.skyMgrMonitor.GetNodeKeyList(), "%2C"))
+	} else {
+		uptimeURL = "https://skywirenc.com/"
+	}
+	log.Debugf("Bot.handleCommandGetUptimeLink: uptimeURL: %s", uptimeURL)
+
+	err := bot.Send(ctx, "whisper", "text", uptimeURL)
+	if err != nil {
+		logSendError("Bot.handleCommandGetUptimeLink", err)
 	}
 	return err
 }
@@ -179,10 +202,12 @@ func (bot *Bot) monitorEventLoop(runctx context.Context, botctx *BotContext, sta
 		select {
 		// Monitor Status Message
 		case msg := <-statusMsgChan:
-			log.Debugf("Bot.monitorEventLoop: Status event: %s", msg)
-			err := bot.Send(botctx, "whisper", "markdown", msg)
-			if err != nil {
-				logSendError("Bot.monitorEventLoop", err)
+			if msg != "" {
+				log.Debugf("Bot.monitorEventLoop: Status event: %s", msg)
+				err := bot.Send(botctx, "whisper", "markdown", msg)
+				if err != nil {
+					logSendError("Bot.monitorEventLoop", err)
+				}
 			}
 
 		// Heartbeat ticker event
@@ -191,9 +216,11 @@ func (bot *Bot) monitorEventLoop(runctx context.Context, botctx *BotContext, sta
 			// Build Heartbeat Status Message
 			msg := bot.skyMgrMonitor.BuildConnectionStatusMsg(wcconst.MsgHeartbeat)
 			log.Debug(msg)
-			err := bot.Send(botctx, "whisper", "markdown", msg)
-			if err != nil {
-				logSendError("Bot.handleCommandStatus", err)
+			if msg != "" {
+				err := bot.Send(botctx, "whisper", "markdown", msg)
+				if err != nil {
+					logSendError("Bot.handleCommandStatus", err)
+				}
 			}
 
 		// Context has been cancelled. Shutdown
