@@ -222,7 +222,7 @@ This section outlines the Telegram Bot commands that are currently supported by 
 - [Show Config](#showconfig)
 - [Start](#start)
 - [Stop](#stop)
-- [Check Updates](#check-updates)]
+- [Check Updates](#check-updates)
 
 ## Help
 `/help`
