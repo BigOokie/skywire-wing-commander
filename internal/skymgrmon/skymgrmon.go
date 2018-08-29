@@ -398,9 +398,7 @@ func (smm *SkyManagerMonitor) BuildConnectionStatusMsg(msgTitle string) string {
 func (smm *SkyManagerMonitor) GetNodeKeyList() []string {
 	var nodekeyslice []string
 
-	for key, value := range smm.connectedNodes {
-		log.Debugf("Key: %s", key)
-		log.Debugf("Value: %v", value)
+	for _, value := range smm.connectedNodes {
 		nodekeyslice = append(nodekeyslice, value.Key)
 	}
 	log.Debugf("SkyManagerMonitor.GetURLEncNodeList: %v", nodekeyslice)

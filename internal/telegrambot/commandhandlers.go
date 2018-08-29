@@ -206,11 +206,9 @@ func (bot *Bot) handleCommandListNodes(ctx *BotContext, command, args string) er
 
 	// Iterate the connectedNodes and build a keyboard with one button
 	// containing the Node Key per row
-	nodeMap := bot.skyMgrMonitor.GetConnectedNodes()
-	log.Debugf("Bot.handleCommandListNodes: Node Count %v", len(nodeMap))
-	for _, v := range nodeMap {
-		log.Debugf("Bot.handleCommandListNodes: Creating button for Node: %s", v.Key)
-		btn = tgbotapi.NewInlineKeyboardButtonData(v.Key, v.Key)
+	for _, v := range bot.skyMgrMonitor.GetNodeKeyList() {
+		log.Debugf("Bot.handleCommandListNodes: Creating button for Node: %s", v)
+		btn = tgbotapi.NewInlineKeyboardButtonData(v, v)
 		btnrow = tgbotapi.NewInlineKeyboardRow(btn)
 		keyboard = append(keyboard, btnrow)
 	}
@@ -239,7 +237,7 @@ func (bot *Bot) handleCommandListNodes(ctx *BotContext, command, args string) er
 	// once a button is selected
 	//nodeListKB.OneTimeKeyboard = true
 
-	err := bot.SendReplyInlineKeyboard(ctx, replyKeyboard)
+	err := bot.SendReplyInlineKeyboard(ctx, replyKeyboard, "Nodes")
 	if err != nil {
 		log.Error(err)
 	}

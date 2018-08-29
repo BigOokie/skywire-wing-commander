@@ -356,21 +356,6 @@ func (bot *Bot) SendReplyKeyboard(ctx *BotContext, kb tgbotapi.ReplyKeyboardMark
 	return err
 }
 
-// SendReplyInlineKeyboard will send a reply using the provided inline keyboard
-func (bot *Bot) SendReplyInlineKeyboard(ctx *BotContext, kb tgbotapi.InlineKeyboardMarkup) error {
-	log.Debug("Bot.SendReplyInlineKeyboard: Start")
-	defer log.Debug("Bot.SendReplyInlineKeyboard: End")
-	var msg tgbotapi.MessageConfig
-
-	msg = tgbotapi.NewMessage(int64(ctx.message.From.ID), ctx.message.Text)
-	msg.ReplyMarkup = kb
-
-	_, err := bot.telegram.Send(msg)
-	//msg.ReplyMarkup = tgbotapi.NewRemoveKeyboard(true)
-	//_, err = bot.telegram.Send(msg)
-	return err
-}
-
 /*
 func (bot *Bot) ReplyAboutEvent(ctx *Context, text string, event *Event) error {
 	return bot.Send(ctx, "reply", "markdown", fmt.Sprintf(
