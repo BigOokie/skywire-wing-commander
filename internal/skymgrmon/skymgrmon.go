@@ -394,8 +394,16 @@ func (smm *SkyManagerMonitor) BuildConnectionStatusMsg(msgTitle string) string {
 	return msg
 }
 
-// GetConnectedNodes returns a NodeInfoMap containing the list of currently
-// connected local Nodes
-func (smm *SkyManagerMonitor) GetConnectedNodes() skynode.NodeInfoMap {
-	return smm.connectedNodes
+// GetNodeKeyList returns a []string (slice) containing the currently connected node keys
+func (smm *SkyManagerMonitor) GetNodeKeyList() []string {
+	var nodekeyslice []string
+
+	for key, value := range smm.connectedNodes {
+		log.Debugf("Key: %s", key)
+		log.Debugf("Value: %v", value)
+		nodekeyslice = append(nodekeyslice, value.Key)
+	}
+	log.Debugf("SkyManagerMonitor.GetURLEncNodeList: %v", nodekeyslice)
+	return nodekeyslice
+
 }

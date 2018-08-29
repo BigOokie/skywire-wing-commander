@@ -298,6 +298,21 @@ func (bot *Bot) handleGroupMessage(ctx *BotContext) error {
 	return gerr
 }
 
+// SendReplyInlineKeyboard will send a reply using the provided inline keyboard
+func (bot *Bot) SendReplyInlineKeyboard(ctx *BotContext, kb tgbotapi.InlineKeyboardMarkup, text string) error {
+	log.Debug("Bot.SendReplyInlineKeyboard: Start")
+	defer log.Debug("Bot.SendReplyInlineKeyboard: End")
+	var msg tgbotapi.MessageConfig
+
+	msg = tgbotapi.NewMessage(int64(ctx.message.From.ID), text)
+	msg.ReplyMarkup = kb
+
+	_, err := bot.telegram.Send(msg)
+	//msg.ReplyMarkup = tgbotapi.NewRemoveKeyboard(true)
+	//_, err = bot.telegram.Send(msg)
+	return err
+}
+
 // Send will send a new message from the Bot using the provided BotContext
 // The mode, format and text parameters are used to constuct the message and
 // determine its format and delivery

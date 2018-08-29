@@ -68,6 +68,11 @@ var commands = Commands{
 	},
 	Command{
 		false,
+		"uptime",
+		(*Bot).handleCommandGetUptimeLink,
+	},
+	Command{
+		false,
 		"listnodes",
 		(*Bot).handleCommandListNodes,
 	},
