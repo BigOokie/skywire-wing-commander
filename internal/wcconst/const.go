@@ -90,9 +90,9 @@ const (
 	MsgMonitorNotRunning = "*Wing Commander* Monitoring is not running..."
 
 	// Default cmd message (unhandled)
-	msgDefault = "Sorry. I don't know that command."
+	//msgDefault = "Sorry. I don't know that command."
 
-	// OS Interupt Signals
+	// OS Interrupt Signals
 	MsgOSInteruptSig = "*Wing Commander* OS Interupt Signal Received. Exiting."
 	MsgOSKillSig     = "*Wing Commander* OS Kill Signal Received. Exiting."
 )

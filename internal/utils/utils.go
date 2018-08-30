@@ -67,7 +67,7 @@ func UpdateAvailable(ownername, reponame, versiontag string) (result bool, updat
 	return
 }
 
-// InitAppInstance will attempt to initalise an instance of the application based on the provided value of appID.
+// InitAppInstance will attempt to initialise an instance of the application based on the provided value of appID.
 // A FATAL error will occur causing the application to exit if another instance
 // of the application is detected as already running.
 func InitAppInstance(appID string) (s *single.Single) {

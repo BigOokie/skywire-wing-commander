@@ -49,7 +49,7 @@ type User struct {
 	Banned    bool   `json:"banned"`
 	Admin     bool   `json:"admin"`
 
-	exists bool
+	//exists bool
 }
 
 // NameAndTags is a helper function to append namess and tags to users within the group
@@ -237,6 +237,7 @@ func (bot *Bot) handleUserLeft(ctx *Context, user *tgbotapi.User) error {
 }
 */
 
+/*
 func (bot *Bot) removeMyName(text string) (string, bool) {
 	var removed bool
 	var words []string
@@ -249,7 +250,9 @@ func (bot *Bot) removeMyName(text string) (string, bool) {
 	}
 	return strings.Join(words, " "), removed
 }
+*/
 
+/*
 func (bot *Bot) isReplyToMe(ctx *BotContext) bool {
 	if re := ctx.message.ReplyToMessage; re != nil {
 		if u := re.From; u != nil {
@@ -260,10 +263,12 @@ func (bot *Bot) isReplyToMe(ctx *BotContext) bool {
 	}
 	return false
 }
+*/
 
+/*
 func (bot *Bot) handleGroupMessage(ctx *BotContext) error {
 	var gerr error
-	/*
+
 		if u := ctx.message.NewChatMembers; u != nil {
 			for _, user := range *u {
 				if err := bot.handleUserJoin(ctx, &user); err != nil {
@@ -271,14 +276,13 @@ func (bot *Bot) handleGroupMessage(ctx *BotContext) error {
 				}
 			}
 		}
-	*/
-	/*
+
 		if u := ctx.message.LeftChatMember; u != nil {
 			if err := bot.handleUserLeft(ctx, u); err != nil {
 				gerr = err
 			}
 		}
-	*/
+
 	if ctx.User != nil {
 		msgWithoutName, mentioned := bot.removeMyName(ctx.message.Text)
 
@@ -297,14 +301,14 @@ func (bot *Bot) handleGroupMessage(ctx *BotContext) error {
 	}
 	return gerr
 }
+*/
 
 // SendReplyInlineKeyboard will send a reply using the provided inline keyboard
 func (bot *Bot) SendReplyInlineKeyboard(ctx *BotContext, kb tgbotapi.InlineKeyboardMarkup, text string) error {
 	log.Debug("Bot.SendReplyInlineKeyboard: Start")
 	defer log.Debug("Bot.SendReplyInlineKeyboard: End")
-	var msg tgbotapi.MessageConfig
 
-	msg = tgbotapi.NewMessage(int64(ctx.message.From.ID), text)
+	msg := tgbotapi.NewMessage(int64(ctx.message.From.ID), text)
 	msg.ReplyMarkup = kb
 
 	_, err := bot.telegram.Send(msg)
@@ -364,7 +368,7 @@ func (bot *Bot) Ask(ctx *BotContext, text string) error {
 }
 */
 
-// Reply will respond to a message recieved by the Bot in the BotContext (ctx).
+// Reply will respond to a message received by the Bot in the BotContext (ctx).
 // Specify the reply format and message text as parameters.
 func (bot *Bot) Reply(ctx *BotContext, format, text string) error {
 	return bot.Send(ctx, "reply", format, text)

@@ -75,7 +75,7 @@ func NewMonitor(manageraddress, discoveryaddress string) *SkyManagerMonitor {
 
 // RunManagerMonitor starts the SkyManagerMonitor monitoring of the local Manager Node.
 // If `ctx` is not nil, the monitor will listen to ctx.Done() and stop monitoring
-// when it recieves the signal.
+// when it receives the signal.
 func (smm *SkyManagerMonitor) RunManagerMonitor(runctx context.Context, statusMsgChan chan<- string, pollInt time.Duration) {
 	log.Debugf("SkyManagerMonitor::RunManagerMonitor: Start (Interval: %v)", pollInt)
 	defer log.Debugln("SkyManagerMonitor::RunManagerMonitor: End")
@@ -104,7 +104,7 @@ func (smm *SkyManagerMonitor) RunManagerMonitor(runctx context.Context, statusMs
 
 // StopManagerMonitor starts the SkyManagerMonitor monitoring of the local Manager Node.
 // If `ctx` is not nil, the monitor will listen to ctx.Done() and stop monitoring
-// when it recieves the signal.
+// when it receives the signal.
 func (smm *SkyManagerMonitor) StopManagerMonitor() {
 	log.Debugln("SkyManagerMonitor::SkyManagerMonitor: Start")
 	defer log.Debugln("SkyManagerMonitor::SkyManagerMonitor: End")
@@ -119,7 +119,7 @@ func (smm *SkyManagerMonitor) StopManagerMonitor() {
 /*
 // RunDiscoveryMonitor starts the SkyManagerMonitor monitoring of the Skywire Discovery Node.
 // If `ctx` is not nil, the monitor will listen to ctx.Done() and stop monitoring
-// when it recieves the signal.
+// when it receives the signal.
 func (smm *SkyManagerMonitor) RunDiscoveryMonitor(runctx context.Context, statusMsgChan chan<- string, pollInt time.Duration) {
 	log.Debugf("SkyManagerMonitor::RunDiscoveryMonitor: Start (Interval: %v)", pollInt)
 	defer log.Debugln("SkyManagerMonitor::RunDiscoveryMonitor: End")
@@ -172,7 +172,7 @@ func (smm *SkyManagerMonitor) ConnectedDiscNodeCount() (int, error) {
 		defer smm.m.Unlock()
 
 		// Compare the list of Nodes connected to the Discovery Node (disccns) against the
-		// current list of locally conected nodes.
+		// current list of locally connected nodes.
 		// If our local Nodes are not listed as connected to the Discovery Node we need to raise an alert
 		discNodeMap := skynode.NodeInfoSliceToMap(discNodes)
 		for _, v := range smm.connectedNodes {
@@ -197,6 +197,7 @@ func (smm *SkyManagerMonitor) IsRunning() bool {
 	return smm.GetCancelFunc() != nil
 }
 
+/*
 // getAllNodesStr requests the list of connected Nodes from the Manager and returns the raw JSON response as a string
 func (smm *SkyManagerMonitor) getAllNodesStr() string {
 	var respstr string
@@ -217,6 +218,7 @@ func (smm *SkyManagerMonitor) getAllNodesStr() string {
 	}
 	return respstr
 }
+*/
 
 // getAllNodesList requests the list of connected Nodes from the Manager and returns an array (slice) of connectedNode
 func getAllNodesList(managerAddr string) (cns skynode.NodeInfoSlice, err error) {
@@ -307,9 +309,9 @@ func (smm *SkyManagerMonitor) maintainConnectedNodesList(newcns skynode.NodeInfo
 			}
 		}
 	}
-	return
 }
 
+/*
 // checkNodeDiscoveryConnection is responsible for checking the list of Nodes currently connected to the local Manager
 // against the list of Nodes reported as connected to the Skywire Discovery Node. If our local Nodes are not reported
 // as connected to the Discovery Node, we need to raise an alert using the provided statusMsgChan
@@ -332,7 +334,7 @@ func (smm *SkyManagerMonitor) checkNodeDiscoveryConnection(disccns skynode.NodeI
 	discConnNodeCount := 0
 
 	// Compare the list of Nodes connected to the Discovery Node (disccns) against the
-	// current list of locally conected nodes.
+	// current list of locally connected nodes.
 	// If our local Nodes are not listed as connected to the Discovery Node we need to raise an alert
 	discNodeMap := skynode.NodeInfoSliceToMap(disccns)
 	for _, v := range smm.connectedNodes {
@@ -355,6 +357,7 @@ func (smm *SkyManagerMonitor) checkNodeDiscoveryConnection(disccns skynode.NodeI
 	//statusMsgChan <- msg
 	return
 }
+*/
 
 // GetConnectedNodeCount will return the count of Nodes within the connectedNodes structure
 // If the structure is nil (not yet assigned), 0 will be returned
