@@ -94,5 +94,5 @@ const (
 
 	// OS Interrupt Signals
 	MsgOSInteruptSig = "*Wing Commander* OS Interupt Signal Received. Exiting."
-	MsgOSKillSig     = "*Wing Commander* OS Kill Signal Received. Exiting."
+	//MsgOSKillSig     = "*Wing Commander* OS Kill Signal Received. Exiting."
 )

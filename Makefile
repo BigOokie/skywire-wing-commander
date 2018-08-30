@@ -15,7 +15,7 @@ test: ## Run tests for Wing Commander
 
 lint: ## Run linters. Use make install-linters first.
 	vendorcheck ./...
-	golangci-lint run --no-config --deadline=3m --disable-all --tests --skip-dirs=lib/cgo \
+	golangci-lint run --no-config --deadline=3m --disable-all --tests \
 		-E golint \
 		-E goimports \
 		-E varcheck \
@@ -33,7 +33,7 @@ lint: ## Run linters. Use make install-linters first.
 		-E misspell \
 		./...
 	# The govet version in golangci-lint is out of date and has spurious warnings, run it separately
-	go vet -all ./...
+	#go vet -all ./...
 
 check: lint test  ## Run tests and linters
 

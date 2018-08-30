@@ -464,8 +464,10 @@ func (bot *Bot) handleUpdate(update *tgbotapi.Update) error {
 }
 
 // Start will start the Bot running - the main duty being to monitor for and handle messages
-func (bot *Bot) Start() error {
+func (bot *Bot) Start() {
 	log.Infoln("BOT: Starting.")
+	defer log.Infoln("BOT: Stopped")
+
 	update := tgbotapi.NewUpdate(0)
 	update.Timeout = 60
 
@@ -475,7 +477,7 @@ func (bot *Bot) Start() error {
 
 	updates, err := bot.telegram.GetUpdatesChan(update)
 	if err != nil {
-		return fmt.Errorf("Failed to create Telegram updates channel: %v", err)
+		log.Fatalf("Failed to create Telegram updates channel: %v", err)
 	}
 
 	for update := range updates {
@@ -483,6 +485,4 @@ func (bot *Bot) Start() error {
 			log.Errorf("Error: %v", err)
 		}
 	}
-	log.Infoln("BOT: Stopped")
-	return nil
 }
