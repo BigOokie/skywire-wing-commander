@@ -184,6 +184,16 @@ func (bot *Bot) handleCommandCheckUpdate(ctx *BotContext, command, args string) 
 	return err
 }
 
+// Handler for help handleCommandShowMenu
+func (bot *Bot) handleCommandShowMenu(ctx *BotContext, command, args string) error {
+	log.Debug("Handle command /menu")
+	err := bot.SendMainMenuMessage()
+	if err != nil {
+		logSendError("Bot.handleCommandShowMenu", err)
+	}
+	return err
+}
+
 // Handler for nodes command
 func (bot *Bot) handleCommandListNodes(ctx *BotContext, command, args string) error {
 	log.Debug("Handle command /listnodes")

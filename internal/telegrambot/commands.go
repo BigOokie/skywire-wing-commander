@@ -81,4 +81,9 @@ var commands = Commands{
 		"listnodes",
 		(*Bot).handleCommandListNodes,
 	},
+	Command{
+		false,
+		"menu",
+		(*Bot).handleCommandShowMenu,
+	},
 }
