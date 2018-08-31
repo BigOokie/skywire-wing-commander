@@ -7,7 +7,7 @@ package wcconst
 
 // Define constants used by the application
 const (
-	BotVersion    = "v0.2.0-beta.8"
+	BotVersion    = "v0.2.0-beta.9"
 	BotAppVersion = "Wing Commander " + BotVersion
 
 	AppInstanceID = "wing-commander-84F95320-8C2D-4236-9252-A322F01B91A7"
@@ -18,7 +18,7 @@ const (
 		"Exiting\n"
 
 	// ScriptPath defines the path to the Scripts folder
-	ScriptPath = "/src/github.com/BigOokie/skywire-wing-commander/src/scripts/"
+	ScriptPath = "/src/github.com/BigOokie/skywire-wing-commander/scripts/"
 
 	MsgCmdLineHelp = "Wing Commander Help\n" +
 		"Command line flags:\n" +
@@ -31,14 +31,15 @@ const (
 	// Bot command messages:
 	// Help message
 	MsgHelpShort = "*Telegram Usage:*\n" +
-		"- /help - show this message\n" +
-		"- /about - show information and credits about my creator and any contributors\n" +
-		"- /status - ask how I'm going.. and if I'm still running\n" +
-		"- /showconfig - display runtime configuration (from config.toml)\n" +
+		"- /help - show this message.\n" +
+		"- /about - show information and credits about my creator and any contributors.\n" +
+		"- /status - request a status update. This provides the same information as the Heartbeat.\n" +
+		"- /showconfig - display runtime configuration (from config.toml).\n" +
 		"- /start - start activly monitoring your Skyminer. Once started, notifications will be sent to you for events that occur. A heartbeat will also be initiated to let you know if the bot and the Miner are still running.\n" +
-		"- /stop - stop monitoring your Skyminer. Once stopped, I won't send any more notifications\n" +
+		"- /stop - stop monitoring your Skyminer. Once stopped, I won't send any more notifications.\n" +
 		"- /checkupdate - check GitHub for new updates.\n" +
-		"- /uptime - dynamically generate a link to the Skywirenc.com site to check uptime for locally connected Nodes"
+		"- /update - attempt to update *Wing Commander* to the latest version from GitHub source.\n" +
+		"- /uptime - dynamically generate a link to the Skywirenc.com site to check uptime for locally connected Nodes."
 
 	MsgHelp = "*Wing Commander* here. I will help you to manage and monitor your Skyminer and its Nodes.\n\n" +
 		MsgHelpShort +
@@ -90,9 +91,9 @@ const (
 	MsgMonitorNotRunning = "*Wing Commander* Monitoring is not running..."
 
 	// Default cmd message (unhandled)
-	msgDefault = "Sorry. I don't know that command."
+	//msgDefault = "Sorry. I don't know that command."
 
-	// OS Interupt Signals
+	// OS Interrupt Signals
 	MsgOSInteruptSig = "*Wing Commander* OS Interupt Signal Received. Exiting."
-	MsgOSKillSig     = "*Wing Commander* OS Kill Signal Received. Exiting."
+	//MsgOSKillSig     = "*Wing Commander* OS Kill Signal Received. Exiting."
 )

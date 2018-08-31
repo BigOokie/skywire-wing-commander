@@ -25,7 +25,7 @@ type NodeInfoSlice []NodeInfo
 // NodeInfoMap defines a string key based map of NodeInfo structs
 type NodeInfoMap map[string]NodeInfo
 
-// NodeInfoSliceToMap convers a provided NodeInfoSlice to a NodeInfoMap
+// NodeInfoSliceToMap converts a provided NodeInfoSlice to a NodeInfoMap
 func NodeInfoSliceToMap(nis NodeInfoSlice) NodeInfoMap {
 	niMap := make(map[string]NodeInfo)
 	for _, ni := range nis {
@@ -36,7 +36,7 @@ func NodeInfoSliceToMap(nis NodeInfoSlice) NodeInfoMap {
 
 // NodesAreEqual determines if two instances of a NodeInfo structure (a and b) represent the same Node based on their Keys.
 // Not that this is not an equality check of the structure - but simply that the two structures represent the same Node.
-// Other elements of the strucutre may be different.
+// Other elements of the structure may be different.
 func NodesAreEqual(a, b NodeInfo) bool {
 	// Check both NodeInfo structures are for the same
 	return a.Key == b.Key

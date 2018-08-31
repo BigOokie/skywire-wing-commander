@@ -18,10 +18,11 @@ import (
 )
 
 type cmdlineFlags struct {
-	dumpconfig bool
-	version    bool
-	help       bool
-	about      bool
+	dumpconfig       bool
+	version          bool
+	help             bool
+	about            bool
+	upgradecompleted bool
 }
 
 type wcBotApp struct {
@@ -56,6 +57,8 @@ func (cf *cmdlineFlags) parseCmdLineFlags() {
 	flag.BoolVar(&cf.dumpconfig, "config", false, "print current config")
 	flag.BoolVar(&cf.help, "help", false, "print application help")
 	flag.BoolVar(&cf.about, "about", false, "print application information")
+	flag.BoolVar(&cf.upgradecompleted, "upgradecompleted", false, "signals the application has been restarted following an upgrade")
+
 	flag.Parse()
 }
 
@@ -79,6 +82,12 @@ func (cf *cmdlineFlags) handleCmdLineFlags() {
 		fmt.Println(wcconst.MsgAbout)
 		fmt.Println("")
 		os.Exit(0)
+	}
+
+	// if about cmd line flag `-about` then print version info and exit
+	if cf.upgradecompleted {
+		fmt.Println("Upgrade completed.")
+		fmt.Println("")
 	}
 }
 

@@ -9,14 +9,14 @@ import (
 )
 
 func Test_FileExists_NotOk(t *testing.T) {
-	var badFilename string = "this-file-does-not-exist.test"
+	badFilename := "this-file-does-not-exist.test"
 	if FileExists(badFilename) {
 		t.Errorf("File (%s) does not exist but was detected as existing.", badFilename)
 	}
 }
 
 func Test_FileExists_Ok(t *testing.T) {
-	var goodFilename string = "./utils_test.go"
+	goodFilename := "./utils_test.go"
 	if !FileExists(goodFilename) {
 		t.Errorf("File (%s) does not exist but should.", goodFilename)
 	}

@@ -68,6 +68,11 @@ var commands = Commands{
 	},
 	Command{
 		false,
+		"update",
+		(*Bot).handleCommandDoUpdate,
+	},
+	Command{
+		false,
 		"uptime",
 		(*Bot).handleCommandGetUptimeLink,
 	},

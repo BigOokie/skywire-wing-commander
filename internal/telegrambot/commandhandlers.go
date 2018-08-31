@@ -99,13 +99,12 @@ func (bot *Bot) handleCommandStart(ctx *BotContext, command, args string) error 
 
 	log.Debug(wcconst.MsgMonitorStart)
 	cancelContext, cancelFunc := context.WithCancel(context.Background())
-	bot.skyMgrMonitor.SetCancelFunc(cancelFunc)
 	monitorStatusMsgChan := make(chan string)
 
 	// Start the Event Monitor - provide cancelContext
 	go bot.monitorEventLoop(cancelContext, ctx, monitorStatusMsgChan)
 	// Start monitoring the local Manager - provide cancelContext
-	go bot.skyMgrMonitor.RunManagerMonitor(cancelContext, monitorStatusMsgChan, bot.config.Monitor.IntervalSec)
+	go bot.skyMgrMonitor.RunManagerMonitor(cancelContext, cancelFunc, monitorStatusMsgChan, bot.config.Monitor.IntervalSec)
 	// Start monitoring the local Manager - provide cancelContext
 	//go bot.skyMgrMonitor.RunDiscoveryMonitor(cancelContext, monitorStatusMsgChan, bot.config.Monitor.DiscoveryMonitorIntMin)
 
@@ -169,7 +168,6 @@ func (bot *Bot) handleCommandCheckUpdate(ctx *BotContext, command, args string) 
 	err := bot.Send(ctx, "whisper", "markdown", "Checking for updates...")
 	if err != nil {
 		logSendError("Bot.handleCommandCheckUpdate", err)
-		// Return if an error has occurred
 		return err
 	}
 
@@ -243,6 +241,39 @@ func (bot *Bot) handleCommandListNodes(ctx *BotContext, command, args string) er
 	}
 
 	return err
+}
+
+// Handler for help DoUpdate
+func (bot *Bot) handleCommandDoUpdate(ctx *BotContext, command, args string) error {
+	log.Debug("Handle command /update")
+	err := bot.Send(ctx, "whisper", "markdown", "*Initiating update...*")
+	if err != nil {
+		logSendError("Bot.handleCommandCheckUpdate", err)
+		return err
+	}
+
+	updateAvailable, updateMsg := utils.UpdateAvailable("BigOokie", "skywire-wing-commander", wcconst.BotVersion)
+	if !updateAvailable {
+		return bot.Send(ctx, "whisper", "markdown", fmt.Sprintf("*Already up to date:* %s", updateMsg))
+	}
+
+	err = bot.Send(ctx, "whisper", "markdown", fmt.Sprintf("*Update available:* %s", updateMsg))
+	if err != nil {
+		logSendError("Bot.handleCommandCheckUpdate", err)
+		return err
+	}
+
+	if utils.DoUpgrade() {
+		err = bot.Send(ctx, "whisper", "markdown", "Upgrade succeeded.")
+	} else {
+		err = bot.Send(ctx, "whisper", "markdown", "Upgrade failed.")
+	}
+	if err != nil {
+		logSendError("Bot.handleCommandCheckUpdate", err)
+		return err
+	}
+
+	return nil
 }
 
 func (bot *Bot) handleDirectMessageFallback(ctx *BotContext, text string) (bool, error) {

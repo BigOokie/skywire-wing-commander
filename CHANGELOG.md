@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v0.2.0-beta.9] - 2018-08-31
+### Added
+- Added `/update` command. This will detect if a newer release is available on GitHub and if so, will invoke the `wc-update.sh` shell script to pull the latest source, build, install and then run the new version. Immediately after invoking the shell script, the current application instance will terminate. The new instance of the Bot will message you to tell you it has restarted as a result of an upgrade. If you do not get this message within a reasonable period of time (1-2min), you should investigate and manually start the Bot.
+### Changed
+- Change the `wc-update.sh` to improve its handling and management of the upgrade process. Only very minor changes, and this script can still be called directly from the command line.
+### Deprecated
+### Removed
+### Fixed
+### Security
+
 ## [v0.2.0-beta.8] - 2018-08-29
 ### Added
 - Added (**Beta**) autoupdate shell script [scripts/wc-update.sh](https://github.com/BigOokie/skywire-wing-commander/blob/dev/scripts/wc-update.sh). This shell script was published recently on the project [wiki](https://github.com/BigOokie/skywire-wing-commander/wiki) to gain feedback from the community. Feedback at this point indicates the script is extreamly useful and as such has now been incorporated into the scripts provided by the project. Please refer to the [Autoupdate Script](https://github.com/BigOokie/skywire-wing-commander/wiki/Autoupdate-Script) page on the project wiki for more information.

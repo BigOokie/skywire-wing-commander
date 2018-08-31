@@ -8,6 +8,8 @@ package utils
 import (
 	"fmt"
 	"os"
+	"os/exec"
+	"path/filepath"
 	"runtime"
 
 	"github.com/BigOokie/skywire-wing-commander/internal/wcconst"
@@ -43,8 +45,7 @@ func FileExists(filename string) bool {
 // UpdateAvailable will perform a check against the specified
 // repository to determine if the passed in version tag is the latest or not
 func UpdateAvailable(ownername, reponame, versiontag string) (result bool, updateMsg string) {
-	log.Debugf("UpdateAvailable: Owner: %s, Repo: %s, Version: %s",
-		ownername, reponame, versiontag)
+	log.Debugf("UpdateAvailable: Owner: %s, Repo: %s, Version: %s", ownername, reponame, versiontag)
 	result = false
 	updateMsg = "An error occurred checking for updates."
 	githubTag := &latest.GithubTag{
@@ -67,7 +68,33 @@ func UpdateAvailable(ownername, reponame, versiontag string) (result bool, updat
 	return
 }
 
-// InitAppInstance will attempt to initalise an instance of the application based on the provided value of appID.
+// DoUpgrade attempts to perform an upgrade by calling a local shell script
+func DoUpgrade() bool {
+	var cmd *exec.Cmd
+	var gopath = os.Getenv("GOPATH")
+	osName := runtime.GOOS
+	if osName == "windows" {
+		log.Error("Upgrade not supported on Windows at this time.")
+		return false
+	}
+
+	scriptPath := filepath.Join(gopath, fmt.Sprintf("%s%s", wcconst.ScriptPath, "wc-update.sh"))
+	log.Debugf("DoUpgrade - Script Path: %s", scriptPath)
+
+	cmd = exec.Command("/bin/bash", scriptPath)
+	log.Debug("DoUpgrade: Executing upgrade shell script.")
+	err := cmd.Start()
+	log.Debug("DoUpgrade: Exiting application...")
+	os.Exit(1)
+
+	if err != nil {
+		log.Error(err)
+		return false
+	}
+	return true
+}
+
+// InitAppInstance will attempt to initialise an instance of the application based on the provided value of appID.
 // A FATAL error will occur causing the application to exit if another instance
 // of the application is detected as already running.
 func InitAppInstance(appID string) (s *single.Single) {
@@ -79,4 +106,13 @@ func InitAppInstance(appID string) (s *single.Single) {
 		log.Fatalf("Failed to acquire exclusive app lock: %v", err)
 	}
 	return
+}
+
+// ReleaseAppInstance will attempt to release(unlock) an instance of the application based on the
+// single.Single reference
+func ReleaseAppInstance(s *single.Single) {
+	err := s.TryUnlock()
+	if err != nil {
+		log.Errorln("Error releasing application instance control.", err)
+	}
 }
