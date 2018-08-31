@@ -11,6 +11,7 @@ import (
 	"os/signal"
 
 	"github.com/BigOokie/skywire-wing-commander/internal/telegrambot"
+	"github.com/BigOokie/skywire-wing-commander/internal/utils"
 	"github.com/BigOokie/skywire-wing-commander/internal/wcconst"
 	log "github.com/sirupsen/logrus"
 )
@@ -33,8 +34,8 @@ func main() {
 	}
 
 	// Check and setup application instance control. Only allow a single instance to run
-	//appInstance := utils.InitAppInstance(wcconst.AppInstanceID)
-	//defer utils.ReleaseAppInstance(appInstance)
+	appInstance := utils.InitAppInstance(wcconst.AppInstanceID)
+	defer utils.ReleaseAppInstance(appInstance)
 
 	// Setup OS Notification for Interrupt or Kill signal - to cleanly terminate the app
 	osSignal := make(chan os.Signal, 1)
