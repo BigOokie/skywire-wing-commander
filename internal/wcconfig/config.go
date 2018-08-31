@@ -26,6 +26,7 @@ type Config struct {
 // are used to manage runtime config for the Wing Commander application
 type WingCommanderParameters struct {
 	TwoFactorEnabled bool `mapstructure:"twofactorenabled"`
+	UpgradeComplete  bool
 }
 
 // TelegramParameters struct defines the configuration parameters that

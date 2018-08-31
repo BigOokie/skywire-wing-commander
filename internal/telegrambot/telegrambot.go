@@ -368,6 +368,24 @@ func (bot *Bot) Ask(ctx *BotContext, text string) error {
 }
 */
 
+// SendNewMessage will send a new message without requiring a BotContext.
+func (bot *Bot) SendNewMessage(format, text string) error {
+	msg := tgbotapi.NewMessage(bot.config.Telegram.ChatID, text)
+
+	switch format {
+	case "markdown":
+		msg.ParseMode = "Markdown"
+	case "html":
+		msg.ParseMode = "HTML"
+	case "text":
+		msg.ParseMode = ""
+	default:
+		return fmt.Errorf("unsupported message format: %s", format)
+	}
+	_, err := bot.telegram.Send(msg)
+	return err
+}
+
 // Reply will respond to a message received by the Bot in the BotContext (ctx).
 // Specify the reply format and message text as parameters.
 func (bot *Bot) Reply(ctx *BotContext, format, text string) error {
@@ -478,6 +496,14 @@ func (bot *Bot) Start() {
 	updates, err := bot.telegram.GetUpdatesChan(update)
 	if err != nil {
 		log.Fatalf("Failed to create Telegram updates channel: %v", err)
+	}
+
+	// Check to see if we are starting because of an upgrade.
+	if bot.config.WingCommander.UpgradeComplete {
+		err = bot.SendNewMessage("markup", "Successful restart after upgrade.")
+		if err != nil {
+			log.Fatalf("Failed to create Telegram updates channel: %v", err)
+		}
 	}
 
 	for update := range updates {

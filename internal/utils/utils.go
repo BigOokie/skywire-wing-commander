@@ -67,6 +67,7 @@ func UpdateAvailable(ownername, reponame, versiontag string) (result bool, updat
 	return
 }
 
+// DoUpgrade attempts to perform an upgrade by calling a local shell script
 func DoUpgrade() bool {
 	return false
 }

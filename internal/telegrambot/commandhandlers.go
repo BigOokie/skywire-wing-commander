@@ -166,7 +166,6 @@ func (bot *Bot) handleCommandCheckUpdate(ctx *BotContext, command, args string) 
 	err := bot.Send(ctx, "whisper", "markdown", "Checking for updates...")
 	if err != nil {
 		logSendError("Bot.handleCommandCheckUpdate", err)
-		// Return if an error has occurred
 		return err
 	}
 
@@ -189,20 +188,31 @@ func (bot *Bot) handleCommandDoUpdate(ctx *BotContext, command, args string) err
 	err := bot.Send(ctx, "whisper", "markdown", "Initiating update...")
 	if err != nil {
 		logSendError("Bot.handleCommandCheckUpdate", err)
-		// Return if an error has occurred
 		return err
 	}
 
-	var msg string
-
 	updateAvailable, updateMsg := utils.UpdateAvailable("BigOokie", "skywire-wing-commander", wcconst.BotVersion)
-	if updateAvailable {
-		msg = fmt.Sprintf("*Update available:* %s", updateMsg)
-	} else {
-		msg = fmt.Sprintf("*Up to date:* %s", updateMsg)
+	if !updateAvailable {
+		return bot.Send(ctx, "whisper", "markdown", fmt.Sprintf("*Already up to date:* %s", updateMsg))
 	}
 
-	return bot.Send(ctx, "whisper", "markdown", msg)
+	err = bot.Send(ctx, "whisper", "markdown", fmt.Sprintf("*Update available:* %s", updateMsg))
+	if err != nil {
+		logSendError("Bot.handleCommandCheckUpdate", err)
+		return err
+	}
+
+	if utils.DoUpgrade() {
+		err = bot.Send(ctx, "whisper", "markdown", "Upgrade succeeded.")
+	} else {
+		err = bot.Send(ctx, "whisper", "markdown", "Upgrade failed.")
+	}
+	if err != nil {
+		logSendError("Bot.handleCommandCheckUpdate", err)
+		return err
+	}
+
+	return nil
 }
 
 func (bot *Bot) handleDirectMessageFallback(ctx *BotContext, text string) (bool, error) {

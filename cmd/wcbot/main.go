@@ -27,6 +27,7 @@ func main() {
 
 	// Load configuration
 	wc.loadConfig()
+	wc.config.WingCommander.UpgradeComplete = wc.cmdFlags.upgradecompleted
 	wc.config.PrintConfig()
 	if wc.cmdFlags.dumpconfig {
 		os.Exit(0)
