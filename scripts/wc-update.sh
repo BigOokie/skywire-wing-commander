@@ -35,5 +35,3 @@ else
     echo "Wing Commander process identified: $WCPID"
     echo "Wing Commander updated and restarted"
 fi
-
-exit 0
