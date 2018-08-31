@@ -83,12 +83,14 @@ func DoUpgrade() bool {
 
 	cmd = exec.Command("/bin/bash", scriptPath)
 	err := cmd.Start()
-	if err != nil {
-		log.Error(err)
-		return false
-	}
-	return true
-
+	os.Exit(1)
+	/*
+		if err != nil {
+			log.Error(err)
+			return false
+		}
+		return true
+	*/
 	/*
 		_, err := cmd.CombinedOutput()
 		if err != nil {
