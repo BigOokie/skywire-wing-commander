@@ -95,12 +95,12 @@ func NewMonitor(manageraddress, discoveryaddress string) *SkyManagerMonitor {
 
 // RunManagerMonitor starts the SkyManagerMonitor monitoring of the local Manager Node.
 // If `ctx` is not nil, the monitor will listen to ctx.Done() and stop monitoring
-// when it recieves the signal.
+// when it receives the signal.
 func (smm *SkyManagerMonitor) RunManagerMonitor(runctx context.Context, doCancelFunc func(), statusMsgChan chan<- string, pollInt time.Duration) {
 	log.Debugf("SkyManagerMonitor::RunManagerMonitor: Start (Interval: %v)", pollInt)
 	defer log.Debugln("SkyManagerMonitor::RunManagerMonitor: End")
-	smm.SetCancelFunc(doCancelFunc)
 
+	smm.SetCancelFunc(doCancelFunc)
 	smm.monitorStatusMsgChan = statusMsgChan
 
 	ticker := time.NewTicker(pollInt)
@@ -125,7 +125,7 @@ func (smm *SkyManagerMonitor) RunManagerMonitor(runctx context.Context, doCancel
 
 // StopManagerMonitor stops the SkyManagerMonitor monitoring of the local Manager Node.
 // If `ctx` is not nil, the monitor will listen to ctx.Done() and stop monitoring
-// when it recieves the signal.
+// when it receives the signal.
 func (smm *SkyManagerMonitor) StopManagerMonitor() {
 	log.Debugln("SkyManagerMonitor::StopManagerMonitor: Start")
 	defer log.Debugln("SkyManagerMonitor::StopManagerMonitor: End")
@@ -142,7 +142,7 @@ func (smm *SkyManagerMonitor) StopManagerMonitor() {
 /*
 // RunDiscoveryMonitor starts the SkyManagerMonitor monitoring of the Skywire Discovery Node.
 // If `ctx` is not nil, the monitor will listen to ctx.Done() and stop monitoring
-// when it recieves the signal.
+// when it receives the signal.
 func (smm *SkyManagerMonitor) RunDiscoveryMonitor(runctx context.Context, statusMsgChan chan<- string, pollInt time.Duration) {
 	log.Debugf("SkyManagerMonitor::RunDiscoveryMonitor: Start (Interval: %v)", pollInt)
 	defer log.Debugln("SkyManagerMonitor::RunDiscoveryMonitor: End")
@@ -195,7 +195,7 @@ func (smm *SkyManagerMonitor) ConnectedDiscNodeCount() (int, error) {
 		defer smm.m.Unlock()
 
 		// Compare the list of Nodes connected to the Discovery Node (disccns) against the
-		// current list of locally conected nodes.
+		// current list of locally connected nodes.
 		// If our local Nodes are not listed as connected to the Discovery Node we need to raise an alert
 		discNodeMap := skynode.NodeInfoSliceToMap(discNodes)
 		for _, v := range smm.connectedNodes {
@@ -220,6 +220,7 @@ func (smm *SkyManagerMonitor) IsRunning() bool {
 	return smm.GetCancelFunc() != nil
 }
 
+/*
 // getAllNodesStr requests the list of connected Nodes from the Manager and returns the raw JSON response as a string
 func (smm *SkyManagerMonitor) getAllNodesStr() string {
 	var respstr string
@@ -240,6 +241,7 @@ func (smm *SkyManagerMonitor) getAllNodesStr() string {
 	}
 	return respstr
 }
+*/
 
 // getAllNodesList requests the list of connected Nodes from the Manager and returns an array (slice) of connectedNode
 func getAllNodesList(managerAddr string) (cns skynode.NodeInfoSlice, err error) {
@@ -330,9 +332,9 @@ func (smm *SkyManagerMonitor) maintainConnectedNodesList(newcns skynode.NodeInfo
 			}
 		}
 	}
-	return
 }
 
+/*
 // checkNodeDiscoveryConnection is responsible for checking the list of Nodes currently connected to the local Manager
 // against the list of Nodes reported as connected to the Skywire Discovery Node. If our local Nodes are not reported
 // as connected to the Discovery Node, we need to raise an alert using the provided statusMsgChan
@@ -355,7 +357,7 @@ func (smm *SkyManagerMonitor) checkNodeDiscoveryConnection(disccns skynode.NodeI
 	discConnNodeCount := 0
 
 	// Compare the list of Nodes connected to the Discovery Node (disccns) against the
-	// current list of locally conected nodes.
+	// current list of locally connected nodes.
 	// If our local Nodes are not listed as connected to the Discovery Node we need to raise an alert
 	discNodeMap := skynode.NodeInfoSliceToMap(disccns)
 	for _, v := range smm.connectedNodes {
@@ -378,6 +380,7 @@ func (smm *SkyManagerMonitor) checkNodeDiscoveryConnection(disccns skynode.NodeI
 	//statusMsgChan <- msg
 	return
 }
+*/
 
 // GetConnectedNodeCount will return the count of Nodes within the connectedNodes structure
 // If the structure is nil (not yet assigned), 0 will be returned
@@ -388,4 +391,45 @@ func (smm *SkyManagerMonitor) GetConnectedNodeCount() int {
 		return 0
 	}
 	return len(smm.connectedNodes)
+}
+
+// BuildConnectionStatusMsg returns a formatted status message regarding
+// the current connection status with the Discovery Server
+func (smm *SkyManagerMonitor) BuildConnectionStatusMsg(msgTitle string) string {
+	log.Debug("SkyManagerMonitor.DiscoveryConnectionStatusMsg: Start")
+	defer log.Debug("SkyManagerMonitor.DiscoveryConnectionStatusMsg: End")
+
+	discConnNodes, err := smm.ConnectedDiscNodeCount()
+
+	// Assume everything is ok
+	status := "👍"
+	statusmsg := ""
+	// Check for errors
+	if err != nil {
+		// Error connecting to Discovery Sefrver
+		status = "⚠️"
+		statusmsg = wcconst.MsgErrorGetDiscNodes
+	} else if smm.GetConnectedNodeCount() != discConnNodes {
+		// We connected but not all nodes are reported as connected
+		status = "⚠️"
+		statusmsg = wcconst.MsgDiscSomeNodes
+	}
+
+	msg := fmt.Sprintf(msgTitle, status, smm.GetConnectedNodeCount(), discConnNodes, statusmsg)
+	log.Debugf("SkyManagerMonitor.DiscoveryConnectionStatusMsg: %s", msg)
+	return msg
+}
+
+// GetNodeKeyList returns a []string (slice) containing the currently connected node keys
+func (smm *SkyManagerMonitor) GetNodeKeyList() []string {
+	var nodekeyslice []string
+
+	for key, value := range smm.connectedNodes {
+		log.Debugf("Key: %s", key)
+		log.Debugf("Value: %v", value)
+		nodekeyslice = append(nodekeyslice, value.Key)
+	}
+	log.Debugf("SkyManagerMonitor.GetURLEncNodeList: %v", nodekeyslice)
+	return nodekeyslice
+
 }

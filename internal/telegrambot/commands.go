@@ -71,4 +71,9 @@ var commands = Commands{
 		"update",
 		(*Bot).handleCommandDoUpdate,
 	},
+	Command{
+		false,
+		"uptime",
+		(*Bot).handleCommandGetUptimeLink,
+	},
 }

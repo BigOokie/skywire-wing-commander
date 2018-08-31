@@ -71,7 +71,7 @@ func DoUpgrade() bool {
 	return false
 }
 
-// InitAppInstance will attempt to initalise an instance of the application based on the provided value of appID.
+// InitAppInstance will attempt to initialise an instance of the application based on the provided value of appID.
 // A FATAL error will occur causing the application to exit if another instance
 // of the application is detected as already running.
 func InitAppInstance(appID string) (s *single.Single) {
@@ -83,4 +83,13 @@ func InitAppInstance(appID string) (s *single.Single) {
 		log.Fatalf("Failed to acquire exclusive app lock: %v", err)
 	}
 	return
+}
+
+// ReleaseAppInstance will attempt to release(unlock) an instance of the application based on the
+// single.Single reference
+func ReleaseAppInstance(s *single.Single) {
+	err := s.TryUnlock()
+	if err != nil {
+		log.Errorln("Error releasing application instance control.", err)
+	}
 }

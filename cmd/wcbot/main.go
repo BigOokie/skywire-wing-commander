@@ -18,7 +18,7 @@ import (
 var wc wcBotApp
 
 func main() {
-	// Setup and initalise application logging
+	// Setup and initialise application logging
 	wc.initLogging()
 
 	// Parse and handle known command line flags
@@ -34,11 +34,11 @@ func main() {
 
 	// Check and setup application instance control. Only allow a single instance to run
 	appInstance := utils.InitAppInstance(wcconst.AppInstanceID)
-	defer appInstance.TryUnlock()
+	defer utils.ReleaseAppInstance(appInstance)
 
-	// Setup OS Notification for Interupt or Kill signal - to cleanly terminate the app
+	// Setup OS Notification for Interrupt or Kill signal - to cleanly terminate the app
 	osSignal := make(chan os.Signal, 1)
-	signal.Notify(osSignal, os.Interrupt, os.Kill)
+	signal.Notify(osSignal, os.Interrupt)
 
 	log.Infoln("Skywire Wing Commander Telegram Bot - Starting.")
 	defer log.Infoln("Skywire Wing Commander Telegram Bot - Stopped.")
@@ -55,12 +55,6 @@ func main() {
 	go bot.Start()
 
 	// Wait for the app to be signaled to terminate
-	select {
-	case signal := <-osSignal:
-		if signal == os.Interrupt {
-			log.Debugln(wcconst.MsgOSInteruptSig)
-		} else if signal == os.Kill {
-			log.Debugln(wcconst.MsgOSKillSig)
-		}
-	}
+	signal := <-osSignal
+	log.Debugln(wcconst.MsgOSInteruptSig, signal)
 }

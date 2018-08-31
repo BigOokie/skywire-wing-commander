@@ -102,7 +102,7 @@ func readConfig(filename, pathname string, defaults map[string]interface{}) (*vi
 }
 
 // LoadConfigParameters will load the applications configuration from the
-// specified configuration file `filename` (note file extention must not be provided) in the
+// specified configuration file `filename` (note file extension must not be provided) in the
 // specified path `pathname`. The function also provides the ability to specify
 // configuration defaults.
 // An `error` will be returned if any errors occur.
