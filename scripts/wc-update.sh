@@ -24,7 +24,7 @@ echo "Check Wing Commander Version."
 ./wcbot -v
 
 echo "Starting Wing Commander (background)..."
-nohup ./wcbot /dev/null 2>&1 & echo $! > wcbot.pid& > /dev/null
+nohup ./wcbot -upgradecompleted /dev/null 2>&1 & echo $! > wcbot.pid& > /dev/null
 
 echo "Checking Wing Commander started..."
 WCPID=$(pgrep wcbot)

@@ -18,7 +18,7 @@ const (
 		"Exiting\n"
 
 	// ScriptPath defines the path to the Scripts folder
-	ScriptPath = "/src/github.com/BigOokie/skywire-wing-commander/scripts/"
+	ScriptPath = "/src/github.com/BigOokie/skywire-wing-commander/scripts"
 
 	MsgCmdLineHelp = "Wing Commander Help\n" +
 		"Command line flags:\n" +

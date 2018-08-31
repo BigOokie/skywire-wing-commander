@@ -8,6 +8,8 @@ package utils
 import (
 	"fmt"
 	"os"
+	"os/exec"
+	"path/filepath"
 	"runtime"
 
 	"github.com/BigOokie/skywire-wing-commander/internal/wcconst"
@@ -43,8 +45,7 @@ func FileExists(filename string) bool {
 // UpdateAvailable will perform a check against the specified
 // repository to determine if the passed in version tag is the latest or not
 func UpdateAvailable(ownername, reponame, versiontag string) (result bool, updateMsg string) {
-	log.Debugf("UpdateAvailable: Owner: %s, Repo: %s, Version: %s",
-		ownername, reponame, versiontag)
+	log.Debugf("UpdateAvailable: Owner: %s, Repo: %s, Version: %s", ownername, reponame, versiontag)
 	result = false
 	updateMsg = "An error occurred checking for updates."
 	githubTag := &latest.GithubTag{
@@ -69,7 +70,23 @@ func UpdateAvailable(ownername, reponame, versiontag string) (result bool, updat
 
 // DoUpgrade attempts to perform an upgrade by calling a local shell script
 func DoUpgrade() bool {
-	return false
+	var cmd *exec.Cmd
+	var gopath = os.Getenv("GOPATH")
+	osName := runtime.GOOS
+	if osName != "windows" {
+		log.Error("Upgrade not supported on Windows at this time.")
+		return false
+	}
+
+	scriptPath := filepath.Join(gopath, fmt.Sprintf("%s%s", wcconst.ScriptPath, "wc-upgrade.sh"))
+	log.Debugf("DoUpgrade - Script Path: %s", scriptPath)
+
+	cmd = exec.Command("/bin/bash", scriptPath)
+	_, err := cmd.CombinedOutput()
+	if err != nil {
+		return false
+	}
+	return true
 }
 
 // InitAppInstance will attempt to initialise an instance of the application based on the provided value of appID.
