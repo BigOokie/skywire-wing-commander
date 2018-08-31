@@ -7,7 +7,7 @@ echo "Updating Wing Commander..."
 ##go install -v  ./... 2>> /tmp/wingcommander_install_errors.log
 
 echo "Checking for Wing Commander Process..."
-cd ${GOPATH}/bin
+#cd ${GOPATH}/bin
 
 WCPID=$(pgrep wcbot)
 
@@ -18,6 +18,8 @@ else
     echo "Terminating the process"
     kill  ${WCPID}
 fi
+
+pgrep wcbot | xargs kill
 
 echo ""
 echo "Check Wing Commander Version."

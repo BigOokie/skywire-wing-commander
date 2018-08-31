@@ -82,7 +82,7 @@ func DoUpgrade() bool {
 	log.Debugf("DoUpgrade - Script Path: %s", scriptPath)
 
 	cmd = exec.Command("/bin/bash", scriptPath)
-	err := cmd.Run()
+	err := cmd.Start()
 	if err != nil {
 		log.Error(err)
 		return false
