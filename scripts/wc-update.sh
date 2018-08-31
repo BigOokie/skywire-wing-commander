@@ -3,8 +3,8 @@
 echo "Updating Wing Commander..."
 cd ${GOPATH}/src/github.com/BigOokie/skywire-wing-commander
 git reset --hard
-#git pull origin master
-git pull origin dev
+git pull origin master
+#git pull origin dev
 go install -v  ./... 2>> /tmp/wingcommander_install_errors.log
 
 echo "Checking for Wing Commander Process..."
