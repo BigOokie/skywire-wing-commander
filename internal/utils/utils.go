@@ -78,15 +78,25 @@ func DoUpgrade() bool {
 		return false
 	}
 
-	scriptPath := filepath.Join(gopath, fmt.Sprintf("%s%s", wcconst.ScriptPath, "wc-upgrade.sh"))
+	scriptPath := filepath.Join(gopath, fmt.Sprintf("%s%s", wcconst.ScriptPath, "wc-update.sh"))
 	log.Debugf("DoUpgrade - Script Path: %s", scriptPath)
 
 	cmd = exec.Command("/bin/bash", scriptPath)
-	_, err := cmd.CombinedOutput()
+	err := cmd.Run()
 	if err != nil {
+		log.Error(err)
 		return false
 	}
 	return true
+
+	/*
+		_, err := cmd.CombinedOutput()
+		if err != nil {
+			log.Error(err)
+			return false
+		}
+		return true
+	*/
 }
 
 // InitAppInstance will attempt to initialise an instance of the application based on the provided value of appID.
