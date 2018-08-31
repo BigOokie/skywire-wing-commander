@@ -482,6 +482,23 @@ func (bot *Bot) handleUpdate(update *tgbotapi.Update) error {
 		return nil
 	}
 
+	if update.CallbackQuery != nil {
+		log.Debugln("handleUpdate: CallbackQuery")
+	}
+
+	if update.ChosenInlineResult != nil {
+		log.Debugln("handleUpdate: ChosenInlineResult")
+		resultid, err := strconv.Atoi(update.ChosenInlineResult.ResultID)
+		if err != nil {
+			return fmt.Errorf("could not parse resultid: %v", err)
+		}
+		log.Debugln("handleUpdate: ResultID %v", resultid)
+	}
+
+	if update.InlineQuery != nil {
+		log.Debugln("handleUpdate: InlineQuery")
+	}
+
 	ctx := BotContext{message: update.Message}
 
 	if u := ctx.message.From; u != nil {
