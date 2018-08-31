@@ -268,13 +268,18 @@ Additionally, the `/start` command will initiate a Heartbeat which will provide 
 
 **Note:** This command will not perform the upgrade. At this point you must still perform the upgrade. This provides information of the availablity of a new version only.
 
-***
+## Do Update
+`/update`
+
+**Wing Commander** will check the GitHub repository to determine if there are updates available. If an update is found, a self-update shell script will be started and the current **Wing Commander** application instance will be terminated. The shell script will manage the update, rebuild and restart of the new version. You should recieve a message in Telegram once the new version has started. If you do not (within 1-2min) you should investigate and start the Bot application manually.
 
 ## Uptime
 `/uptime`
 **Wing Commander** will dynamically generate a URL request to the [skywirenc.com](https://skywirenc.com) site for the currently connected local Nodes. The user will be presented with a hyperlink button in Telegram that they can click to be taken to the site to check their nodes uptime.
 
 Quite deliberatly, we have avoided attempting to compute uptime indipendantly. We prefer to utilise the same central source to remove ambiguity and potential for drift in calculations.
+
+***
 
 # Known Issues
 The following section outlines some known issues that need to be taken into consideration by anyone running this software:
