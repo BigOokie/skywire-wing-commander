@@ -498,14 +498,6 @@ func (bot *Bot) Start() {
 		log.Fatalf("Failed to create Telegram updates channel: %v", err)
 	}
 
-	// Check to see if we are starting because of an upgrade.
-	if bot.config.WingCommander.UpgradeComplete {
-		err = bot.SendNewMessage("markup", "Successful restart after upgrade.")
-		if err != nil {
-			log.Fatalf("Failed to create Telegram updates channel: %v", err)
-		}
-	}
-
 	for update := range updates {
 		if err := bot.handleUpdate(&update); err != nil {
 			log.Errorf("Error: %v", err)

@@ -6,6 +6,7 @@
 package main
 
 import (
+	"fmt"
 	"os"
 	"os/signal"
 
@@ -27,7 +28,6 @@ func main() {
 
 	// Load configuration
 	wc.loadConfig()
-	wc.config.WingCommander.UpgradeComplete = wc.cmdFlags.upgradecompleted
 	wc.config.PrintConfig()
 	if wc.cmdFlags.dumpconfig {
 		os.Exit(0)
@@ -50,6 +50,14 @@ func main() {
 	if err != nil {
 		log.Error(err)
 		return
+	}
+
+	// Check to see if we are starting because of an upgrade.
+	if wc.cmdFlags.upgradecompleted {
+		err = bot.SendNewMessage("markdown", fmt.Sprintf("Successfully restarted after upgrade to %s", wcconst.BotVersion))
+		if err != nil {
+			log.Fatalf("Failed to create Telegram updates channel: %v", err)
+		}
 	}
 
 	log.Infoln("Starting Bot instance.")
