@@ -185,7 +185,7 @@ func (bot *Bot) handleCommandCheckUpdate(ctx *BotContext, command, args string) 
 // Handler for help DoUpdate
 func (bot *Bot) handleCommandDoUpdate(ctx *BotContext, command, args string) error {
 	log.Debug("Handle command /update")
-	err := bot.Send(ctx, "whisper", "markdown", "Initiating update...")
+	err := bot.Send(ctx, "whisper", "markdown", "*Initiating update...*")
 	if err != nil {
 		logSendError("Bot.handleCommandCheckUpdate", err)
 		return err

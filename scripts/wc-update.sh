@@ -19,8 +19,6 @@ else
     kill  ${WCPID}
 fi
 
-pgrep wcbot | xargs kill
-
 echo ""
 echo "Check Wing Commander Version."
 ./wcbot -v
