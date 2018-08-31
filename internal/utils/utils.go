@@ -82,7 +82,9 @@ func DoUpgrade() bool {
 	log.Debugf("DoUpgrade - Script Path: %s", scriptPath)
 
 	cmd = exec.Command("/bin/bash", scriptPath)
+	log.Debug("DoUpgrade: Executing upgrade shell script.")
 	err := cmd.Start()
+	log.Debug("DoUpgrade: Exiting application...")
 	os.Exit(1)
 	/*
 		if err != nil {
