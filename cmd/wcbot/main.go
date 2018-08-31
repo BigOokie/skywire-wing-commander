@@ -51,12 +51,17 @@ func main() {
 		return
 	}
 
+	var startmsg string
 	// Check to see if we are starting because of an upgrade.
 	if wc.cmdFlags.upgradecompleted {
-		err = bot.SendNewMessage("markdown", fmt.Sprintf("*Successfully restarted after upgrade to %s*", wcconst.BotVersion))
-		if err != nil {
-			log.Fatalf("Failed to create Telegram updates channel: %v", err)
-		}
+		startmsg = fmt.Sprintf("*Successfully restarted after upgrade to %s*", wcconst.BotVersion)
+	} else {
+		startmsg = fmt.Sprintf("*Started: %s*", wcconst.BotAppVersion)
+	}
+	log.Debug(startmsg)
+	err = bot.SendNewMessage("markdown", startmsg)
+	if err != nil {
+		log.Fatalf("Failed to create Telegram updates channel: %v", err)
 	}
 
 	log.Infoln("Starting Bot instance.")
