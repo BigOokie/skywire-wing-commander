@@ -7,7 +7,7 @@ package wcconst
 
 // Define constants used by the application
 const (
-	BotVersion    = "v0.2.0-beta.9"
+	BotVersion    = "v0.2.0-beta.1"
 	BotAppVersion = "Wing Commander " + BotVersion
 
 	AppInstanceID = "wing-commander-84F95320-8C2D-4236-9252-A322F01B91A7"
@@ -18,7 +18,7 @@ const (
 		"Exiting\n"
 
 	// ScriptPath defines the path to the Scripts folder
-	ScriptPath = "/src/github.com/BigOokie/skywire-wing-commander/scripts"
+	ScriptPath = "/src/github.com/BigOokie/skywire-wing-commander/scripts/"
 
 	MsgCmdLineHelp = "Wing Commander Help\n" +
 		"Command line flags:\n" +

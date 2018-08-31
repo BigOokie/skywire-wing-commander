@@ -8,6 +8,7 @@ package utils
 import (
 	"fmt"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"runtime"
 
@@ -69,10 +70,10 @@ func UpdateAvailable(ownername, reponame, versiontag string) (result bool, updat
 
 // DoUpgrade attempts to perform an upgrade by calling a local shell script
 func DoUpgrade() bool {
-	//var cmd *exec.Cmd
+	var cmd *exec.Cmd
 	var gopath = os.Getenv("GOPATH")
 	osName := runtime.GOOS
-	if osName != "windows" {
+	if osName == "windows" {
 		log.Error("Upgrade not supported on Windows at this time.")
 		return false
 	}
@@ -80,12 +81,12 @@ func DoUpgrade() bool {
 	scriptPath := filepath.Join(gopath, fmt.Sprintf("%s%s", wcconst.ScriptPath, "wc-upgrade.sh"))
 	log.Debugf("DoUpgrade - Script Path: %s", scriptPath)
 
-	//cmd = exec.Command("/bin/bash", scriptPath)
-	//_, err := cmd.CombinedOutput()
-	//if err != nil {
-	return false
-	//	}
-	//	return true
+	cmd = exec.Command("/bin/bash", scriptPath)
+	_, err := cmd.CombinedOutput()
+	if err != nil {
+		return false
+	}
+	return true
 }
 
 // InitAppInstance will attempt to initialise an instance of the application based on the provided value of appID.
