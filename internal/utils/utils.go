@@ -86,21 +86,12 @@ func DoUpgrade() bool {
 	err := cmd.Start()
 	log.Debug("DoUpgrade: Exiting application...")
 	os.Exit(1)
-	/*
-		if err != nil {
-			log.Error(err)
-			return false
-		}
-		return true
-	*/
-	/*
-		_, err := cmd.CombinedOutput()
-		if err != nil {
-			log.Error(err)
-			return false
-		}
-		return true
-	*/
+
+	if err != nil {
+		log.Error(err)
+		return false
+	}
+	return true
 }
 
 // InitAppInstance will attempt to initialise an instance of the application based on the provided value of appID.
