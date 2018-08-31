@@ -308,12 +308,17 @@ func (bot *Bot) SendReplyInlineKeyboard(ctx *BotContext, kb tgbotapi.InlineKeybo
 	log.Debug("Bot.SendReplyInlineKeyboard: Start")
 	defer log.Debug("Bot.SendReplyInlineKeyboard: End")
 
-	msg := tgbotapi.NewMessage(int64(ctx.message.From.ID), text)
+	var msg tgbotapi.MessageConfig
+
+	if ctx == nil {
+		msg = tgbotapi.NewMessage(bot.config.Telegram.ChatID, text)
+	} else {
+		msg = tgbotapi.NewMessage(int64(ctx.message.From.ID), text)
+	}
+	msg.ParseMode = "Markdown"
 	msg.ReplyMarkup = kb
 
 	_, err := bot.telegram.Send(msg)
-	//msg.ReplyMarkup = tgbotapi.NewRemoveKeyboard(true)
-	//_, err = bot.telegram.Send(msg)
 	return err
 }
 
@@ -469,9 +474,6 @@ func NewBot(config wcconfig.Config) (*Bot, error) {
 	log.Printf("Bot Chat: %s %d %s", chat.Type, chat.ID, chat.Title)
 
 	bot.setCommandHandlers()
-
-	//bot.SendMainMenuMessage()
-
 	return &bot, nil
 }
 
@@ -495,20 +497,25 @@ func (bot *Bot) handleUpdate(update *tgbotapi.Update) error {
 }
 
 // SendMainMenuMessage will send a main menu message
-func (bot *Bot) SendMainMenuMessage(update tgbotapi.Update) (tgbotapi.Message, error) {
-	buttons := make([]tgbotapi.InlineKeyboardButton, 0)
-	buttons = append(buttons, tgbotapi.NewInlineKeyboardButtonData("help", "mainmenu-btn-help"))
-	buttons = append(buttons, tgbotapi.NewInlineKeyboardButtonData("about", "mainmenu-btn-about"))
-	buttons = append(buttons, tgbotapi.NewInlineKeyboardButtonData("start", "mainmenu-btn-start"))
-	buttons = append(buttons, tgbotapi.NewInlineKeyboardButtonData("stop", "mainmenu-btn-stop"))
-	buttons = append(buttons, tgbotapi.NewInlineKeyboardButtonData("status", "mainmenu-btn-status"))
-	buttons = append(buttons, tgbotapi.NewInlineKeyboardButtonData("checkupdate", "mainmenu-btn-checkupdate"))
-	markup := tgbotapi.NewInlineKeyboardMarkup(buttons)
-	messageTxt := "Wing Commander: How can I help?"
-	msg := tgbotapi.NewMessage(int64(update.Message.From.ID), messageTxt)
-	msg.ReplyMarkup = markup
+func (bot *Bot) SendMainMenuMessage() error {
+	var button tgbotapi.InlineKeyboardButton
 
-	return bot.telegram.Send(msg)
+	if bot.skyMgrMonitor.IsRunning() {
+		button = tgbotapi.NewInlineKeyboardButtonData("stop", "mainmenu-btn-stop")
+	} else {
+		button = tgbotapi.NewInlineKeyboardButtonData("start", "mainmenu-btn-start")
+	}
+
+	menuKB := tgbotapi.NewInlineKeyboardMarkup(
+		tgbotapi.NewInlineKeyboardRow(button),
+		tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData("help", "mainmenu-btn-help")),
+		tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData("about", "mainmenu-btn-about")),
+		tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData("status", "mainmenu-btn-status")),
+		tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData("check update", "mainmenu-btn-checkupdate")),
+		tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData("update", "mainmenu-btn-update")),
+	)
+
+	return bot.SendReplyInlineKeyboard(nil, menuKB, "*Menu*")
 }
 
 // Start will start the Bot running - the main duty being to monitor for and handle messages
