@@ -1,11 +1,11 @@
  # Wing Commander - Quick Start Guide
 
-<img src="assets/icons/WingCommanderLogoFull-600x600.png" width=250 height=250>
+<img src="https://raw.githubusercontent.com/BigOokie/wc-digital-assets/master/assets/icons/WingCommanderLogoFull-600x600.png" width=250 height=250>
 
 Welcome to the **Wing Commander** Quick Start Guide. There will be very little commentary provided here - just follow along.
 
 ## Setup Overview
-<img src="assets/images/WingCommander-QuickSetup.gif">
+<img src="https://raw.githubusercontent.com/BigOokie/wc-digital-assets/master/assets/images/WingCommander-QuickSetup.gif">
 
 ## The Commands You Need
 This section presents all the commands you need, in the order you need them. Remember this is a Quick-Start Guide, and there are a lot of assumptions that you have pre-requisits installed and generally required things are all in order.
