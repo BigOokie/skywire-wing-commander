@@ -308,12 +308,17 @@ func (bot *Bot) SendReplyInlineKeyboard(ctx *BotContext, kb tgbotapi.InlineKeybo
 	log.Debug("Bot.SendReplyInlineKeyboard: Start")
 	defer log.Debug("Bot.SendReplyInlineKeyboard: End")
 
-	msg := tgbotapi.NewMessage(int64(ctx.message.From.ID), text)
+	var msg tgbotapi.MessageConfig
+
+	if ctx == nil {
+		msg = tgbotapi.NewMessage(bot.config.Telegram.ChatID, text)
+	} else {
+		msg = tgbotapi.NewMessage(int64(ctx.message.From.ID), text)
+	}
+	msg.ParseMode = "Markdown"
 	msg.ReplyMarkup = kb
 
 	_, err := bot.telegram.Send(msg)
-	//msg.ReplyMarkup = tgbotapi.NewRemoveKeyboard(true)
-	//_, err = bot.telegram.Send(msg)
 	return err
 }
 
@@ -344,6 +349,17 @@ func (bot *Bot) Send(ctx *BotContext, mode, format, text string) error {
 		return fmt.Errorf("unsupported message format: %s", format)
 	}
 	_, err := bot.telegram.Send(msg)
+	return err
+}
+
+// SendReplyKeyboard will send a reply using the provided keyboard
+func (bot *Bot) SendReplyKeyboard(ctx *BotContext, kb tgbotapi.ReplyKeyboardMarkup) error {
+	msg := tgbotapi.NewMessage(int64(ctx.message.From.ID), ctx.message.Text)
+	msg.ReplyMarkup = kb
+
+	_, err := bot.telegram.Send(msg)
+	//msg.ReplyMarkup = tgbotapi.NewRemoveKeyboard(true)
+	//_, err = bot.telegram.Send(msg)
 	return err
 }
 
@@ -458,13 +474,29 @@ func NewBot(config wcconfig.Config) (*Bot, error) {
 	log.Printf("Bot Chat: %s %d %s", chat.Type, chat.ID, chat.Title)
 
 	bot.setCommandHandlers()
-
 	return &bot, nil
 }
 
 func (bot *Bot) handleUpdate(update *tgbotapi.Update) error {
 	if update.Message == nil {
 		return nil
+	}
+
+	if update.CallbackQuery != nil {
+		log.Debugln("handleUpdate: CallbackQuery")
+	}
+
+	if update.ChosenInlineResult != nil {
+		log.Debugln("handleUpdate: ChosenInlineResult")
+		resultid, err := strconv.Atoi(update.ChosenInlineResult.ResultID)
+		if err != nil {
+			return fmt.Errorf("could not parse resultid: %v", err)
+		}
+		log.Debugln("handleUpdate: ResultID %v", resultid)
+	}
+
+	if update.InlineQuery != nil {
+		log.Debugln("handleUpdate: InlineQuery")
 	}
 
 	ctx := BotContext{message: update.Message}
@@ -479,6 +511,28 @@ func (bot *Bot) handleUpdate(update *tgbotapi.Update) error {
 	}
 
 	return bot.handleMessage(&ctx)
+}
+
+// SendMainMenuMessage will send a main menu message
+func (bot *Bot) SendMainMenuMessage() error {
+	var button tgbotapi.InlineKeyboardButton
+
+	if bot.skyMgrMonitor.IsRunning() {
+		button = tgbotapi.NewInlineKeyboardButtonData("stop", "mainmenu-btn-stop")
+	} else {
+		button = tgbotapi.NewInlineKeyboardButtonData("start", "mainmenu-btn-start")
+	}
+
+	menuKB := tgbotapi.NewInlineKeyboardMarkup(
+		tgbotapi.NewInlineKeyboardRow(button),
+		tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData("help", "mainmenu-btn-help")),
+		tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData("about", "mainmenu-btn-about")),
+		tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData("status", "mainmenu-btn-status")),
+		tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData("check update", "mainmenu-btn-checkupdate")),
+		tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData("update", "mainmenu-btn-update")),
+	)
+
+	return bot.SendReplyInlineKeyboard(nil, menuKB, "*Menu*")
 }
 
 // Start will start the Bot running - the main duty being to monitor for and handle messages
