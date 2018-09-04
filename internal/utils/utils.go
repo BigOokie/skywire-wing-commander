@@ -53,8 +53,11 @@ func UpdateAvailable(ownername, reponame, versiontag string) (result bool, updat
 		Repository: reponame,
 	}
 
-	res, _ := latest.Check(githubTag, versiontag)
-	if res.Outdated {
+	res, err := latest.Check(githubTag, versiontag)
+	if err != nil {
+		result = false
+		updateMsg = fmt.Sprintf("Error occured checking for update: %v", err)
+	} else if res.Outdated {
 		result = true
 		updateMsg = fmt.Sprintf("%s is not latest, you should upgrade to v%s", versiontag, res.Current)
 	} else if res.New {
@@ -68,6 +71,7 @@ func UpdateAvailable(ownername, reponame, versiontag string) (result bool, updat
 	return
 }
 
+// nolint
 // DoUpgrade attempts to perform an upgrade by calling a local shell script
 func DoUpgrade() bool {
 	var cmd *exec.Cmd
