@@ -1,5 +1,5 @@
 # Wing Commander
-<img src="assets/icons/WingCommanderLogoFull-600x600.png" width=250 height=250>
+<img src="https://raw.githubusercontent.com/BigOokie/wc-digital-assets/master/assets/icons/WingCommanderLogoFull-600x600.png" width=250 height=250>
 
 **Note:** The Skycoin Cloud included in the logo above is the property of the [Skycoin project](https://skycoin.net), and has been used here with permission of the Skycoin project.
 
@@ -52,8 +52,7 @@ The intention of this project is to have a specialised Telegram bot application 
 The following section should contain all the steps requied to setup and build the bot.
 
 ## Create your Bot
-
-<img src="assets/images/Telegram-BotFather.jpg" width=150 height=150>
+<img src="https://raw.githubusercontent.com/BigOokie/wc-digital-assets/master/assets/images/Telegram-BotFather.jpg" width=150 height=150>
 
 Initiate a Telegram chat with the `@BotFather`. The `@BotFather` is a bot provided by Telegram and will guide you through the process of creating a new Telegram account for your bot. 
 
@@ -148,7 +147,7 @@ The `@BotFather` allows you to revoke and re-issue you Bots APIKey at any time. 
 
 If you feel that you need to revoke and re-issue your Bots APIKey, initiate a chat in Telegram with the `@BotFater`. Issue the command `/mybots`. 
 
-<img src="assets/images/BotFather-Help.png" width=300>
+<img src="https://raw.githubusercontent.com/BigOokie/wc-digital-assets/master/assets/images/BotFather-Help.png" width=300>
 
 The `@BotFather` will provide a listing of your Bots for you to choose from. Select the Bot you wish to revoke and re-issue the APIKey for. The `@BotFather` will then present an options menu for the selected Bot. On this list should be an option `API Token`. Selecting this will display your Bots current `API Token` (`APIKey`). An option will also be presented to `Revoke current token`. Selecting this will revoke the current token and re-issue a new one. You will be returned to the set of options and you will need to select `API Token` again to view (and copy) the newlu=y issued `API Token`.
 
@@ -253,8 +252,7 @@ Additionally, the `/start` command will initiate a Heartbeat which will provide 
 **If you stop receiving the Heartbeat, you need to check whats going on.**
 
 ### Heartbeat screenshot
-<img src="assets/images/WingCommander-Heartbeat.png">
-
+<img src="https://raw.githubusercontent.com/BigOokie/wc-digital-assets/master/assets/images/WingCommander-Heartbeat.png">
 
 ## Stop
 `/stop`
