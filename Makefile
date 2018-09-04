@@ -15,7 +15,7 @@ test: ## Run tests for Wing Commander
 
 lint: ## Run linters. Use make install-linters first.
 	vendorcheck ./...
-	golangci-lint run --no-config --deadline=3m --disable-all --tests \
+	$GOPATH/bin/golangci-lint run --no-config --deadline=3m --disable-all --tests \
 		-E golint \
 		-E goimports \
 		-E varcheck \
