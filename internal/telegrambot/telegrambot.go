@@ -514,7 +514,7 @@ func (bot *Bot) handleUpdate(update *tgbotapi.Update) error {
 }
 
 // SendMainMenuMessage will send a main menu message
-func (bot *Bot) SendMainMenuMessage() error {
+func (bot *Bot) SendMainMenuMessage(ctx *BotContext) error {
 	var button tgbotapi.InlineKeyboardButton
 
 	if bot.skyMgrMonitor.IsRunning() {
@@ -532,7 +532,7 @@ func (bot *Bot) SendMainMenuMessage() error {
 		tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData("update", "mainmenu-btn-update")),
 	)
 
-	return bot.SendReplyInlineKeyboard(nil, menuKB, "*Menu*")
+	return bot.SendReplyInlineKeyboard(ctx, menuKB, "*Menu*")
 }
 
 // Start will start the Bot running - the main duty being to monitor for and handle messages

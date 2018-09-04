@@ -188,7 +188,7 @@ func (bot *Bot) handleCommandCheckUpdate(ctx *BotContext, command, args string) 
 // Handler for help handleCommandShowMenu
 func (bot *Bot) handleCommandShowMenu(ctx *BotContext, command, args string) error {
 	log.Debugf("Handle command: %s args: %s", command, args)
-	err := bot.SendMainMenuMessage()
+	err := bot.SendMainMenuMessage(ctx)
 	if err != nil {
 		logSendError("Bot.handleCommandShowMenu", err)
 	}

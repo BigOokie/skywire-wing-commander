@@ -65,7 +65,7 @@ func main() {
 		log.Fatalf("Failed to send startup message to Telegram: %v", err)
 	}
 
-	err = bot.SendMainMenuMessage()
+	err = bot.SendMainMenuMessage(nil)
 	if err != nil {
 		log.Fatalf("Failed to Send Main Menu: %v", err)
 	}
