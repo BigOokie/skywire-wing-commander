@@ -187,7 +187,7 @@ func (bot *Bot) handleCommandCheckUpdate(ctx *BotContext, command, args string) 
 
 // Handler for help handleCommandShowMenu
 func (bot *Bot) handleCommandShowMenu(ctx *BotContext, command, args string) error {
-	log.Debug("Handle command /menu")
+	log.Debugf("Handle command: %s args: %s", command, args)
 	err := bot.SendMainMenuMessage()
 	if err != nil {
 		logSendError("Bot.handleCommandShowMenu", err)
@@ -197,7 +197,7 @@ func (bot *Bot) handleCommandShowMenu(ctx *BotContext, command, args string) err
 
 // Handler for nodes command
 func (bot *Bot) handleCommandListNodes(ctx *BotContext, command, args string) error {
-	log.Debug("Handle command /listnodes")
+	log.Debugf("Handle command: %s args: %s", command, args)
 
 	if bot.skyMgrMonitor.GetConnectedNodeCount() == 0 {
 		log.Debug("Bot.handleCommandListNodes: No connected Nodes.")
