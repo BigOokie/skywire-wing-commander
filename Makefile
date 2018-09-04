@@ -1,15 +1,6 @@
 .PHONY: run run-help check cover
 .PHONY: install-linters format
 
-# Compilation output
-#BUILD_DIR = build
-BIN_DIR = bin
-#DOC_DIR = docs
-#INCLUDE_DIR = include
-
-#run:  ## Run the skycoin node. To add arguments, do 'make ARGS="--foo" run'.
-#	./run.sh ${ARGS}
-
 test: ## Run tests for Wing Commander
 	go test ./... -timeout=5m
 
@@ -43,16 +34,10 @@ cover: ## Runs tests on ./cmd/ with HTML code coverage
 
 install-linters: ## Install linters
 	go get -u github.com/FiloSottile/vendorcheck
-	# For some reason this install method is not recommended, see https://github.com/golangci/golangci-lint#install
-	# However, they suggest `curl ... | bash` which we should not do
-	#go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
 	# Using v1.10.2
-	curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | bash -s -- -b $GOPATH/bin v1.10.2
+	curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | bash -s -- -b $(GOPATH)/bin v1.10.2
 
 format: ## Formats the code. Must have goimports installed (use make install-linters).
 	goimports -w -local github.com/BigOokie/skywire-wing-commander ./cmd
 	goimports -w -local github.com/BigOokie/skywire-wing-commander ./internal
 
-#release-bin: ## Build standalone apps. Use osarch=${osarch} to specify the platform. Example: 'make release-bin osarch=darwin/amd64' Supported architectures are the same as 'release' command.
-#	cd $(ELECTRON_DIR) && ./build-standalone-release.sh ${osarch}
-#	@echo release files are in the folder of electron/release
