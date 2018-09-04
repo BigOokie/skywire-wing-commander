@@ -352,16 +352,24 @@ func (bot *Bot) Send(ctx *BotContext, mode, format, text string) error {
 	return err
 }
 
+/*
 // SendReplyKeyboard will send a reply using the provided keyboard
 func (bot *Bot) SendReplyKeyboard(ctx *BotContext, kb tgbotapi.ReplyKeyboardMarkup) error {
+	if ctx == nil {
+		msg = tgbotapi.NewMessage(bot.config.Telegram.ChatID, text)
+	} else {
+		msg = tgbotapi.NewMessage(int64(ctx.message.From.ID), ctx.message.Text)
+	}
+
 	msg := tgbotapi.NewMessage(int64(ctx.message.From.ID), ctx.message.Text)
 	msg.ReplyMarkup = kb
 
 	_, err := bot.telegram.Send(msg)
-	//msg.ReplyMarkup = tgbotapi.NewRemoveKeyboard(true)
-	//_, err = bot.telegram.Send(msg)
+	msg.ReplyMarkup = tgbotapi.NewRemoveKeyboard(true)
+	_, err = bot.telegram.Send(msg)
 	return err
 }
+*/
 
 /*
 func (bot *Bot) ReplyAboutEvent(ctx *Context, text string, event *Event) error {
@@ -481,23 +489,24 @@ func (bot *Bot) handleUpdate(update *tgbotapi.Update) error {
 	if update.Message == nil {
 		return nil
 	}
-
-	if update.CallbackQuery != nil {
-		log.Debugln("handleUpdate: CallbackQuery")
-	}
-
-	if update.ChosenInlineResult != nil {
-		log.Debugln("handleUpdate: ChosenInlineResult")
-		resultid, err := strconv.Atoi(update.ChosenInlineResult.ResultID)
-		if err != nil {
-			return fmt.Errorf("could not parse resultid: %v", err)
+	/*
+		if update.CallbackQuery != nil {
+			log.Debugln("handleUpdate: CallbackQuery")
 		}
-		log.Debugln("handleUpdate: ResultID %v", resultid)
-	}
 
-	if update.InlineQuery != nil {
-		log.Debugln("handleUpdate: InlineQuery")
-	}
+		if update.ChosenInlineResult != nil {
+			log.Debugln("handleUpdate: ChosenInlineResult")
+			resultid, err := strconv.Atoi(update.ChosenInlineResult.ResultID)
+			if err != nil {
+				return fmt.Errorf("could not parse resultid: %v", err)
+			}
+			log.Debugln("handleUpdate: ResultID %v", resultid)
+		}
+
+		if update.InlineQuery != nil {
+			log.Debugln("handleUpdate: InlineQuery")
+		}
+	*/
 
 	ctx := BotContext{message: update.Message}
 
