@@ -25,6 +25,8 @@ func getSendModeforContext(ctx *BotContext) string {
 	var mode string
 
 	if ctx.IsCallBackQuery() {
+		// we cannot "whisper" otherwise this will instruct the
+		// bot to talk to itself which is prohibuted. We must "yell"
 		mode = "yell"
 	} else if ctx.IsUserMessage() {
 		mode = "whisper"
@@ -46,7 +48,7 @@ func (bot *Bot) handleCommandHelp(ctx *BotContext, command, args string) error {
 // Handler for about command
 func (bot *Bot) handleCommandAbout(ctx *BotContext, command, args string) error {
 	log.Debugf("Handle command: %s args: %s", command, args)
-	err := bot.Send(ctx, "whisper", "markdown", wcconst.MsgAbout)
+	err := bot.Send(ctx, getSendModeforContext(ctx), "markdown", wcconst.MsgAbout)
 	if err != nil {
 		logSendError("Bot.handleCommandAbout", err)
 	}
@@ -56,11 +58,11 @@ func (bot *Bot) handleCommandAbout(ctx *BotContext, command, args string) error 
 // Handler for showconfig command
 func (bot *Bot) handleCommandShowConfig(ctx *BotContext, command, args string) error {
 	log.Debugf("Handle command: %s args: %s", command, args)
-	err := bot.Send(ctx, "whisper", "markdown", fmt.Sprintf(wcconst.MsgShowConfig, bot.config.String()))
+	err := bot.Send(ctx, getSendModeforContext(ctx), "markdown", fmt.Sprintf(wcconst.MsgShowConfig, bot.config.String()))
 	if err != nil {
 		logSendError("Bot.handleCommandShowConfig (Send):", err)
 		log.Debug("Bot.handleCommandShowConfig: Attempting to resend as text.")
-		err = bot.Send(ctx, "whisper", "text", fmt.Sprintf(wcconst.MsgShowConfig, bot.config.String()))
+		err = bot.Send(ctx, getSendModeforContext(ctx), "text", fmt.Sprintf(wcconst.MsgShowConfig, bot.config.String()))
 		if err != nil {
 			logSendError("Bot.handleCommandShowConfig (Resend as Text):", err)
 		}
@@ -103,7 +105,7 @@ func (bot *Bot) handleCommandStart(ctx *BotContext, command, args string) error 
 
 	if bot.skyMgrMonitor.IsRunning() {
 		log.Debug(wcconst.MsgMonitorAlreadyStarted)
-		err := bot.Send(ctx, "whisper", "markdown", wcconst.MsgMonitorAlreadyStarted)
+		err := bot.Send(ctx, getSendModeforContext(ctx), "markdown", wcconst.MsgMonitorAlreadyStarted)
 		if err != nil {
 			logSendError("Bot.handleCommandStart", err)
 		}
@@ -121,7 +123,7 @@ func (bot *Bot) handleCommandStart(ctx *BotContext, command, args string) error 
 	// Start monitoring the local Manager - provide cancelContext
 	//go bot.skyMgrMonitor.RunDiscoveryMonitor(cancelContext, monitorStatusMsgChan, bot.config.Monitor.DiscoveryMonitorIntMin)
 
-	err := bot.Send(ctx, "whisper", "markdown", wcconst.MsgMonitorStart)
+	err := bot.Send(ctx, getSendModeforContext(ctx), "markdown", wcconst.MsgMonitorStart)
 	if err != nil {
 		logSendError("Bot.handleCommandStart", err)
 	}
@@ -136,7 +138,7 @@ func (bot *Bot) handleCommandStop(ctx *BotContext, command, args string) error {
 		log.Debug(wcconst.MsgMonitorStop)
 		bot.skyMgrMonitor.StopManagerMonitor()
 		log.Debug(wcconst.MsgMonitorStopped)
-		err := bot.Send(ctx, "whisper", "markdown", wcconst.MsgMonitorStop)
+		err := bot.Send(ctx, getSendModeforContext(ctx), "markdown", wcconst.MsgMonitorStop)
 		if err != nil {
 			logSendError("Bot.handleCommandStop", err)
 		}
@@ -144,7 +146,7 @@ func (bot *Bot) handleCommandStop(ctx *BotContext, command, args string) error {
 	}
 
 	log.Debug(wcconst.MsgMonitorNotRunning)
-	err := bot.Send(ctx, "whisper", "markdown", wcconst.MsgMonitorNotRunning)
+	err := bot.Send(ctx, getSendModeforContext(ctx), "markdown", wcconst.MsgMonitorNotRunning)
 	if err != nil {
 		logSendError("Bot.handleCommandStop", err)
 	}
@@ -157,7 +159,7 @@ func (bot *Bot) handleCommandStatus(ctx *BotContext, command, args string) error
 
 	if !bot.skyMgrMonitor.IsRunning() {
 		// Monitor not running
-		err := bot.Send(ctx, "whisper", "markdown", wcconst.MsgMonitorNotRunning)
+		err := bot.Send(ctx, getSendModeforContext(ctx), "markdown", wcconst.MsgMonitorNotRunning)
 
 		if err != nil {
 			logSendError("Bot.handleCommandStatus", err)
@@ -168,7 +170,7 @@ func (bot *Bot) handleCommandStatus(ctx *BotContext, command, args string) error
 
 	// Build Status Check Message
 	msg := bot.skyMgrMonitor.BuildConnectionStatusMsg(wcconst.MsgStatus)
-	err := bot.Send(ctx, "whisper", "markdown", msg)
+	err := bot.Send(ctx, getSendModeforContext(ctx), "markdown", msg)
 	if err != nil {
 		logSendError("Bot.handleCommandStatus", err)
 	}
@@ -178,7 +180,7 @@ func (bot *Bot) handleCommandStatus(ctx *BotContext, command, args string) error
 // Handler for help CheckUpdate
 func (bot *Bot) handleCommandCheckUpdate(ctx *BotContext, command, args string) error {
 	log.Debugf("Handle command: %s args: %s", command, args)
-	err := bot.Send(ctx, "whisper", "markdown", "Checking for updates...")
+	err := bot.Send(ctx, getSendModeforContext(ctx), "markdown", "Checking for updates...")
 	if err != nil {
 		logSendError("Bot.handleCommandCheckUpdate", err)
 		return err
@@ -186,9 +188,9 @@ func (bot *Bot) handleCommandCheckUpdate(ctx *BotContext, command, args string) 
 
 	updateAvailable, updateMsg := utils.UpdateAvailable("BigOokie", "skywire-wing-commander", wcconst.BotVersion)
 	if updateAvailable {
-		err = bot.Send(ctx, "whisper", "markdown", fmt.Sprintf("*Update available:* %s", updateMsg))
+		err = bot.Send(ctx, getSendModeforContext(ctx), "markdown", fmt.Sprintf("*Update available:* %s", updateMsg))
 	} else {
-		err = bot.Send(ctx, "whisper", "markdown", fmt.Sprintf("*Up to date:* %s", updateMsg))
+		err = bot.Send(ctx, getSendModeforContext(ctx), "markdown", fmt.Sprintf("*Up to date:* %s", updateMsg))
 	}
 
 	if err != nil {
@@ -213,7 +215,7 @@ func (bot *Bot) handleCommandListNodes(ctx *BotContext, command, args string) er
 
 	if bot.skyMgrMonitor.GetConnectedNodeCount() == 0 {
 		log.Debug("Bot.handleCommandListNodes: No connected Nodes.")
-		err := bot.Send(ctx, "whisper", "markdown", "No connected Nodes.")
+		err := bot.Send(ctx, getSendModeforContext(ctx), "markdown", "No connected Nodes.")
 		if err != nil {
 			logSendError("Bot.handleCommandListNodes", err)
 		}
@@ -269,7 +271,7 @@ func (bot *Bot) handleCommandListNodes(ctx *BotContext, command, args string) er
 // Handler for help DoUpdate
 func (bot *Bot) handleCommandDoUpdate(ctx *BotContext, command, args string) error {
 	log.Debugf("Handle command: %s args: %s", command, args)
-	err := bot.Send(ctx, "whisper", "markdown", "*Initiating update...*")
+	err := bot.Send(ctx, getSendModeforContext(ctx), "markdown", "*Initiating update...*")
 	if err != nil {
 		logSendError("Bot.handleCommandCheckUpdate", err)
 		return err
@@ -277,19 +279,19 @@ func (bot *Bot) handleCommandDoUpdate(ctx *BotContext, command, args string) err
 
 	updateAvailable, updateMsg := utils.UpdateAvailable("BigOokie", "skywire-wing-commander", wcconst.BotVersion)
 	if !updateAvailable {
-		return bot.Send(ctx, "whisper", "markdown", fmt.Sprintf("*Already up to date:* %s", updateMsg))
+		return bot.Send(ctx, getSendModeforContext(ctx), "markdown", fmt.Sprintf("*Already up to date:* %s", updateMsg))
 	}
 
-	err = bot.Send(ctx, "whisper", "markdown", fmt.Sprintf("*Update available:* %s", updateMsg))
+	err = bot.Send(ctx, getSendModeforContext(ctx), "markdown", fmt.Sprintf("*Update available:* %s", updateMsg))
 	if err != nil {
 		logSendError("Bot.handleCommandCheckUpdate", err)
 		return err
 	}
 
 	if utils.DoUpgrade() {
-		err = bot.Send(ctx, "whisper", "markdown", "Upgrade succeeded.")
+		err = bot.Send(ctx, getSendModeforContext(ctx), "markdown", "Upgrade succeeded.")
 	} else {
-		err = bot.Send(ctx, "whisper", "markdown", "Upgrade failed.")
+		err = bot.Send(ctx, getSendModeforContext(ctx), "markdown", "Upgrade failed.")
 	}
 	if err != nil {
 		logSendError("Bot.handleCommandCheckUpdate", err)
@@ -326,7 +328,7 @@ func (bot *Bot) monitorEventLoop(runctx context.Context, botctx *BotContext, sta
 		case msg := <-statusMsgChan:
 			if msg != "" {
 				log.Debugf("Bot.monitorEventLoop: Status event: %s", msg)
-				err := bot.Send(botctx, "whisper", "markdown", msg)
+				err := bot.Send(botctx, getSendModeforContext(botctx), "markdown", msg)
 				if err != nil {
 					logSendError("Bot.monitorEventLoop", err)
 				}
@@ -339,7 +341,7 @@ func (bot *Bot) monitorEventLoop(runctx context.Context, botctx *BotContext, sta
 			msg := bot.skyMgrMonitor.BuildConnectionStatusMsg(wcconst.MsgHeartbeat)
 			log.Debug(msg)
 			if msg != "" {
-				err := bot.Send(botctx, "whisper", "markdown", msg)
+				err := bot.Send(botctx, getSendModeforContext(botctx), "markdown", msg)
 				if err != nil {
 					logSendError("Bot.handleCommandStatus", err)
 				}
