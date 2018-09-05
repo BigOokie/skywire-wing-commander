@@ -489,31 +489,37 @@ func (bot *Bot) handleUpdate(update *tgbotapi.Update) error {
 	log.Debugln("handleUpdate: Start")
 	defer log.Debugln("handleUpdate: End")
 	var err error
+	var ctx BotContext
+
 	//if update == nil || update.Message == nil {
 	if update == nil {
 		log.Debugln("handleUpdate: update is nil")
 		return err
 	}
 
-	if update.CallbackQuery != nil {
-		log.Debugln("handleUpdate: CallbackQuery %v", update.CallbackQuery)
+	if update.Message != nil {
+		ctx = BotContext{message: update.Message}
+	} else {
+		ctx = BotContext{message: update.CallbackQuery.Message}
+
 		//chatID := int64(update.CallbackQuery.From.ID)
 		//msgID := update.CallbackQuery.Message.MessageID
-		//editText := tgbotapi.NewEditMessageText(chatID, msgID, "Got data "+update.CallbackQuery.Data)
-		//err = bot.telegram.Send(editText)
-		err = bot.SendNewMessage("markdown", "Got data "+update.CallbackQuery.Data)
+	}
+
+	if u := ctx.message.From; u != nil {
+		ctx.User = &User{
+			ID:        u.ID,
+			UserName:  u.UserName,
+			FirstName: u.FirstName,
+			LastName:  u.LastName,
+		}
+	}
+
+	if update.CallbackQuery != nil {
+		log.Debugln("handleUpdate: CallbackQuery %v", update.CallbackQuery)
+		err = bot.Send(&ctx, "yell", "markdown", "Got data "+update.CallbackQuery.Data)
 	} else {
 		log.Debugln("handleUpdate: handleMessage")
-		ctx := BotContext{message: update.Message}
-
-		if u := ctx.message.From; u != nil {
-			ctx.User = &User{
-				ID:        u.ID,
-				UserName:  u.UserName,
-				FirstName: u.FirstName,
-				LastName:  u.LastName,
-			}
-		}
 		err = bot.handleMessage(&ctx)
 	}
 	return err
