@@ -567,15 +567,15 @@ func createMarkup(btns ...string) tgbotapi.InlineKeyboardMarkup {
 
 // SendMainMenuMessage will send a main menu message
 func (bot *Bot) SendMainMenuMessage(ctx *BotContext) error {
-	//var button tgbotapi.InlineKeyboardButton
-	var startstopbtn string
+	var menuKB tgbotapi.InlineKeyboardMarkup
 
 	if bot.skyMgrMonitor.IsRunning() {
-		startstopbtn = "stop"
+		// Monitor is running
+		menuKB = createMarkup("stop", "status", "help", "about", "update")
 	} else {
-		startstopbtn = "stop"
+		// Monitor is not running
+		menuKB = createMarkup("start", "help", "about", "update")
 	}
-	menuKB := createMarkup(startstopbtn, "help", "about", "status", "update")
 	return bot.SendReplyInlineKeyboard(ctx, menuKB, "*Menu*")
 }
 
