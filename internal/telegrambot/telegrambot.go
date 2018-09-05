@@ -31,7 +31,18 @@ type Bot struct {
 // BotContext provides context for Bot Messages
 type BotContext struct {
 	message *tgbotapi.Message
+	cbQuery *tgbotapi.CallbackQuery
 	User    *User
+}
+
+// IsCallBackQuery will evaluate the BotContext and determine if it is a CallBackQueyr or not
+func (ctx *BotContext) IsCallBackQuery() bool {
+	return ctx != nil && ctx.cbQuery != nil
+}
+
+// IsUserMessage will evaluate the BotContext and determine if it is a regular User Message or not
+func (ctx *BotContext) IsUserMessage() bool {
+	return ctx != nil && ctx.message != nil && ctx.cbQuery == nil
 }
 
 // CommandHandler provides an interface specification for command handlers
@@ -450,6 +461,26 @@ func (bot *Bot) handleMessage(ctx *BotContext) error {
 	*/
 }
 
+func (bot *Bot) handleCallbackQuery(ctx *BotContext) error {
+	// Check to ensure the User sending the message is registered in the Bots config
+	// as the Admin user. Ignore any message or command from anyone else
+	// Fixed #10
+	if fmt.Sprintf("@%s", ctx.message.Chat.UserName) != bot.config.Telegram.Admin {
+		log.Debugf("Bot.handleCallbackQuery: Ignoring message from non-owner user chat %d (%s)", ctx.message.Chat.ID, "@"+ctx.message.Chat.UserName)
+		return nil
+	}
+
+	// If this is NOT a prive chat then DONT respond
+	if !ctx.message.Chat.IsPrivate() {
+		log.Debugf("Bot.handleCallbackQuery: Unknown chat %d (%s)", ctx.message.Chat.ID, ctx.message.Chat.UserName)
+		return nil
+	}
+
+	//log.Debug("Bot.handleMessage: handlePrivateMessage")
+	//return bot.handlePrivateMessage(ctx)
+	return bot.handleCommand(ctx, ctx.cbQuery.Data, "")
+}
+
 // NewBot will create a new instance of a Bot struct based on the passed Config structure
 // which supplies runtime configuration for the bot.
 func NewBot(config wcconfig.Config) (*Bot, error) {
@@ -497,13 +528,12 @@ func (bot *Bot) handleUpdate(update *tgbotapi.Update) error {
 		return err
 	}
 
+	// Setup the bot context based on the type of message we are handling
 	if update.Message != nil {
 		ctx = BotContext{message: update.Message}
-	} else {
-		ctx = BotContext{message: update.CallbackQuery.Message}
-
-		//chatID := int64(update.CallbackQuery.From.ID)
-		//msgID := update.CallbackQuery.Message.MessageID
+	} else if update.CallbackQuery != nil {
+		ctx = BotContext{message: update.CallbackQuery.Message,
+			cbQuery: update.CallbackQuery}
 	}
 
 	if u := ctx.message.From; u != nil {
@@ -516,8 +546,8 @@ func (bot *Bot) handleUpdate(update *tgbotapi.Update) error {
 	}
 
 	if update.CallbackQuery != nil {
-		log.Debugln("handleUpdate: CallbackQuery %v", update.CallbackQuery)
-		err = bot.Send(&ctx, "yell", "markdown", "Got data "+update.CallbackQuery.Data)
+		log.Debugln("handleUpdate: handleCallbackQuery")
+		err = bot.handleCallbackQuery(&ctx)
 	} else {
 		log.Debugln("handleUpdate: handleMessage")
 		err = bot.handleMessage(&ctx)
@@ -545,24 +575,7 @@ func (bot *Bot) SendMainMenuMessage(ctx *BotContext) error {
 	} else {
 		startstopbtn = "stop"
 	}
-	menuKB := createMarkup(startstopbtn, "help", "about", "status", "check update", "update")
-	/*
-		if bot.skyMgrMonitor.IsRunning() {
-			button = tgbotapi.NewInlineKeyboardButtonData("stop", "mainmenu-btn-stop")
-		} else {
-			button = tgbotapi.NewInlineKeyboardButtonData("start", "mainmenu-btn-start")
-		}
-
-		menuKB := tgbotapi.NewInlineKeyboardMarkup(
-			tgbotapi.NewInlineKeyboardRow(button),
-			tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData("help", "mainmenu-btn-help")),
-			tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData("about", "mainmenu-btn-about")),
-			tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData("status", "mainmenu-btn-status")),
-			tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData("check update", "mainmenu-btn-checkupdate")),
-			tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData("update", "mainmenu-btn-update")),
-		)
-	*/
-
+	menuKB := createMarkup(startstopbtn, "help", "about", "status", "update")
 	return bot.SendReplyInlineKeyboard(ctx, menuKB, "*Menu*")
 }
 

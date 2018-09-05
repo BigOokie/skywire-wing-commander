@@ -21,10 +21,22 @@ func logSendError(from string, err error) {
 	log.Errorf("%s - Error: %v", from, err)
 }
 
+func getSendModeforContext(ctx *BotContext) string {
+	var mode string
+
+	if ctx.IsCallBackQuery() {
+		mode = "yell"
+	} else if ctx.IsUserMessage() {
+		mode = "whisper"
+	}
+
+	return mode
+}
+
 // Handler for help command
 func (bot *Bot) handleCommandHelp(ctx *BotContext, command, args string) error {
 	log.Debugf("Handle command: %s args: %s", command, args)
-	err := bot.Send(ctx, "whisper", "markdown", fmt.Sprintf(wcconst.MsgHelp, bot.config.Telegram.Admin))
+	err := bot.Send(ctx, getSendModeforContext(ctx), "markdown", fmt.Sprintf(wcconst.MsgHelp, bot.config.Telegram.Admin))
 	if err != nil {
 		logSendError("Bot.handleCommandHelp", err)
 	}
