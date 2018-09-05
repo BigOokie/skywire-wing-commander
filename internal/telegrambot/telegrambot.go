@@ -517,14 +517,14 @@ func NewBot(config wcconfig.Config) (*Bot, error) {
 }
 
 func (bot *Bot) handleUpdate(update *tgbotapi.Update) error {
-	log.Debugln("handleUpdate: Start")
-	defer log.Debugln("handleUpdate: End")
+	log.Debugln("Bot.handleUpdate: Start")
+	defer log.Debugln("Bot.handleUpdate: End")
 	var err error
 	var ctx BotContext
 
 	//if update == nil || update.Message == nil {
 	if update == nil {
-		log.Debugln("handleUpdate: update is nil")
+		log.Debugln("Bot.handleUpdate: update is nil")
 		return err
 	}
 
@@ -546,12 +546,19 @@ func (bot *Bot) handleUpdate(update *tgbotapi.Update) error {
 	}
 
 	if update.CallbackQuery != nil {
-		log.Debugln("handleUpdate: handleCallbackQuery")
+		log.Debugln("Bot.handleUpdate: handleCallbackQuery")
 		err = bot.handleCallbackQuery(&ctx)
 	} else {
-		log.Debugln("handleUpdate: handleMessage")
+		log.Debugln("Bot.handleUpdate: handleMessage")
 		err = bot.handleMessage(&ctx)
 	}
+
+	if err != nil {
+		log.Errorf("Bot.handleUpdate: Error %v", err)
+	}
+
+	log.Debugf("Bot.handleUpdate: SendMainMenuMessage")
+	//_ = bot.SendMainMenuMessage(&ctx)
 	return err
 }
 
@@ -593,12 +600,15 @@ func (bot *Bot) Start() {
 
 	updates, err := bot.telegram.GetUpdatesChan(update)
 	if err != nil {
-		log.Fatalf("Failed to create Telegram updates channel: %v", err)
+		log.Fatalf("Bot.Start: Failed to create Telegram updates channel: %v", err)
 	}
 
 	for update := range updates {
 		if err := bot.handleUpdate(&update); err != nil {
-			log.Errorf("Error: %v", err)
+			log.Errorf("Bot.Start: Error: %v", err)
+		}
+		if err := bot.SendMainMenuMessage(nil); err != nil {
+			log.Errorf("Bot.Start: Error: %v", err)
 		}
 	}
 }
