@@ -486,60 +486,76 @@ func NewBot(config wcconfig.Config) (*Bot, error) {
 }
 
 func (bot *Bot) handleUpdate(update *tgbotapi.Update) error {
-	if update.Message == nil {
-		return nil
+	log.Debugln("handleUpdate: Start")
+	defer log.Debugln("handleUpdate: End")
+	var err error
+	//if update == nil || update.Message == nil {
+	if update == nil {
+		log.Debugln("handleUpdate: update is nil")
+		return err
 	}
-	/*
-		if update.CallbackQuery != nil {
-			log.Debugln("handleUpdate: CallbackQuery")
-		}
 
-		if update.ChosenInlineResult != nil {
-			log.Debugln("handleUpdate: ChosenInlineResult")
-			resultid, err := strconv.Atoi(update.ChosenInlineResult.ResultID)
-			if err != nil {
-				return fmt.Errorf("could not parse resultid: %v", err)
+	if update.CallbackQuery != nil {
+		log.Debugln("handleUpdate: CallbackQuery %v", update.CallbackQuery)
+		//chatID := int64(update.CallbackQuery.From.ID)
+		//msgID := update.CallbackQuery.Message.MessageID
+		//editText := tgbotapi.NewEditMessageText(chatID, msgID, "Got data "+update.CallbackQuery.Data)
+		//err = bot.telegram.Send(editText)
+		err = bot.SendNewMessage("markdown", "Got data "+update.CallbackQuery.Data)
+	} else {
+		log.Debugln("handleUpdate: handleMessage")
+		ctx := BotContext{message: update.Message}
+
+		if u := ctx.message.From; u != nil {
+			ctx.User = &User{
+				ID:        u.ID,
+				UserName:  u.UserName,
+				FirstName: u.FirstName,
+				LastName:  u.LastName,
 			}
-			log.Debugln("handleUpdate: ResultID %v", resultid)
 		}
-
-		if update.InlineQuery != nil {
-			log.Debugln("handleUpdate: InlineQuery")
-		}
-	*/
-
-	ctx := BotContext{message: update.Message}
-
-	if u := ctx.message.From; u != nil {
-		ctx.User = &User{
-			ID:        u.ID,
-			UserName:  u.UserName,
-			FirstName: u.FirstName,
-			LastName:  u.LastName,
-		}
+		err = bot.handleMessage(&ctx)
 	}
+	return err
+}
 
-	return bot.handleMessage(&ctx)
+// return tgbotapi.InlineKeyboardMarkup
+func createMarkup(btns ...string) tgbotapi.InlineKeyboardMarkup {
+	row := tgbotapi.NewInlineKeyboardRow()
+	for _, btn := range btns {
+		inlineBtn := tgbotapi.NewInlineKeyboardButtonData(btn, btn)
+		row = append(row, inlineBtn)
+	}
+	return tgbotapi.NewInlineKeyboardMarkup(row)
 }
 
 // SendMainMenuMessage will send a main menu message
 func (bot *Bot) SendMainMenuMessage(ctx *BotContext) error {
-	var button tgbotapi.InlineKeyboardButton
+	//var button tgbotapi.InlineKeyboardButton
+	var startstopbtn string
 
 	if bot.skyMgrMonitor.IsRunning() {
-		button = tgbotapi.NewInlineKeyboardButtonData("stop", "mainmenu-btn-stop")
+		startstopbtn = "stop"
 	} else {
-		button = tgbotapi.NewInlineKeyboardButtonData("start", "mainmenu-btn-start")
+		startstopbtn = "stop"
 	}
+	menuKB := createMarkup(startstopbtn, "help", "about", "status", "check update", "update")
+	/*
+		if bot.skyMgrMonitor.IsRunning() {
+			button = tgbotapi.NewInlineKeyboardButtonData("stop", "mainmenu-btn-stop")
+		} else {
+			button = tgbotapi.NewInlineKeyboardButtonData("start", "mainmenu-btn-start")
+		}
 
-	menuKB := tgbotapi.NewInlineKeyboardMarkup(
-		tgbotapi.NewInlineKeyboardRow(button),
-		tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData("help", "mainmenu-btn-help")),
-		tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData("about", "mainmenu-btn-about")),
-		tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData("status", "mainmenu-btn-status")),
-		tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData("check update", "mainmenu-btn-checkupdate")),
-		tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData("update", "mainmenu-btn-update")),
-	)
+		menuKB := tgbotapi.NewInlineKeyboardMarkup(
+			tgbotapi.NewInlineKeyboardRow(button),
+			tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData("help", "mainmenu-btn-help")),
+			tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData("about", "mainmenu-btn-about")),
+			tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData("status", "mainmenu-btn-status")),
+			tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData("check update", "mainmenu-btn-checkupdate")),
+			tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData("update", "mainmenu-btn-update")),
+		)
+	*/
 
 	return bot.SendReplyInlineKeyboard(ctx, menuKB, "*Menu*")
 }
