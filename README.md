@@ -222,6 +222,9 @@ This section outlines the Telegram Bot commands that are currently supported by 
 - [Start](#start)
 - [Stop](#stop)
 - [Check Updates](#check-updates)
+- [Do Update](#do-update)
+- [Up Time](#up-time)
+- [Main Menu](#main-menu)
 
 ## Help
 `/help`
@@ -276,6 +279,12 @@ Additionally, the `/start` command will initiate a Heartbeat which will provide 
 **Wing Commander** will dynamically generate a URL request to the [skywirenc.com](https://skywirenc.com) site for the currently connected local Nodes. The user will be presented with a hyperlink button in Telegram that they can click to be taken to the site to check their nodes uptime.
 
 Quite deliberatly, we have avoided attempting to compute uptime indipendantly. We prefer to utilise the same central source to remove ambiguity and potential for drift in calculations.
+
+## Main Menu
+`/menu`
+This command can be used to manually request **Wing Commander** to display its **Main Menu** buttons.
+
+<img src="https://raw.githubusercontent.com/BigOokie/wc-digital-assets/master/assets/images/wingcommander-menu.png">
 
 ***
 

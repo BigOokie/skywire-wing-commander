@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v0.2.0-beta.11] - TBA
+### Added
+- Added support for Telegram Inline Keyboards. **Wing Commander** will now display a **Main Menu** to the user at startup. The **Main Menu** is context aware, and will only display command button options that are considered valid based on the current state. For example, the `start` button will be shown if the Bot is not currently monitoring your Nodes and the `stop` button will be shown if it is.  The **Main Menu** will be shown automatically on start-up and at the completion of executing a command. Note that some commands are performed in the background and responces rely on feedback from remote systems. In these cases the menu may move up through the conversation as additional status information is reported by the Bot.
+- Added the `/menu` command. This allows the user to manually request the **Main Menu** to be shown.
+### Changed
+### Deprecated
+### Removed
+### Fixed
+### Security
+
 ## [v0.2.0-beta.10] - 2018-09-01
 ### Added
 ### Changed
@@ -184,6 +194,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 [Unreleased]: 
 https://github.com/BigOokie/Skywire-Wing-Commander/compare/master...dev
+[v0.2.0-beta.11]: 
+https://github.com/BigOokie/Skywire-Wing-Commander/compare/v0.2.0-beta.10...v0.2.0-beta.11
 [v0.2.0-beta.10]: 
 https://github.com/BigOokie/Skywire-Wing-Commander/compare/v0.2.0-beta.9...v0.2.0-beta.10
 [v0.2.0-beta.9]: 
