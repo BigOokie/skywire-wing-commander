@@ -1,5 +1,5 @@
-.PHONY: run run-help check cover
-.PHONY: install-linters format
+.PHONY: test lint check cover
+.PHONY: install-linters
 
 test: ## Run tests for Wing Commander
 	go test ./... -timeout=5m
@@ -37,7 +37,7 @@ install-linters: ## Install linters
 	# Using v1.10.2
 	curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | bash -s -- -b $(GOPATH)/bin v1.10.2
 
-format: ## Formats the code. Must have goimports installed (use make install-linters).
-	goimports -w -local github.com/BigOokie/skywire-wing-commander ./cmd
-	goimports -w -local github.com/BigOokie/skywire-wing-commander ./internal
+#format: ## Formats the code. Must have goimports installed (use make install-linters).
+#	goimports -w -local github.com/BigOokie/skywire-wing-commander ./cmd
+#	goimports -w -local github.com/BigOokie/skywire-wing-commander ./internal
 
