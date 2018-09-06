@@ -570,10 +570,10 @@ func (bot *Bot) SendMainMenuMessage(ctx *BotContext) error {
 
 	if bot.skyMgrMonitor.IsRunning() {
 		// Monitor is running
-		menuKB = CreateMultiLineMarkup("stop", "status", "uptime", "|", "help", "about", "update")
+		menuKB = CreateMultiLineMarkup("stop", "|", "status", "uptime", "|", "help", "about", "update")
 	} else {
 		// Monitor is not running
-		menuKB = CreateMultiLineMarkup("start", "help", "|", "about", "update")
+		menuKB = CreateMultiLineMarkup("start", "|", "help", "about", "update")
 	}
 	return bot.SendReplyInlineKeyboard(ctx, menuKB, "*Menu*")
 }
