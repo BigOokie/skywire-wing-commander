@@ -564,26 +564,16 @@ func (bot *Bot) handleUpdate(update *tgbotapi.Update) error {
 	return err
 }
 
-// return tgbotapi.InlineKeyboardMarkup
-func createMarkup(btns ...string) tgbotapi.InlineKeyboardMarkup {
-	row := tgbotapi.NewInlineKeyboardRow()
-	for _, btn := range btns {
-		inlineBtn := tgbotapi.NewInlineKeyboardButtonData(btn, btn)
-		row = append(row, inlineBtn)
-	}
-	return tgbotapi.NewInlineKeyboardMarkup(row)
-}
-
 // SendMainMenuMessage will send a main menu message
 func (bot *Bot) SendMainMenuMessage(ctx *BotContext) error {
 	var menuKB tgbotapi.InlineKeyboardMarkup
 
 	if bot.skyMgrMonitor.IsRunning() {
 		// Monitor is running
-		menuKB = createMarkup("stop", "status", "uptime", "help", "about", "update")
+		menuKB = CreateMultiLineMarkup("stop", "status", "uptime", "|", "help", "about", "update")
 	} else {
 		// Monitor is not running
-		menuKB = createMarkup("start", "help", "about", "update")
+		menuKB = CreateMultiLineMarkup("start", "help", "|", "about", "update")
 	}
 	return bot.SendReplyInlineKeyboard(ctx, menuKB, "*Menu*")
 }
