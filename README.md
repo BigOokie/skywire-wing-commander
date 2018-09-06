@@ -284,7 +284,7 @@ Quite deliberatly, we have avoided attempting to compute uptime indipendantly. W
 `/menu`
 This command can be used to manually request **Wing Commander** to display its **Main Menu** buttons.
 
-<img src="https://raw.githubusercontent.com/BigOokie/wc-digital-assets/master/assets/images/wingcommander-menu.png">
+<img src="https://raw.githubusercontent.com/BigOokie/wc-digital-assets/master/assets/images/WingCommander-Menu.png">
 
 ***
 
