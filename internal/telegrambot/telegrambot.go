@@ -323,6 +323,8 @@ func (bot *Bot) SendReplyInlineKeyboard(ctx *BotContext, kb tgbotapi.InlineKeybo
 
 	if ctx == nil {
 		msg = tgbotapi.NewMessage(bot.config.Telegram.ChatID, text)
+	} else if ctx.IsCallBackQuery() {
+		msg = tgbotapi.NewMessage(int64(ctx.cbQuery.From.ID), text)
 	} else {
 		msg = tgbotapi.NewMessage(int64(ctx.message.From.ID), text)
 	}
@@ -578,7 +580,7 @@ func (bot *Bot) SendMainMenuMessage(ctx *BotContext) error {
 
 	if bot.skyMgrMonitor.IsRunning() {
 		// Monitor is running
-		menuKB = createMarkup("stop", "status", "help", "about", "update")
+		menuKB = createMarkup("stop", "status", "uptime", "help", "about", "update")
 	} else {
 		// Monitor is not running
 		menuKB = createMarkup("start", "help", "about", "update")
