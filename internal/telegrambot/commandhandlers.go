@@ -209,6 +209,7 @@ func (bot *Bot) handleCommandShowMenu(ctx *BotContext, command, args string) err
 	return err
 }
 
+/*
 // Handler for nodes command
 func (bot *Bot) handleCommandListNodes(ctx *BotContext, command, args string) error {
 	log.Debugf("Handle command: %s args: %s", command, args)
@@ -247,6 +248,7 @@ func (bot *Bot) handleCommandListNodes(ctx *BotContext, command, args string) er
 
 	return err
 }
+*/
 
 // Handler for help DoUpdate
 func (bot *Bot) handleCommandDoUpdate(ctx *BotContext, command, args string) error {
