@@ -19,7 +19,7 @@
 - [Contributors](CONTRIBUTORS.md)
 - [Overview](#overview)
 - [Wing Comamander Setup](#wing-comamander-setup)
-    - [Quick Start Guide](QUICK-START-GUIDE.md)
+    - [Quick Start Guide](https://github.com/BigOokie/skywire-wing-commander/wiki/Quick-Start-Guide)
     - [Create your Bot](#create-your-bot)
     - [Install and Build](#install-and-build)
     - [Update and Rebuild](#update-and-rebuild)
