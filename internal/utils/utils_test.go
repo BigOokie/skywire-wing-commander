@@ -56,7 +56,10 @@ func Test_ReleaseAppInstance_Double_Unlock(t *testing.T) {
 	if appInst == nil {
 		t.Error("Failed to obtain application instance.")
 	}
-	appInst.TryUnlock()
+	err := appInst.TryUnlock()
+	if err != nil {
+		t.Error("TryUnlock failded")
+	}
 
 	ReleaseAppInstance(appInst)
 }
