@@ -46,3 +46,23 @@ func Test_ReleaseAppInstance_Ok(t *testing.T) {
 
 	ReleaseAppInstance(appInst)
 }
+
+func Test_UpgradeAvailable_BadRepo(t *testing.T) {
+	result, msg := UpdateAvailable("BigOokie", "ThisRepoDoesntExist", "1.0")
+	if result {
+		t.Errorf("An upgrade should not be available as the Repo does not exist. %s", msg)
+	}
+}
+func Test_UpgradeAvailable_GoodRepo_BadVersion(t *testing.T) {
+	result, msg := UpdateAvailable("BigOokie", "skywire-wing-commander", "BAD-99999")
+	if result {
+		t.Errorf("An upgrade should not be available. The version tag should not exist. %s", msg)
+	}
+}
+
+func Test_UpgradeAvailable_GoodRepo_VersionOk(t *testing.T) {
+	result, msg := UpdateAvailable("BigOokie", "skywire-wing-commander", "0.0.1")
+	if !result {
+		t.Errorf("An upgrade should be available. The newer version tag should exist. %s", msg)
+	}
+}
