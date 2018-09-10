@@ -6,6 +6,8 @@ package utils
 
 import (
 	"testing"
+
+	"github.com/BigOokie/skywire-wing-commander/internal/wcconst"
 )
 
 func Test_FileExists_NotOk(t *testing.T) {
@@ -24,6 +26,23 @@ func Test_FileExists_Ok(t *testing.T) {
 
 func Test_UserHome(t *testing.T) {
 	if UserHome() == "" {
-		t.Error("Failed to determine User Home Pather.")
+		t.Error("Failed to determine User Home Path")
 	}
+}
+
+func Test_InitAppInstance_Ok(t *testing.T) {
+	appInst := InitAppInstance(wcconst.AppInstanceID + "Test_InitAppInstance_Ok")
+	defer appInst.Unlock()
+	if appInst == nil {
+		t.Error("Failed to obtain application instance.")
+	}
+}
+
+func Test_ReleaseAppInstance_Ok(t *testing.T) {
+	appInst := InitAppInstance(wcconst.AppInstanceID + "Test_ReleaseAppInstance_Ok")
+	if appInst == nil {
+		t.Error("Failed to obtain application instance.")
+	}
+
+	ReleaseAppInstance(appInst)
 }
