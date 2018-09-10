@@ -61,6 +61,14 @@
   revision = "ef8a98b0bbce4a65b5aa4c368430a80ddc533168"
 
 [[projects]]
+  branch = "master"
+  digest = "1:289a0aeeff2a467506d6faacb71c783a8610e53639e8f065e1997a569e622d6b"
+  name = "github.com/jpillora/go-ogle-analytics"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "14b04e0594ef6a9fd943363b135656f0ec8c9d0e"
+
+[[projects]]
   digest = "1:c568d7727aa262c32bdf8a3f7db83614f7af0ed661474b24588de635c20024c7"
   name = "github.com/magiconair/properties"
   packages = ["."]
@@ -225,6 +233,7 @@
   analyzer-version = 1
   input-imports = [
     "github.com/go-test/deep",
+    "github.com/jpillora/go-ogle-analytics",
     "github.com/marcsauter/single",
     "github.com/sirupsen/logrus",
     "github.com/spf13/viper",

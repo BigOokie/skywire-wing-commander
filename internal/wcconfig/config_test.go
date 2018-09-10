@@ -15,6 +15,10 @@ func Test_ConfigString(t *testing.T) {
 
 	expectstr := "[WingCommander]\n" +
 		"  twofactorenabled = false\n" +
+		"  analyticsenabled = false\n" +
+		"[AppAnalytics]\n" +
+		"  clientuuid = \n" +
+		"  userid = \n" +
 		"[SkyManager]\n" +
 		"  address = \"127.0.0.1:8000\"\n" +
 		"  discoveryaddress = \"discovery.skycoin.net:8001\"\n" +

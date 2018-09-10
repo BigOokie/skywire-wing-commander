@@ -10,6 +10,8 @@ const (
 	BotVersion    = "v0.2.0-beta.11"
 	BotAppVersion = "Wing Commander " + BotVersion
 
+	AnalyticsID = "UA-125471033-1"
+
 	AppInstanceID = "wing-commander-84F95320-8C2D-4236-9252-A322F01B91A7"
 
 	MsgAppInstErr = "Another instance of Wing Commander has been detected running on this system.\n\n" +

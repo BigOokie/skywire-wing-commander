@@ -13,6 +13,7 @@ import (
 	"github.com/BigOokie/skywire-wing-commander/internal/skymgrmon"
 	"github.com/BigOokie/skywire-wing-commander/internal/wcconfig"
 	"github.com/BigOokie/skywire-wing-commander/internal/wcconst"
+	"github.com/jpillora/go-ogle-analytics"
 	log "github.com/sirupsen/logrus"
 	"gopkg.in/telegram-bot-api.v4"
 )
@@ -26,6 +27,7 @@ type Bot struct {
 	adminCommandHandlers   map[string]CommandHandler
 	privateMessageHandlers []MessageHandler
 	groupMessageHandlers   []MessageHandler
+	gaclient               *ga.Client
 }
 
 // BotContext provides context for Bot Messages
@@ -483,6 +485,38 @@ func (bot *Bot) handleCallbackQuery(ctx *BotContext) error {
 	return bot.handleCommand(ctx, ctx.cbQuery.Data, "")
 }
 
+// initGAClient will initialise the GA client and send the first event
+func (bot *Bot) initGAClient() {
+	log.Debugf("InitGAClient: Start")
+	defer log.Debugf("InitGAClient: End")
+	var err error
+	bot.gaclient, err = ga.NewClient(wcconst.AnalyticsID)
+	if err != nil {
+		panic(err)
+	}
+
+	bot.gaclient.DataSource("app")
+	bot.gaclient.SessionControl("start")
+	bot.gaclient.UserID(bot.config.AppAnalytics.UserID)
+	bot.gaclient.ApplicationName("Wing Commander")
+	bot.gaclient.ApplicationVersion(wcconst.BotVersion)
+
+	bot.SendGAEvent("AppInit", "InitGAClient", "Init GA Client")
+}
+
+// SendGAEvent will send a GA Event on the
+func (bot *Bot) SendGAEvent(category, action, label string) {
+	log.Debugf("Bot.SendGAEvent: Start")
+	defer log.Debugf("Bot.SendGAEvent: End")
+
+	if bot.gaclient != nil {
+		err := bot.gaclient.Send(ga.NewEvent(category, action).Label(label))
+		if err != nil {
+			log.Errorf("Bot.SendGAEvent: Error: %v", err)
+		}
+	}
+}
+
 // NewBot will create a new instance of a Bot struct based on the passed Config structure
 // which supplies runtime configuration for the bot.
 func NewBot(config wcconfig.Config) (*Bot, error) {
@@ -493,6 +527,10 @@ func NewBot(config wcconfig.Config) (*Bot, error) {
 	}
 	bot.config = config
 	var err error
+
+	if config.WingCommander.AnalyticsEnabled {
+		bot.initGAClient()
+	}
 
 	bot.skyMgrMonitor = skymgrmon.NewMonitor(config.SkyManager.Address, config.SkyManager.DiscoveryAddress)
 

@@ -37,6 +37,7 @@ func (ba *wcBotApp) loadConfig() {
 	defer log.Debugln("wcBotApp.loadConfig: Complete")
 	// Load configuration
 	c, err := wcconfig.LoadConfigParameters("config", filepath.Join(utils.UserHome(), ".wingcommander"), map[string]interface{}{
+		"wingcommander.analyticsenabled": true,
 		"telegram.debug":                 false,
 		"monitor.intervalsec":            10,
 		"monitor.heartbeatintmin":        120,

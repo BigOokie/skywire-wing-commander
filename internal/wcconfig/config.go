@@ -7,8 +7,11 @@ package wcconfig
 
 import (
 	"fmt"
+	"runtime"
 	"strings"
 	"time"
+
+	"crypto/sha256"
 
 	log "github.com/sirupsen/logrus"
 	viper "github.com/spf13/viper"
@@ -17,6 +20,7 @@ import (
 // Config structure models the applications configuration structure
 type Config struct {
 	WingCommander WingCommanderParameters `mapstructure:"wingcommander"`
+	AppAnalytics  WingCommanderAnalytics  `mapstructure:"appanalytics"`
 	Telegram      TelegramParameters      `mapstructure:"telegram"`
 	Monitor       MonitorParameters       `mapstructure:"monitor"`
 	SkyManager    SkyManagerParameters    `mapstructure:"skymanager"`
@@ -26,6 +30,13 @@ type Config struct {
 // are used to manage runtime config for the Wing Commander application
 type WingCommanderParameters struct {
 	TwoFactorEnabled bool `mapstructure:"twofactorenabled"`
+	AnalyticsEnabled bool `mapstructure:"analyticsenabled"`
+}
+
+// WingCommanderAnalytics struct defines the parameters that are used if Analytics is enabled
+type WingCommanderAnalytics struct {
+	ClientUUID string `mapstructure:"clientuuid"`
+	UserID     string `mapstructure:"userid"`
 }
 
 // TelegramParameters struct defines the configuration parameters that
@@ -56,6 +67,10 @@ type MonitorParameters struct {
 func (c *Config) String() string {
 	resultstr := "[WingCommander]\n" +
 		"  twofactorenabled = %v\n" +
+		"  analyticsenabled = %v\n" +
+		"[AppAnalytics]\n" +
+		"  clientuuid = %s\n" +
+		"  userid = %s\n" +
 		"[SkyManager]\n" +
 		"  address = %q\n" +
 		"  discoveryaddress = %q\n" +
@@ -69,10 +84,11 @@ func (c *Config) String() string {
 		"  heartbeatintmin = %v\n" +
 		"  discoverymonitorintmin = %v\n"
 
-	return fmt.Sprintf(resultstr, c.WingCommander.TwoFactorEnabled, c.SkyManager.Address,
-		c.SkyManager.DiscoveryAddress, c.Telegram.APIKey, c.Telegram.ChatID,
-		c.Telegram.Admin, c.Telegram.Debug, c.Monitor.IntervalSec, c.Monitor.HeartbeatIntMin,
-		c.Monitor.DiscoveryMonitorIntMin)
+	return fmt.Sprintf(resultstr, c.WingCommander.TwoFactorEnabled, c.WingCommander.AnalyticsEnabled,
+		c.AppAnalytics.ClientUUID, c.AppAnalytics.UserID,
+		c.SkyManager.Address, c.SkyManager.DiscoveryAddress,
+		c.Telegram.APIKey, c.Telegram.ChatID, c.Telegram.Admin, c.Telegram.Debug,
+		c.Monitor.IntervalSec, c.Monitor.HeartbeatIntMin, c.Monitor.DiscoveryMonitorIntMin)
 }
 
 // PrintConfig will log debug information for the passed Config structure
@@ -128,6 +144,12 @@ func LoadConfigParameters(filename, pathname string, defaults map[string]interfa
 		// Add an "@" as the first character
 		config.Telegram.Admin = "@" + config.Telegram.Admin
 		log.Warnf("ReadConfig: admin username configuration is not prefixed `@`. Runtime config updated to prevent errors.")
+	}
+
+	// Setup a unique analytics user id and anonymise it by hashing it
+	if config.AppAnalytics.UserID == "" {
+		sum := sha256.Sum256([]byte(config.Telegram.APIKey + "::" + config.Telegram.Admin + "::" + runtime.GOOS))
+		config.AppAnalytics.UserID = fmt.Sprintf("%x", sum)
 	}
 
 	//config.PrintLogConfig()
