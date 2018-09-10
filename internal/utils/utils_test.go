@@ -47,6 +47,20 @@ func Test_ReleaseAppInstance_Ok(t *testing.T) {
 	ReleaseAppInstance(appInst)
 }
 
+func Test_ReleaseAppInstance_Nil_Ok(t *testing.T) {
+	ReleaseAppInstance(nil)
+}
+
+func Test_ReleaseAppInstance_Double_Unlock(t *testing.T) {
+	appInst := InitAppInstance(wcconst.AppInstanceID + "Test_ReleaseAppInstance_Double_Unlock")
+	if appInst == nil {
+		t.Error("Failed to obtain application instance.")
+	}
+	appInst.TryUnlock()
+
+	ReleaseAppInstance(appInst)
+}
+
 func Test_UpgradeAvailable_BadRepo(t *testing.T) {
 	result, msg := UpdateAvailable("BigOokie", "ThisRepoDoesntExist", "1.0")
 	if result {
@@ -54,15 +68,29 @@ func Test_UpgradeAvailable_BadRepo(t *testing.T) {
 	}
 }
 func Test_UpgradeAvailable_GoodRepo_BadVersion(t *testing.T) {
-	result, msg := UpdateAvailable("BigOokie", "skywire-wing-commander", "BAD-99999")
+	result, msg := UpdateAvailable("BigOokie", "skywire-wing-commander", "vBAD-99999")
 	if result {
 		t.Errorf("An upgrade should not be available. The version tag should not exist. %s", msg)
 	}
 }
 
-func Test_UpgradeAvailable_GoodRepo_VersionOk(t *testing.T) {
+func Test_UpgradeAvailable_GoodRepo_VersionOK_Older(t *testing.T) {
 	result, msg := UpdateAvailable("BigOokie", "skywire-wing-commander", "0.0.1")
 	if !result {
 		t.Errorf("An upgrade should be available. The newer version tag should exist. %s", msg)
+	}
+}
+
+func Test_UpgradeAvailable_GoodRepo_VersionOK_Newer(t *testing.T) {
+	result, msg := UpdateAvailable("BigOokie", "skywire-wing-commander", "1000.0.0")
+	if result {
+		t.Errorf("%s", msg)
+	}
+}
+
+func Test_UpgradeAvailable_GoodRepo_VersionOK_Latest(t *testing.T) {
+	result, msg := UpdateAvailable("BigOokie", "skywire-wing-commander", wcconst.BotVersion)
+	if result {
+		t.Errorf("%s", msg)
 	}
 }

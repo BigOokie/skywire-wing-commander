@@ -115,8 +115,10 @@ func InitAppInstance(appID string) (s *single.Single) {
 // ReleaseAppInstance will attempt to release(unlock) an instance of the application based on the
 // single.Single reference
 func ReleaseAppInstance(s *single.Single) {
-	err := s.TryUnlock()
-	if err != nil {
-		log.Errorln("Error releasing application instance control.", err)
+	if s != nil {
+		err := s.TryUnlock()
+		if err != nil {
+			log.Errorln("Error releasing application instance control.", err)
+		}
 	}
 }
