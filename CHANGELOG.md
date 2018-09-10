@@ -207,6 +207,8 @@ analyticsenabled = false
 
 [Unreleased]: 
 https://github.com/BigOokie/Skywire-Wing-Commander/compare/master...dev
+[v0.2.0-beta.12]: 
+https://github.com/BigOokie/Skywire-Wing-Commander/compare/v0.2.0-beta.11...v0.2.0-beta.12
 [v0.2.0-beta.11]: 
 https://github.com/BigOokie/Skywire-Wing-Commander/compare/v0.2.0-beta.10...v0.2.0-beta.11
 [v0.2.0-beta.10]: 
