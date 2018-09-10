@@ -591,9 +591,11 @@ func (bot *Bot) handleUpdate(update *tgbotapi.Update) error {
 
 	if update.CallbackQuery != nil {
 		log.Debugln("Bot.handleUpdate: handleCallbackQuery")
+		bot.SendGAEvent("BotMessageHandler", "CallbackQuery", "CallbackQuery Handler")
 		err = bot.handleCallbackQuery(&ctx)
 	} else {
 		log.Debugln("Bot.handleUpdate: handleMessage")
+		bot.SendGAEvent("BotMessageHandler", "Message", "Message Handler")
 		err = bot.handleMessage(&ctx)
 	}
 

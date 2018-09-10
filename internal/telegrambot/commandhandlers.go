@@ -37,8 +37,8 @@ func getSendModeforContext(ctx *BotContext) string {
 
 // Handler for help command
 func (bot *Bot) handleCommandHelp(ctx *BotContext, command, args string) error {
-	bot.SendGAEvent("BotCommand", command, "Handle"+command)
 	log.Debugf("Handle command: %s args: %s", command, args)
+	bot.SendGAEvent("BotCommand", command, "Handle"+command)
 	err := bot.Send(ctx, getSendModeforContext(ctx), "markdown", fmt.Sprintf(wcconst.MsgHelp, bot.config.Telegram.Admin))
 	if err != nil {
 		logSendError("Bot.handleCommandHelp", err)
@@ -54,20 +54,18 @@ func (bot *Bot) handleCommandAbout(ctx *BotContext, command, args string) error 
 	if err != nil {
 		logSendError("Bot.handleCommandAbout", err)
 	}
-
-	bot.SendGAEvent("BotCommand", command, "Handle"+command)
-
 	return err
 }
 
 // Handler for showconfig command
 func (bot *Bot) handleCommandShowConfig(ctx *BotContext, command, args string) error {
 	log.Debugf("Handle command: %s args: %s", command, args)
-	bot.SendGAEvent("BotCommand", command, "Handle"+command)
+	bot.SendGAEvent("BotCommand", command+"-asmarkdown", "Handle"+command)
 	err := bot.Send(ctx, getSendModeforContext(ctx), "markdown", fmt.Sprintf(wcconst.MsgShowConfig, bot.config.String()))
 	if err != nil {
 		logSendError("Bot.handleCommandShowConfig (Send):", err)
 		log.Debug("Bot.handleCommandShowConfig: Attempting to resend as text.")
+		bot.SendGAEvent("BotCommand", command+"-astext", "Handle"+command)
 		err = bot.Send(ctx, getSendModeforContext(ctx), "text", fmt.Sprintf(wcconst.MsgShowConfig, bot.config.String()))
 		if err != nil {
 			logSendError("Bot.handleCommandShowConfig (Resend as Text):", err)
@@ -79,7 +77,6 @@ func (bot *Bot) handleCommandShowConfig(ctx *BotContext, command, args string) e
 // Handler for uptime command
 func (bot *Bot) handleCommandGetUptimeLink(ctx *BotContext, command, args string) error {
 	log.Debugf("Handle command: %s args: %s", command, args)
-	bot.SendGAEvent("BotCommand", command, "Handle"+command)
 
 	//https://skywirenc.com/?key_list={node1-id}%2C{node2-id}%2C{node3-id}....etc
 
@@ -88,8 +85,10 @@ func (bot *Bot) handleCommandGetUptimeLink(ctx *BotContext, command, args string
 	if bot.skyMgrMonitor.IsRunning() {
 		// Add Node Keys as parameters to the URL Query
 		uptimeURL = fmt.Sprintf("https://skywirenc.com/?key_list=%s", strings.Join(bot.skyMgrMonitor.GetNodeKeyList(), "%2C"))
+		bot.SendGAEvent("BotCommand", command+"-isrunning", "Handle"+command)
 	} else {
 		uptimeURL = "https://skywirenc.com/"
+		bot.SendGAEvent("BotCommand", command+"-notrunning", "Handle"+command)
 	}
 	msg := fmt.Sprintf("Skywirenc.com (%v Nodes)", bot.skyMgrMonitor.GetConnectedNodeCount())
 	log.Debugf("Bot.handleCommandGetUptimeLink: %s", msg)
@@ -109,16 +108,17 @@ func (bot *Bot) handleCommandGetUptimeLink(ctx *BotContext, command, args string
 // Handler for start command
 func (bot *Bot) handleCommandStart(ctx *BotContext, command, args string) error {
 	log.Debugf("Handle command: %s args: %s", command, args)
-	bot.SendGAEvent("BotCommand", command, "Handle"+command)
 
 	if bot.skyMgrMonitor.IsRunning() {
 		log.Debug(wcconst.MsgMonitorAlreadyStarted)
+		bot.SendGAEvent("BotCommand", command+"-isrunning", "Handle"+command)
 		err := bot.Send(ctx, getSendModeforContext(ctx), "markdown", wcconst.MsgMonitorAlreadyStarted)
 		if err != nil {
 			logSendError("Bot.handleCommandStart", err)
 		}
 		return err
 	}
+	bot.SendGAEvent("BotCommand", command+"-notrunning", "Handle"+command)
 
 	log.Debug(wcconst.MsgMonitorStart)
 	cancelContext, cancelFunc := context.WithCancel(context.Background())
@@ -141,9 +141,9 @@ func (bot *Bot) handleCommandStart(ctx *BotContext, command, args string) error 
 // Handler for stop command
 func (bot *Bot) handleCommandStop(ctx *BotContext, command, args string) error {
 	log.Debugf("Handle command: %s args: %s", command, args)
-	bot.SendGAEvent("BotCommand", command, "Handle"+command)
 
 	if bot.skyMgrMonitor.IsRunning() {
+		bot.SendGAEvent("BotCommand", command+"-isrunning", "Handle"+command)
 		log.Debug(wcconst.MsgMonitorStop)
 		bot.skyMgrMonitor.StopManagerMonitor()
 		log.Debug(wcconst.MsgMonitorStopped)
@@ -154,6 +154,7 @@ func (bot *Bot) handleCommandStop(ctx *BotContext, command, args string) error {
 		return err
 	}
 
+	bot.SendGAEvent("BotCommand", command+"-notrunning", "Handle"+command)
 	log.Debug(wcconst.MsgMonitorNotRunning)
 	err := bot.Send(ctx, getSendModeforContext(ctx), "markdown", wcconst.MsgMonitorNotRunning)
 	if err != nil {
@@ -165,19 +166,18 @@ func (bot *Bot) handleCommandStop(ctx *BotContext, command, args string) error {
 // Handler for status command
 func (bot *Bot) handleCommandStatus(ctx *BotContext, command, args string) error {
 	log.Debugf("Handle command: %s args: %s", command, args)
-	bot.SendGAEvent("BotCommand", command, "Handle"+command)
 
 	if !bot.skyMgrMonitor.IsRunning() {
 		// Monitor not running
+		bot.SendGAEvent("BotCommand", command+"-notrunning", "Handle"+command)
 		err := bot.Send(ctx, getSendModeforContext(ctx), "markdown", wcconst.MsgMonitorNotRunning)
-
 		if err != nil {
 			logSendError("Bot.handleCommandStatus", err)
 		}
-
 		return err
 	}
 
+	bot.SendGAEvent("BotCommand", command+"-isrunning", "Handle"+command)
 	// Build Status Check Message
 	msg := bot.skyMgrMonitor.BuildConnectionStatusMsg(wcconst.MsgStatus)
 	err := bot.Send(ctx, getSendModeforContext(ctx), "markdown", msg)
@@ -200,8 +200,10 @@ func (bot *Bot) handleCommandCheckUpdate(ctx *BotContext, command, args string) 
 
 	updateAvailable, updateMsg := utils.UpdateAvailable("BigOokie", "skywire-wing-commander", wcconst.BotVersion)
 	if updateAvailable {
+		bot.SendGAEvent("BotCommand", command+"-updateavailable", "Handle"+command)
 		err = bot.Send(ctx, getSendModeforContext(ctx), "markdown", fmt.Sprintf("*Update available:* %s", updateMsg))
 	} else {
+		bot.SendGAEvent("BotCommand", command+"-uptodate", "Handle"+command)
 		err = bot.Send(ctx, getSendModeforContext(ctx), "markdown", fmt.Sprintf("*Up to date:* %s", updateMsg))
 	}
 
@@ -320,7 +322,7 @@ func (bot *Bot) AddGroupMessageHandler(handler MessageHandler) {
 // Its also responsible for managing the Heartbeat (if configured)
 func (bot *Bot) monitorEventLoop(runctx context.Context, botctx *BotContext, statusMsgChan <-chan string) {
 	tickerHB := time.NewTicker(bot.config.Monitor.HeartbeatIntMin)
-
+	bot.SendGAEvent("BotMonitoring", "Start", "Bot Monitoring Started")
 	for {
 		select {
 		// Monitor Status Message
@@ -349,7 +351,7 @@ func (bot *Bot) monitorEventLoop(runctx context.Context, botctx *BotContext, sta
 		// Context has been cancelled. Shutdown
 		case <-runctx.Done():
 			log.Debugln("Bot.monitorEventLoop - Done event.")
-			bot.SendGAEvent("BotStopMonitoring", "Cancel Event", "Bot Monitoring Cancelled")
+			bot.SendGAEvent("BotMonitoring", "Stop", "Bot Monitoring Stopped")
 			return
 		}
 	}
