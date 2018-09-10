@@ -30,6 +30,7 @@ func Test_UserHome(t *testing.T) {
 	}
 }
 
+/*
 func Test_InitAppInstance_Ok(t *testing.T) {
 	appInst := InitAppInstance(wcconst.AppInstanceID + "Test_InitAppInstance_Ok")
 	defer appInst.Unlock()
@@ -63,6 +64,7 @@ func Test_ReleaseAppInstance_Double_Unlock(t *testing.T) {
 
 	ReleaseAppInstance(appInst)
 }
+*/
 
 func Test_UpgradeAvailable_BadRepo(t *testing.T) {
 	result, msg := UpdateAvailable("BigOokie", "ThisRepoDoesntExist", "1.0")
