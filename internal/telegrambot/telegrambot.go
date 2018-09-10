@@ -13,6 +13,7 @@ import (
 	"github.com/BigOokie/skywire-wing-commander/internal/skymgrmon"
 	"github.com/BigOokie/skywire-wing-commander/internal/wcconfig"
 	"github.com/BigOokie/skywire-wing-commander/internal/wcconst"
+	"github.com/cloudfoundry/jibber_jabber"
 	"github.com/jpillora/go-ogle-analytics"
 	log "github.com/sirupsen/logrus"
 	"gopkg.in/telegram-bot-api.v4"
@@ -500,7 +501,10 @@ func (bot *Bot) initGAClient() {
 	bot.gaclient.UserID(bot.config.AppAnalytics.UserID)
 	bot.gaclient.ApplicationName("Wing Commander")
 	bot.gaclient.ApplicationVersion(wcconst.BotVersion)
-
+	userLocale, err := jibber_jabber.DetectIETF()
+	if err == nil {
+		bot.gaclient.UserLanguage(userLocale)
+	}
 	bot.SendGAEvent("AppInit", "InitGAClient", "Init GA Client")
 }
 

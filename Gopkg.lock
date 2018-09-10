@@ -2,6 +2,14 @@
 
 
 [[projects]]
+  branch = "master"
+  digest = "1:5a73e8b2320070eeb804f6362f0251a21bfc5f3fa808eed185b4ec5fa6b4a152"
+  name = "github.com/cloudfoundry/jibber_jabber"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "bcc4c8345a21301bf47c032ff42dd1aae2fe3027"
+
+[[projects]]
   digest = "1:abeb38ade3f32a92943e5be54f55ed6d6e3b6602761d74b4aab4c9dd45c18abd"
   name = "github.com/fsnotify/fsnotify"
   packages = ["."]
@@ -232,6 +240,7 @@
   analyzer-name = "dep"
   analyzer-version = 1
   input-imports = [
+    "github.com/cloudfoundry/jibber_jabber",
     "github.com/go-test/deep",
     "github.com/jpillora/go-ogle-analytics",
     "github.com/marcsauter/single",
