@@ -46,6 +46,8 @@ Please note that this **is not an official [Skycoin](https://skycoin.net) projec
 
 The intention of this project is to have a specialised Telegram bot application (written in Go) to run on a Skycoin Skywire (Skyminer) Manager Node and provide its owner with realtime management and monitoring capabilities.
 
+**NOTE:** From v0.2.0-beta.12 application usage analytics have been introduced and are enabled by default to collect information about "real-world" usage and deployment which will assist in focusing ongoing development of features and enhancements. Application analytics are focused on usage only - No personally identifiable information is collected. An example of information that is collected includes, the application version, and bot commands such as `/start`, `/stop`, `/status`, etc. Data resulting from these commands is not collected either. You are free to check the code. Analytics are enabled by default, but can be disabled. Please review the [Changelog](CHANGELOG.md) for further details.
+
 ***
 
 # Wing Commander Setup
