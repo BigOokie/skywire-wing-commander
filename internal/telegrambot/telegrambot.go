@@ -497,7 +497,6 @@ func (bot *Bot) initGAClient() {
 	}
 
 	bot.gaclient.DataSource("app")
-	//bot.gaclient.SessionControl("start")
 	bot.gaclient.ClientID(bot.config.AppAnalytics.UserID)
 	bot.gaclient.UserID(bot.config.AppAnalytics.UserID)
 	bot.gaclient.ApplicationName("Wing Commander")
@@ -508,15 +507,13 @@ func (bot *Bot) initGAClient() {
 	}
 	bot.gaclient.UseTLS = true
 	bot.SendGAEvent("AppInit", "InitGAClient", "Init GA Client")
-	//bot.gaclient.SessionControl("")
 }
 
 // SendGAEvent will send a GA Event on the
 func (bot *Bot) SendGAEvent(category, action, label string) {
-	log.Debugf("Bot.SendGAEvent: Start: Cat: %s Act: %s Lab: %s", category, action, label)
-	defer log.Debugf("Bot.SendGAEvent: End")
-
-	if bot.gaclient != nil {
+	if bot.config.WingCommander.AnalyticsEnabled && bot.gaclient != nil {
+		log.Debugf("Bot.SendGAEvent: Start: Cat: %s Act: %s Lab: %s", category, action, label)
+		defer log.Debugf("Bot.SendGAEvent: End")
 		err := bot.gaclient.Send(ga.NewEvent(category, action).Label(label))
 		if err != nil {
 			log.Errorf("Bot.SendGAEvent: Error: %v", err)

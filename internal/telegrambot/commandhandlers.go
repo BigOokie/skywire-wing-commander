@@ -327,6 +327,7 @@ func (bot *Bot) monitorEventLoop(runctx context.Context, botctx *BotContext, sta
 		select {
 		// Monitor Status Message
 		case msg := <-statusMsgChan:
+			bot.SendGAEvent("BotMonitoring", "ReceiveMonitorStatusMessage", "Receive Monitor Status Message")
 			if msg != "" {
 				log.Debugf("Bot.monitorEventLoop: Status event: %s", msg)
 				err := bot.Send(botctx, getSendModeforContext(botctx), "markdown", msg)
@@ -338,6 +339,7 @@ func (bot *Bot) monitorEventLoop(runctx context.Context, botctx *BotContext, sta
 		// Heartbeat ticker event
 		case <-tickerHB.C:
 			log.Debug("Bot.monitorEventLoop - Heartbeat event")
+			bot.SendGAEvent("BotMonitoring", "ReceiveHeartBeat", "Receive Monitor HeartBeat")
 			// Build Heartbeat Status Message
 			msg := bot.skyMgrMonitor.BuildConnectionStatusMsg(wcconst.MsgHeartbeat)
 			log.Debug(msg)
@@ -351,7 +353,7 @@ func (bot *Bot) monitorEventLoop(runctx context.Context, botctx *BotContext, sta
 		// Context has been cancelled. Shutdown
 		case <-runctx.Done():
 			log.Debugln("Bot.monitorEventLoop - Done event.")
-			bot.SendGAEvent("BotMonitoring", "Stop", "Bot Monitoring Stopped")
+			bot.SendGAEvent("BotMonitoring", "ReceivedStop", "Receive Monitor Stop")
 			return
 		}
 	}

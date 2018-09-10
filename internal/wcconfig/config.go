@@ -152,6 +152,7 @@ func LoadConfigParameters(filename, pathname string, defaults map[string]interfa
 		config.AppAnalytics.UserID = fmt.Sprintf("%x", sum)
 	}
 
-	//config.PrintLogConfig()
+	config.AppAnalytics.ClientUUID = config.AppAnalytics.UserID
+
 	return config, nil
 }

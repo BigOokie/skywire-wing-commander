@@ -7,7 +7,7 @@ package wcconst
 
 // Define constants used by the application
 const (
-	BotVersion    = "v0.2.0-beta.11"
+	BotVersion    = "v0.2.0-beta.12"
 	BotAppVersion = "Wing Commander " + BotVersion
 
 	AnalyticsID = "UA-125471033-1"
@@ -41,7 +41,8 @@ const (
 		"- /stop - stop monitoring your Skyminer. Once stopped, I won't send any more notifications.\n" +
 		"- /checkupdate - check GitHub for new updates.\n" +
 		"- /update - attempt to update *Wing Commander* to the latest version from GitHub source.\n" +
-		"- /uptime - dynamically generate a link to the Skywirenc.com site to check uptime for locally connected Nodes."
+		"- /uptime - dynamically generate a link to the Skywirenc.com site to check uptime for locally connected Nodes.\n" +
+		"- /menu - request the menu keyboard to be displayed."
 
 	MsgHelp = "*Wing Commander* here. I will help you to manage and monitor your Skyminer and its Nodes.\n\n" +
 		MsgHelpShort +
@@ -92,10 +93,6 @@ const (
 	MsgMonitorStopped    = "*Wing Commander* Monitoring stopped..."
 	MsgMonitorNotRunning = "*Wing Commander* Monitoring is not running..."
 
-	// Default cmd message (unhandled)
-	//msgDefault = "Sorry. I don't know that command."
-
 	// OS Interrupt Signals
 	MsgOSInteruptSig = "*Wing Commander* OS Interupt Signal Received. Exiting."
-	//MsgOSKillSig     = "*Wing Commander* OS Kill Signal Received. Exiting."
 )
