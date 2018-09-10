@@ -75,5 +75,6 @@ func main() {
 
 	// Wait for the app to be signaled to terminate
 	signal := <-osSignal
+	bot.Stop()
 	log.Debugln(wcconst.MsgOSInteruptSig, signal)
 }

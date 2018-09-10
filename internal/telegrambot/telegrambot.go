@@ -498,6 +498,7 @@ func (bot *Bot) initGAClient() {
 
 	bot.gaclient.DataSource("app")
 	bot.gaclient.SessionControl("start")
+	bot.gaclient.ClientID(bot.config.AppAnalytics.UserID)
 	bot.gaclient.UserID(bot.config.AppAnalytics.UserID)
 	bot.gaclient.ApplicationName("Wing Commander")
 	bot.gaclient.ApplicationVersion(wcconst.BotVersion)
@@ -505,7 +506,9 @@ func (bot *Bot) initGAClient() {
 	if err == nil {
 		bot.gaclient.UserLanguage(userLocale)
 	}
+	bot.gaclient.UseTLS = true
 	bot.SendGAEvent("AppInit", "InitGAClient", "Init GA Client")
+	bot.gaclient.SessionControl("")
 }
 
 // SendGAEvent will send a GA Event on the
@@ -649,4 +652,12 @@ func (bot *Bot) Start() {
 			log.Errorf("Bot.Start: Error: %v", err)
 		}
 	}
+}
+
+// Stop will stop the Bot
+func (bot *Bot) Stop() {
+	log.Infoln("BOT: Stopping.")
+	defer log.Infoln("BOT: Stopped")
+	bot.gaclient.SessionControl("end")
+	bot.SendGAEvent("AppInit", "BotStop", "Bot Stopping")
 }
