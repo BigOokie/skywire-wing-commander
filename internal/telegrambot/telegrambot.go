@@ -510,7 +510,7 @@ func (bot *Bot) initGAClient() {
 
 // SendGAEvent will send a GA Event on the
 func (bot *Bot) SendGAEvent(category, action, label string) {
-	log.Debugf("Bot.SendGAEvent: Start")
+	log.Debugf("Bot.SendGAEvent: Start: Cat: %s Act: %s Lab: %s", category, action, label)
 	defer log.Debugf("Bot.SendGAEvent: End")
 
 	if bot.gaclient != nil {
@@ -624,6 +624,7 @@ func (bot *Bot) SendMainMenuMessage(ctx *BotContext) error {
 func (bot *Bot) Start() {
 	log.Infoln("BOT: Starting.")
 	defer log.Infoln("BOT: Stopped")
+	bot.SendGAEvent("AppInit", "BotStart", "Bot Starting")
 
 	update := tgbotapi.NewUpdate(0)
 	update.Timeout = 60
@@ -638,6 +639,7 @@ func (bot *Bot) Start() {
 	}
 
 	for update := range updates {
+		//bot.SendGAEvent("BotMessages", "HandleUpdates", "Handle Updates Loop")
 		if err := bot.handleUpdate(&update); err != nil {
 			log.Errorf("Bot.Start: Error: %v", err)
 		}

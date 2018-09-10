@@ -37,6 +37,7 @@ func getSendModeforContext(ctx *BotContext) string {
 
 // Handler for help command
 func (bot *Bot) handleCommandHelp(ctx *BotContext, command, args string) error {
+	bot.SendGAEvent("BotCommand", command, "Handle"+command)
 	log.Debugf("Handle command: %s args: %s", command, args)
 	err := bot.Send(ctx, getSendModeforContext(ctx), "markdown", fmt.Sprintf(wcconst.MsgHelp, bot.config.Telegram.Admin))
 	if err != nil {
@@ -48,16 +49,21 @@ func (bot *Bot) handleCommandHelp(ctx *BotContext, command, args string) error {
 // Handler for about command
 func (bot *Bot) handleCommandAbout(ctx *BotContext, command, args string) error {
 	log.Debugf("Handle command: %s args: %s", command, args)
+	bot.SendGAEvent("BotCommand", command, "Handle"+command)
 	err := bot.Send(ctx, getSendModeforContext(ctx), "markdown", wcconst.MsgAbout)
 	if err != nil {
 		logSendError("Bot.handleCommandAbout", err)
 	}
+
+	bot.SendGAEvent("BotCommand", command, "Handle"+command)
+
 	return err
 }
 
 // Handler for showconfig command
 func (bot *Bot) handleCommandShowConfig(ctx *BotContext, command, args string) error {
 	log.Debugf("Handle command: %s args: %s", command, args)
+	bot.SendGAEvent("BotCommand", command, "Handle"+command)
 	err := bot.Send(ctx, getSendModeforContext(ctx), "markdown", fmt.Sprintf(wcconst.MsgShowConfig, bot.config.String()))
 	if err != nil {
 		logSendError("Bot.handleCommandShowConfig (Send):", err)
@@ -73,6 +79,7 @@ func (bot *Bot) handleCommandShowConfig(ctx *BotContext, command, args string) e
 // Handler for uptime command
 func (bot *Bot) handleCommandGetUptimeLink(ctx *BotContext, command, args string) error {
 	log.Debugf("Handle command: %s args: %s", command, args)
+	bot.SendGAEvent("BotCommand", command, "Handle"+command)
 
 	//https://skywirenc.com/?key_list={node1-id}%2C{node2-id}%2C{node3-id}....etc
 
@@ -102,6 +109,7 @@ func (bot *Bot) handleCommandGetUptimeLink(ctx *BotContext, command, args string
 // Handler for start command
 func (bot *Bot) handleCommandStart(ctx *BotContext, command, args string) error {
 	log.Debugf("Handle command: %s args: %s", command, args)
+	bot.SendGAEvent("BotCommand", command, "Handle"+command)
 
 	if bot.skyMgrMonitor.IsRunning() {
 		log.Debug(wcconst.MsgMonitorAlreadyStarted)
@@ -133,6 +141,7 @@ func (bot *Bot) handleCommandStart(ctx *BotContext, command, args string) error 
 // Handler for stop command
 func (bot *Bot) handleCommandStop(ctx *BotContext, command, args string) error {
 	log.Debugf("Handle command: %s args: %s", command, args)
+	bot.SendGAEvent("BotCommand", command, "Handle"+command)
 
 	if bot.skyMgrMonitor.IsRunning() {
 		log.Debug(wcconst.MsgMonitorStop)
@@ -156,6 +165,7 @@ func (bot *Bot) handleCommandStop(ctx *BotContext, command, args string) error {
 // Handler for status command
 func (bot *Bot) handleCommandStatus(ctx *BotContext, command, args string) error {
 	log.Debugf("Handle command: %s args: %s", command, args)
+	bot.SendGAEvent("BotCommand", command, "Handle"+command)
 
 	if !bot.skyMgrMonitor.IsRunning() {
 		// Monitor not running
@@ -180,6 +190,8 @@ func (bot *Bot) handleCommandStatus(ctx *BotContext, command, args string) error
 // Handler for help CheckUpdate
 func (bot *Bot) handleCommandCheckUpdate(ctx *BotContext, command, args string) error {
 	log.Debugf("Handle command: %s args: %s", command, args)
+	bot.SendGAEvent("BotCommand", command, "Handle"+command)
+
 	err := bot.Send(ctx, getSendModeforContext(ctx), "markdown", "Checking for updates...")
 	if err != nil {
 		logSendError("Bot.handleCommandCheckUpdate", err)
@@ -202,6 +214,8 @@ func (bot *Bot) handleCommandCheckUpdate(ctx *BotContext, command, args string) 
 // Handler for help handleCommandShowMenu
 func (bot *Bot) handleCommandShowMenu(ctx *BotContext, command, args string) error {
 	log.Debugf("Handle command: %s args: %s", command, args)
+	bot.SendGAEvent("BotCommand", command, "Handle"+command)
+
 	err := bot.SendMainMenuMessage(ctx)
 	if err != nil {
 		logSendError("Bot.handleCommandShowMenu", err)
@@ -253,6 +267,8 @@ func (bot *Bot) handleCommandListNodes(ctx *BotContext, command, args string) er
 // Handler for help DoUpdate
 func (bot *Bot) handleCommandDoUpdate(ctx *BotContext, command, args string) error {
 	log.Debugf("Handle command: %s args: %s", command, args)
+	bot.SendGAEvent("BotCommand", command, "Handle"+command)
+
 	err := bot.Send(ctx, getSendModeforContext(ctx), "markdown", "*Initiating update...*")
 	if err != nil {
 		logSendError("Bot.handleCommandCheckUpdate", err)
@@ -286,6 +302,7 @@ func (bot *Bot) handleCommandDoUpdate(ctx *BotContext, command, args string) err
 func (bot *Bot) handleDirectMessageFallback(ctx *BotContext, text string) (bool, error) {
 	errmsg := fmt.Sprintf("Sorry, I only take commands. '%s' is not a command.\n\n%s", text, wcconst.MsgHelpShort)
 	log.Debugf(errmsg)
+	bot.SendGAEvent("BotCommandError", text, "HandleMessageFallback")
 	return true, bot.Reply(ctx, "markdown", errmsg)
 }
 
@@ -332,6 +349,7 @@ func (bot *Bot) monitorEventLoop(runctx context.Context, botctx *BotContext, sta
 		// Context has been cancelled. Shutdown
 		case <-runctx.Done():
 			log.Debugln("Bot.monitorEventLoop - Done event.")
+			bot.SendGAEvent("BotStopMonitoring", "Cancel Event", "Bot Monitoring Cancelled")
 			return
 		}
 	}
