@@ -97,8 +97,8 @@ func NewMonitor(manageraddress, discoveryaddress string) *SkyManagerMonitor {
 // If `ctx` is not nil, the monitor will listen to ctx.Done() and stop monitoring
 // when it receives the signal.
 func (smm *SkyManagerMonitor) RunManagerMonitor(runctx context.Context, doCancelFunc func(), statusMsgChan chan<- string, pollInt time.Duration) {
-	log.Debugf("SkyManagerMonitor::RunManagerMonitor: Start (Interval: %v)", pollInt)
-	defer log.Debugln("SkyManagerMonitor::RunManagerMonitor: End")
+	log.Debugf("SkyManagerMonitor.RunManagerMonitor: Start (Interval: %v)", pollInt)
+	defer log.Debugln("SkyManagerMonitor.RunManagerMonitor: End")
 
 	smm.SetCancelFunc(doCancelFunc)
 	smm.monitorStatusMsgChan = statusMsgChan
@@ -117,7 +117,7 @@ func (smm *SkyManagerMonitor) RunManagerMonitor(runctx context.Context, doCancel
 				smm.maintainConnectedNodesList(newcns, statusMsgChan)
 			}
 		case <-runctx.Done():
-			log.Debugln("SkyManagerMonitor::RunManagerMonitor: Done Event.")
+			log.Debugln("SkyManagerMonitor.RunManagerMonitor: Done Event.")
 			return
 		}
 	}
@@ -127,8 +127,8 @@ func (smm *SkyManagerMonitor) RunManagerMonitor(runctx context.Context, doCancel
 // If `ctx` is not nil, the monitor will listen to ctx.Done() and stop monitoring
 // when it receives the signal.
 func (smm *SkyManagerMonitor) StopManagerMonitor() {
-	log.Debugln("SkyManagerMonitor::StopManagerMonitor: Start")
-	defer log.Debugln("SkyManagerMonitor::StopManagerMonitor: End")
+	log.Debugln("SkyManagerMonitor.StopManagerMonitor: Start")
+	defer log.Debugln("SkyManagerMonitor.StopManagerMonitor: End")
 
 	if smm.IsRunning() {
 		smm.DoCancelFunc()
@@ -144,8 +144,8 @@ func (smm *SkyManagerMonitor) StopManagerMonitor() {
 // If `ctx` is not nil, the monitor will listen to ctx.Done() and stop monitoring
 // when it receives the signal.
 func (smm *SkyManagerMonitor) RunDiscoveryMonitor(runctx context.Context, statusMsgChan chan<- string, pollInt time.Duration) {
-	log.Debugf("SkyManagerMonitor::RunDiscoveryMonitor: Start (Interval: %v)", pollInt)
-	defer log.Debugln("SkyManagerMonitor::RunDiscoveryMonitor: End")
+	log.Debugf("SkyManagerMonitor.RunDiscoveryMonitor: Start (Interval: %v)", pollInt)
+	defer log.Debugln("SkyManagerMonitor.RunDiscoveryMonitor: End")
 
 	ticker := time.NewTicker(pollInt)
 
@@ -161,7 +161,7 @@ func (smm *SkyManagerMonitor) RunDiscoveryMonitor(runctx context.Context, status
 				smm.checkNodeDiscoveryConnection(discNodes, statusMsgChan)
 			}
 		case <-runctx.Done():
-			log.Debugln("SkyManagerMonitor::RunDiscoveryMonitor: Done Event.")
+			log.Debugln("SkyManagerMonitor.RunDiscoveryMonitor: Done Event.")
 			return
 		}
 	}
@@ -171,25 +171,25 @@ func (smm *SkyManagerMonitor) RunDiscoveryMonitor(runctx context.Context, status
 // ConnectedDiscNodeCount returns a count the locally Managed Nodes that are connected to the
 // Discovery Node
 func (smm *SkyManagerMonitor) ConnectedDiscNodeCount() (int, error) {
-	log.Debug("SkyManagerMonitor::RefreshDiscoveryConnectionCount: Start")
-	defer log.Debugln("SkyManagerMonitor::RefreshDiscoveryConnectionCount: End")
+	log.Debug("SkyManagerMonitor.ConnectedDiscNodeCount: Start")
+	defer log.Debugln("SkyManagerMonitor.ConnectedDiscNodeCount: End")
 	discConnNodeCount := 0
 
 	// Check the local Nodes are connected to Discovery Node
 	if smm.GetConnectedNodeCount() == 0 {
-		log.Debug("SkyManagerMonitor.RefreshDiscoveryConnectionCount: Connected Node list is empty. No work to do.")
+		log.Debug("SkyManagerMonitor.ConnectedDiscNodeCount: Connected Node list is empty. No work to do.")
 		return discConnNodeCount, nil
 	}
 
 	discNodes, err := getAllNodesList(smm.DiscoveryAddress)
 	if err != nil {
-		log.Errorf("SkyManagerMonitor.RefreshDiscoveryConnectionCount: Error contacting Discovery Server: %v", err)
+		log.Errorf("SkyManagerMonitor.ConnectedDiscNodeCount: Error contacting Discovery Server: %v", err)
 		return discConnNodeCount, err
 	} else if len(discNodes) == 0 {
-		log.Debugln("SkyManagerMonitor.RefreshDiscoveryConnectionCount: Empty Discovery Server Node List.")
+		log.Debugln("SkyManagerMonitor.ConnectedDiscNodeCount: Empty Discovery Server Node List.")
 		return discConnNodeCount, nil
 	} else {
-		log.Debugf("SkyManagerMonitor.RefreshDiscoveryConnectionCount: Discovery Node Returned %v Nodes.", len(discNodes))
+		log.Debugf("SkyManagerMonitor.ConnectedDiscNodeCount: Discovery Node Returned %v Nodes.", len(discNodes))
 		// Nodes were returned from the Discovery Server
 		smm.m.Lock()
 		defer smm.m.Unlock()
@@ -202,14 +202,14 @@ func (smm *SkyManagerMonitor) ConnectedDiscNodeCount() (int, error) {
 			_, hasKey := discNodeMap[v.Key]
 			if hasKey {
 				// Node Key found in the Discover Node Map
-				log.Debugf("SkyManagerMonitor.RefreshDiscoveryConnectionCount: Node Connected:\n%s\n", v.FmtString())
+				log.Debugf("SkyManagerMonitor.ConnectedDiscNodeCount: Node Connected:\n%s\n", v.FmtString())
 				discConnNodeCount++
 			} else {
-				log.Debugf("SkyManagerMonitor.RefreshDiscoveryConnectionCount: Node Not Connected:\n%s\n", v.FmtString())
+				log.Debugf("SkyManagerMonitor.ConnectedDiscNodeCount: Node Not Connected:\n%s\n", v.FmtString())
 			}
 		}
 
-		log.Debugf("%d Nodes Connected to Discovery", discConnNodeCount)
+		log.Debugf("SkyManagerMonitor.ConnectedDiscNodeCount: %d Nodes Connected to Discovery", discConnNodeCount)
 	}
 	return discConnNodeCount, nil
 }
@@ -245,7 +245,9 @@ func (smm *SkyManagerMonitor) getAllNodesStr() string {
 
 // getAllNodesList requests the list of connected Nodes from the Manager and returns an array (slice) of connectedNode
 func getAllNodesList(managerAddr string) (cns skynode.NodeInfoSlice, err error) {
-	log.Debugln("SkyManagerMonitor.getAllNodesList")
+	log.Debug("SkyManagerMonitor.getAllNodesList: Start")
+	defer log.Debug("SkyManagerMonitor.getAllNodesList: End")
+
 	userAgent := "Wing Commander Telegram Bot " + wcconst.BotVersion
 
 	client := &http.Client{}
@@ -284,6 +286,9 @@ func getAllNodesList(managerAddr string) (cns skynode.NodeInfoSlice, err error) 
 // Monitors internal connectedNodeList.
 // TODO: Support use of channels for signaling of change events
 func (smm *SkyManagerMonitor) maintainConnectedNodesList(newcns skynode.NodeInfoSlice, statusMsgChan chan<- string) {
+	log.Debug("SkyManagerMonitor.maintainConnectedNodesList: Start")
+	defer log.Debug("SkyManagerMonitor.maintainConnectedNodesList: End")
+
 	smm.m.Lock()
 	defer smm.m.Unlock()
 
@@ -396,8 +401,8 @@ func (smm *SkyManagerMonitor) GetConnectedNodeCount() int {
 // BuildConnectionStatusMsg returns a formatted status message regarding
 // the current connection status with the Discovery Server
 func (smm *SkyManagerMonitor) BuildConnectionStatusMsg(msgTitle string) string {
-	log.Debug("SkyManagerMonitor.DiscoveryConnectionStatusMsg: Start")
-	defer log.Debug("SkyManagerMonitor.DiscoveryConnectionStatusMsg: End")
+	log.Debug("SkyManagerMonitor.BuildConnectionStatusMsg: Start")
+	defer log.Debug("SkyManagerMonitor.BuildConnectionStatusMsg: End")
 
 	discConnNodes, err := smm.ConnectedDiscNodeCount()
 
@@ -416,7 +421,7 @@ func (smm *SkyManagerMonitor) BuildConnectionStatusMsg(msgTitle string) string {
 	}
 
 	msg := fmt.Sprintf(msgTitle, status, smm.GetConnectedNodeCount(), discConnNodes, statusmsg)
-	log.Debugf("SkyManagerMonitor.DiscoveryConnectionStatusMsg: %s", msg)
+	log.Debugf("SkyManagerMonitor.BuildConnectionStatusMsg: %s", msg)
 	return msg
 }
 
