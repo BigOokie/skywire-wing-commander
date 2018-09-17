@@ -13,6 +13,7 @@ builds:
     - arm64
 archive:
   name_template: '{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}'
+  wrap_in_directory: true
   replacements:
     darwin: Darwin
     linux: Linux
@@ -24,7 +25,7 @@ checksum:
 sign:
   artifacts: checksum
 snapshot:
-  name_template: '{{ .ProjectName }}_SNAPSHOT_{{ .Commit }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}'   
+  name_template: '{{ .ProjectName }}_SNAPSHOT_{{ .Commit }}'   
 changelog:
   sort: asc
   filters:
