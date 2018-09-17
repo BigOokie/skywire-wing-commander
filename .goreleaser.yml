@@ -12,6 +12,7 @@ goarch:
   - arm
   - arm64
 archive:
+  name_template: '{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}'
   replacements:
     darwin: Darwin
     linux: Linux
@@ -19,9 +20,11 @@ archive:
     386: i386
     amd64: x86_64
 checksum:
-  name_template: '{{ .ProjectName }}_checksums.txt'
+  name_template: '{{ .ProjectName }}_{{ .Version }}_checksums.txt'
+sign:
+  artefacts: checksum
 snapshot:
-  name_template: '{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}'
+  name_template: '{{ .ProjectName }}_SNAPSHOT_{{ .Commit }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}'
   replacements:
     darwin: Darwin
     linux: Linux
@@ -34,3 +37,7 @@ changelog:
     exclude:
     - '^docs:'
     - '^test:'
+release:
+  draft: true
+  prerelease: true
+  disable: true
