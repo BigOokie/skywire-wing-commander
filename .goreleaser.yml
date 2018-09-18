@@ -30,7 +30,7 @@ snapshot:
   name_template: '{{ .ProjectName }}_SNAPSHOT_{{ .Commit }}'   
 changelog:
   sort: asc
-  filters:cd cmd
+  filters:
     exclude:
     - '^docs:'
     - '^test:'
