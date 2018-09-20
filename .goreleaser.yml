@@ -34,7 +34,7 @@ checksum:
 sign:
   artifacts: checksum
 snapshot:
-  name_template: '{{ .ProjectName }}_SNAPSHOT_{{ .Commit }}'   
+  name_template: '{{ .ProjectName }}_SNAPSHOT__{{ .Os }}_{{ .Commit }}'   
 changelog:
   sort: asc
   filters:
