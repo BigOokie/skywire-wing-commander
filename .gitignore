@@ -3,6 +3,7 @@ config.toml
 
 # Compiled Object files, Static and Dynamic libs (Shared Objects)
 cmd/wcbot/wcbot
+dist/
 
 # Configs
 .DS_Store
