@@ -3,17 +3,18 @@
 project_name: wcbot
 build:
   main: cmd/wcbot/main.go
-  - env:
+  binary: wcbot
+  env:
     - CGO_ENABLED=0
-  - goos:
+  goos:
     - linux
     - darwin
-  - goarch:
+  goarch:
     - 386
     - amd64
     - arm
     - arm64
-  - goarm:
+  goarm:
     - 6
     - 7
     - 8
