@@ -1,8 +1,9 @@
 .PHONY: test lint check cover
 .PHONY: install-linters
+.PHONY: release
 
 test: ## Run tests for Wing Commander
-	go test ./... -timeout=5m
+	go test -race ./... -timeout=5m
 
 lint: ## Run linters. Use make install-linters first.
 	vendorcheck ./...
@@ -29,7 +30,7 @@ lint: ## Run linters. Use make install-linters first.
 check: lint test  ## Run tests and linters
 
 cover: ## Runs tests on ./cmd/ with HTML code coverage
-	go test -cover -coverprofile=cover.out -coverpkg=github.com/BigOokie/skywire-wing-commander/... ./...
+	go test -race -cover -coverprofile=cover.out -coverpkg=github.com/BigOokie/skywire-wing-commander/... ./...
 	go tool cover -html=cover.out
 
 install-linters: ## Install linters
@@ -41,3 +42,5 @@ install-linters: ## Install linters
 #	goimports -w -local github.com/BigOokie/skywire-wing-commander ./cmd
 #	goimports -w -local github.com/BigOokie/skywire-wing-commander ./internal
 
+release: check	## Use GoReleaser to build, package and release
+	goreleaser --rm-dist
