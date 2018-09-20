@@ -2,7 +2,7 @@
 # Make sure to check the documentation at http://goreleaser.com
 project_name: wcbot
 build:
-  main: cmd/wcbot/main.go
+  main: ./cmd/wcbot/main.go
   binary: wcbot
   env:
     - CGO_ENABLED=0
