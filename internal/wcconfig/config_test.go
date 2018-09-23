@@ -96,6 +96,26 @@ func Test_LoadConfigParameters_AllParams(t *testing.T) {
 	}
 }
 
+func Test_LoadConfigParameters_NoAdminAtSym(t *testing.T) {
+	// Load configuration
+	config, err := LoadConfigParameters("configtest-noadminatsym", "./testdata", map[string]interface{}{
+		"telegram.debug":                 false,
+		"monitor.intervalsec":            10,
+		"monitor.heartbeatintmin":        120,
+		"monitor.discoverymonitorintmin": 120,
+		"skymanager.address":             "127.0.0.1:8000",
+		"skymanager.discoveryaddress":    "discovery.skycoin.net:8001",
+	})
+
+	if err != nil {
+		t.Error(err)
+	}
+
+	if IsEmpty(config) {
+		t.Error("Expected: Config should be populated")
+	}
+}
+
 func Test_LoadConfigParameters_NoDefaultParams(t *testing.T) {
 	// Load configuration
 	config, err := LoadConfigParameters("configtest-nodefaults", "./testdata", map[string]interface{}{
