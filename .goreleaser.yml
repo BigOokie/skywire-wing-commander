@@ -35,12 +35,12 @@ sign:
   artifacts: checksum
 snapshot:
   name_template: '{{ .ProjectName }}_SNAPSHOT_{{ .Commit }}'   
-changelog:
-  sort: asc
-  filters:
-    exclude:
-    - '^docs:'
-    - '^test:'
+#changelog:
+#  sort: asc
+#  filters:
+#    exclude:
+#    - '^docs:'
+#    - '^test:'
 release:
   draft: true
   prerelease: true
