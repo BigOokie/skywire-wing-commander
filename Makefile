@@ -29,8 +29,8 @@ lint: ## Run linters. Use make install-linters first.
 check: lint cover  ## Run coverage tests and linters
 
 cover: ## Runs tests on ./cmd/ with HTML code coverage
-	go test -race -cover -coverprofile=coverage.txt -covermode=atomic -coverpkg=github.com/BigOokie/skywire-wing-commander/... ./...
-	go tool cover -html=coverage.txt
+	go test -race -cover -coverprofile=coverage.out -covermode=atomic -coverpkg=github.com/BigOokie/skywire-wing-commander/... ./...
+	go tool cover -html=coverage.out
 
 install-linters: ## Install linters
 	go get -u github.com/FiloSottile/vendorcheck
