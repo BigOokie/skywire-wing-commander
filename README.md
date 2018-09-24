@@ -8,9 +8,6 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/BigOokie/skywire-wing-commander)](https://goreportcard.com/report/github.com/BigOokie/skywire-wing-commander)
 [![Coverage Status](https://coveralls.io/repos/github/BigOokie/skywire-wing-commander/badge.svg?branch=master)](https://coveralls.io/github/BigOokie/skywire-wing-commander?branch=master)
 [![codecov](https://codecov.io/gh/BigOokie/skywire-wing-commander/branch/master/graph/badge.svg)](https://codecov.io/gh/BigOokie/skywire-wing-commander)
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FBigOokie%2Fskywire-wing-commander.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FBigOokie%2Fskywire-wing-commander?ref=badge_shield)
-
-
 
 
 | Build Status |  |
@@ -352,7 +349,3 @@ This is not my job, but I enjoy building things for the **Skyfleet** community. 
 Skycoin:    ES5LccJDhBCK275APmW9tmQNEgiYwTFKQF
 Bitcoin:    1KedLdhvUubRMLVxw8XQWoEBMkvHvf8aGt 
 ```
-
-
-## License
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FBigOokie%2Fskywire-wing-commander.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2FBigOokie%2Fskywire-wing-commander?ref=badge_large)
