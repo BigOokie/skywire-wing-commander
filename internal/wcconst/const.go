@@ -37,7 +37,7 @@ const (
 		"- /about - show information and credits about my creator and any contributors.\n" +
 		"- /status - request a status update. This provides the same information as the Heartbeat.\n" +
 		"- /showconfig - display runtime configuration (from config.toml).\n" +
-		"- /start - start activly monitoring your Skyminer. Once started, notifications will be sent to you for events that occur. A heartbeat will also be initiated to let you know if the bot and the Miner are still running.\n" +
+		"- /start - start activly monitoring your Skyminer. Once started, notifications will be sent to you for events that occur. A Heartbeat will also be initiated to let you know if the bot and the Miner are still running.\n" +
 		"- /stop - stop monitoring your Skyminer. Once stopped, I won't send any more notifications.\n" +
 		"- /checkupdate - check GitHub for new updates.\n" +
 		"- /update - attempt to update *Wing Commander* to the latest version from GitHub source.\n" +
@@ -78,7 +78,7 @@ const (
 	// Status cmd message
 	MsgStatus = "%v*Wing Commander Status*\n" + MsgConnectedNodes + "\n" + MsgDiscConnNodes + "\n%s"
 	// Heartbeat message
-	MsgHeartbeat = "%v*Wing Commander Heatbeat* ❣️\n" + MsgConnectedNodes + "\n" + MsgDiscConnNodes + "\n%s"
+	MsgHeartbeat = "%v*Wing Commander Heartbeat* ❣️\n" + MsgConnectedNodes + "\n" + MsgDiscConnNodes + "\n%s"
 
 	// Node Connect/Disconnect Event Messages
 	MsgNodeConnected    = "*Node Connected:* %s\n\n" + MsgConnectedNodes
