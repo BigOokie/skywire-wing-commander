@@ -11,13 +11,11 @@ newIssueWelcomeComment: >
 
 # Comment to be posted to on PRs from first time contributors in your repository
 newPRWelcomeComment: >
-  Thanks for opening this pull request! Please check out our contributing guidelines.
-
   💖 Thanks for opening this pull request! 💖
   Things that will help get your PR across the finish line:
   - Run `make check` locally to catch any obvious errors.
   - Document any user-facing changes you've made, including ChangeLog.md.
-   - Include tests when adding/changing behavior.
+  - Include tests when adding/changing behavior.
   - Include screenshots and animated GIFs whenever possible.
 
 # Configuration for first-pr-merge - https://github.com/behaviorbot/first-pr-merge
