@@ -1,6 +1,6 @@
 .PHONY: test lint check cover
 .PHONY: install-linters
-.PHONY: release
+.PHONY: release test-release
 
 test: ## Run tests for Wing Commander
 	go test -race ./... -timeout=5m
@@ -43,4 +43,7 @@ install-linters: ## Install linters
 #	goimports -w -local github.com/BigOokie/skywire-wing-commander ./internal
 
 release: check	## Use GoReleaser to build, package and release
-	goreleaser --rm-dist
+	goreleaser release --rm-dist
+
+test-release: check
+	goreleaser release --skip-publish --rm-dist
