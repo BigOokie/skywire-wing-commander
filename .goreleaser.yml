@@ -31,8 +31,11 @@ archive:
     #windows: Windows
 checksum:
   name_template: '{{ .ProjectName }}_checksums.txt'
-#sign:
-#  artifacts: all
+sign:
+  artifacts: checksum
+  args:
+    -u "DD42061C"
+
 snapshot:
   name_template: '{{ .ProjectName }}_SNAPSHOT_{{ .Commit }}'   
 #changelog:
