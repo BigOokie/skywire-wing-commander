@@ -31,8 +31,8 @@ archive:
     #windows: Windows
 checksum:
   name_template: '{{ .ProjectName }}_checksums.txt'
-sign:
-  artifacts: checksum
+#sign:
+#  artifacts: all
 snapshot:
   name_template: '{{ .ProjectName }}_SNAPSHOT_{{ .Commit }}'   
 #changelog:
