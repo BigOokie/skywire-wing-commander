@@ -66,7 +66,8 @@ func (cf *cmdlineFlags) parseCmdLineFlags() {
 func (cf *cmdlineFlags) handleCmdLineFlags() {
 	// if version cmd line flag `-v` then print version info and exit
 	if cf.version {
-		fmt.Println(wcconst.BotAppVersion)
+		//fmt.Println(wcconst.BotAppVersion)
+		fmt.Printf("Wing Commander %s [%s] %v\n", version, commit, date)
 		fmt.Println("")
 		os.Exit(0)
 	}
