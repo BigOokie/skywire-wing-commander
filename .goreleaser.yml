@@ -34,7 +34,8 @@ checksum:
 sign:
   artifacts: checksum
   args:
-    -u "DD42061C"
+    - -u 
+    - "DD42061C"
 
 snapshot:
   name_template: '{{ .ProjectName }}_SNAPSHOT_{{ .Commit }}'   
