@@ -27,7 +27,7 @@ lint: ## Run linters. Use make install-linters first.
 	# The govet version in golangci-lint is out of date and has spurious warnings, run it separately
 	#go vet -all ./...
 
-check: lint test  ## Run tests and linters
+check: lint cover  ## Run coverage tests and linters
 
 cover: ## Runs tests on ./cmd/ with HTML code coverage
 	go test -race -cover -coverprofile=cover.out -coverpkg=github.com/BigOokie/skywire-wing-commander/... ./...

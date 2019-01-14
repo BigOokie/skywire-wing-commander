@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v0.2.0-beta.13] - 2018-11-03
+### Added
+### Changed
+### Deprecated
+### Removed
+### Fixed
+- Fixed typo in the Heartbeat status message.
+### Security
+
 ## [v0.2.0-beta.12] - 2018-09-10
 ### Added
 - Application usage analytics collected via Google Analytics. Application usage analytics have been added to **Wing Commander** to assist with understanding "real-world" deployment usage and better focus the development of improvements and features. No personally identifiable information is collected (you can check the source code). Information that is collected includes the application version and the events that occur within the application (i.e. if you select 'start', 'update', etc.). Application usage analytics are enabled by default. If you wish to 'opt-out', please update your `config.toml` file with the following entries:
@@ -207,6 +216,8 @@ analyticsenabled = false
 
 [Unreleased]: 
 https://github.com/BigOokie/Skywire-Wing-Commander/compare/master...dev
+[v0.2.0-beta.13]: 
+https://github.com/BigOokie/Skywire-Wing-Commander/compare/v0.2.0-beta.12...v0.2.0-beta.13
 [v0.2.0-beta.12]: 
 https://github.com/BigOokie/Skywire-Wing-Commander/compare/v0.2.0-beta.11...v0.2.0-beta.12
 [v0.2.0-beta.11]: 

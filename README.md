@@ -7,6 +7,8 @@
 ![GitHub](https://img.shields.io/github/license/BigOokie/skywire-wing-commander.svg)
 [![Go Report Card](https://goreportcard.com/badge/github.com/BigOokie/skywire-wing-commander)](https://goreportcard.com/report/github.com/BigOokie/skywire-wing-commander)
 [![Coverage Status](https://coveralls.io/repos/github/BigOokie/skywire-wing-commander/badge.svg?branch=master)](https://coveralls.io/github/BigOokie/skywire-wing-commander?branch=master)
+[![codecov](https://codecov.io/gh/BigOokie/skywire-wing-commander/branch/master/graph/badge.svg)](https://codecov.io/gh/BigOokie/skywire-wing-commander)
+
 
 | Build Status |  |
 |--------------|--|
