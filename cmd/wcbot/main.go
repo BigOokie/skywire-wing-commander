@@ -16,7 +16,14 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-var wc wcBotApp
+var (
+	wc wcBotApp
+
+	// Go build will populate these variables
+	version = "dev"
+	commit  = "none"
+	date    = "unknown"
+)
 
 func main() {
 	// Setup and initialise application logging
