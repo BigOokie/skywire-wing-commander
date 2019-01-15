@@ -50,3 +50,6 @@ release: check	## Use GoReleaser to build, package and release
 
 test-release: check
 	goreleaser release --skip-publish --rm-dist
+
+downloader:
+	godownloader --repo=BigOokie/skywire-wing-commander > ./godownloader-wcbot.sh
