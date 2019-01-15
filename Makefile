@@ -42,7 +42,7 @@ install-linters: ## Install linters
 #	goimports -w -local github.com/BigOokie/skywire-wing-commander ./cmd
 #	goimports -w -local github.com/BigOokie/skywire-wing-commander ./internal
 
-build: check
+build:
 	go build -v -race ./cmd/wcbot/.
 
 release: check	## Use GoReleaser to build, package and release
