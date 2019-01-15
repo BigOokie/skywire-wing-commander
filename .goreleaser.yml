@@ -6,6 +6,8 @@ build:
   binary: wcbot
   env:
     - CGO_ENABLED=0
+  ldflags:
+    -s -w -X main.Version={{.Version}} -X main.GitCommit={{.ShortCommit}} -X main.BuildDate={{.Date}}`.
   goos:
     - darwin
     - linux
