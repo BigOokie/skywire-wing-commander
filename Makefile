@@ -2,6 +2,9 @@
 .PHONY: install-linters
 .PHONY: release test-release
 
+VERSION=`git describe --abbrev=0 --tags`
+LDFLAGS=-ldflags "-X main.Version=${VERSION}"
+
 test: ## Run tests for Wing Commander
 	go test -race ./... -timeout=5m
 
@@ -43,7 +46,10 @@ install-linters: ## Install linters
 #	goimports -w -local github.com/BigOokie/skywire-wing-commander ./internal
 
 build:
-	go build -v -race ./cmd/wcbot/.
+	go build -v ${LDFLAGS} ./cmd/wcbot/.
+
+install:
+	go install -v ${LDFLAGS} ./cmd/wcbot/.	
 
 release: check	## Use GoReleaser to build, package and release
 	goreleaser release --rm-dist
