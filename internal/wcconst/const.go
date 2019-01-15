@@ -7,9 +7,6 @@ package wcconst
 
 // Define constants used by the application
 const (
-	BotVersion    = "v0.2.0-beta.13"
-	BotAppVersion = "Wing Commander " + BotVersion
-
 	AnalyticsID = "UA-125471033-1"
 
 	AppInstanceID = "wing-commander-84F95320-8C2D-4236-9252-A322F01B91A7"
@@ -51,8 +48,7 @@ const (
 		"Note: I am bound to this chat. I will only respond to commands from my configured Admin (%s)."
 
 	// About cmd message
-	MsgAbout = "*Wing Commander (" + BotVersion + ")*\n" +
-		"A Telegram bot written in *Go* designed to help the *Skyfleet* community monitor and manage their *Skyminers*.\n" +
+	MsgAbout = "A Telegram bot written in *Go* designed to help the *Skyfleet* community monitor and manage their *Skyminers*.\n" +
 		"\n" +
 		"*Created by:* @BigOokie *2018*\n" +
 		"*GitHub:* https://github.com/BigOokie/skywire-wing-commander\n" +

@@ -62,9 +62,9 @@ func main() {
 	var startmsg string
 	// Check to see if we are starting because of an upgrade.
 	if wc.cmdFlags.upgradecompleted {
-		startmsg = fmt.Sprintf("*Successfully restarted after upgrade to %s*", wcconst.BotVersion)
+		startmsg = fmt.Sprintf("*Successfully restarted after upgrade to %s*", utils.AppVersionInfoString())
 	} else {
-		startmsg = fmt.Sprintf("*Started: %s*", wcconst.BotAppVersion)
+		startmsg = fmt.Sprintf("*Started: %s*", utils.AppVersionInfoString())
 	}
 	log.Debug(startmsg)
 	err = bot.SendNewMessage("markdown", startmsg)

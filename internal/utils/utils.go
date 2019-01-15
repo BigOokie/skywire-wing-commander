@@ -18,6 +18,40 @@ import (
 	latest "github.com/tcnksm/go-latest"
 )
 
+// AppVersionInfo structure contains information about the application binary version
+// including the version number (semantic versioning), the Git commit hash, and the build date
+type AppVersionInfo struct {
+	version string
+	commit  string
+	date    string
+}
+
+var appverinfo *AppVersionInfo
+
+// NewAppVerInfo builds and initalises a new instance of the AppVerInfo structure
+func NewAppVerInfo(versioninfo, commitinfo, dateinfo string) *AppVersionInfo {
+	return &AppVersionInfo{
+		version: versioninfo,
+		commit:  commitinfo,
+		date:    dateinfo,
+	}
+}
+
+// InitAppVersionInfo will initialise the global application information variable
+func InitAppVersionInfo(versioninfo, commitinfo, dateinfo string) {
+	appverinfo = NewAppVerInfo(versioninfo, commitinfo, dateinfo)
+}
+
+// AppVersionInfoString returns a string containing the application version information
+func AppVersionInfoString() string {
+	return fmt.Sprintf("v%s [%s] %s", appverinfo.version, appverinfo.commit, appverinfo.date)
+}
+
+// AppVersionNumberString returns a string containing the application version information
+func AppVersionNumberString() string {
+	return fmt.Sprintf("v%s", appverinfo.version)
+}
+
 // UserHome returns the current user home path
 func UserHome() string {
 	if runtime.GOOS == "windows" {

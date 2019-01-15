@@ -11,6 +11,7 @@ import (
 	"strings"
 
 	"github.com/BigOokie/skywire-wing-commander/internal/skymgrmon"
+	"github.com/BigOokie/skywire-wing-commander/internal/utils"
 	"github.com/BigOokie/skywire-wing-commander/internal/wcconfig"
 	"github.com/BigOokie/skywire-wing-commander/internal/wcconst"
 	"github.com/cloudfoundry/jibber_jabber"
@@ -500,7 +501,7 @@ func (bot *Bot) initGAClient() {
 	bot.gaclient.ClientID(bot.config.AppAnalytics.UserID)
 	bot.gaclient.UserID(bot.config.AppAnalytics.UserID)
 	bot.gaclient.ApplicationName("Wing Commander")
-	bot.gaclient.ApplicationVersion(wcconst.BotVersion)
+	bot.gaclient.ApplicationVersion(utils.AppVersionNumberString())
 	userLocale, err := jibber_jabber.DetectIETF()
 	if err == nil {
 		bot.gaclient.UserLanguage(userLocale)
