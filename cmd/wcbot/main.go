@@ -17,17 +17,18 @@ import (
 )
 
 var (
-	wc wcBotApp
-
-	// Go build will populate these variables
-	version = "dev"
-	commit  = "none"
-	date    = "unknown"
+	wc         wcBotApp
+	Version    = "0.0.0"
+	GitCommit  = "GitCommit"
+	GitBranch  = "GitBranch"
+	GitState   = "GitState"
+	GitSummary = "GitSummary"
+	BuildDate  = "BuildDate"
 )
 
 func main() {
 	// Setup application version information structures
-	utils.InitAppVersionInfo(version, commit, date)
+	utils.InitAppVersionInfo(Version, GitCommit, GitBranch, GitState, GitSummary, BuildDate)
 
 	// Setup and initialise application logging
 	wc.initLogging()

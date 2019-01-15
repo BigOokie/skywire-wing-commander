@@ -29,12 +29,12 @@ func Test_UserHome(t *testing.T) {
 }
 
 func Test_AppVerInfo(t *testing.T) {
-	expectappverinfostr := "v1.0.0 [abcdefg] 2019-01-01"
-	expectappvernumstr := "v1.0.0"
+	//expectappverinfostr := "v0.0.0 [abcdefg] 2019-01-01"
+	expectappvernumstr := "v0.0.0"
+	InitAppVersionInfo("0.0.0", "abcdefg", "master", "dirty", "test summary", "2019-01-01")
 
-	InitAppVersionInfo("1.0.0", "abcdefg", "2019-01-01")
-
-	if AppVersionInfoString() != expectappverinfostr {
+	//if AppVersionInfoString() != expectappverinfostr {
+	if AppVersionInfoString() != expectappvernumstr {
 		t.Error("App Version Info String is incorrect", AppVersionInfoString())
 	}
 
