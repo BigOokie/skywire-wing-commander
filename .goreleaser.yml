@@ -32,7 +32,7 @@ archive:
     linux: linux
     #windows: windows
   files:
-    - LICENSE.txt
+    - LICENSE
     - README.md
     - CHANGELOG.md
     - godownloader-wcbot.sh
