@@ -26,6 +26,9 @@ var (
 )
 
 func main() {
+	// Setup application version information structures
+	utils.InitAppVersionInfo(version, commit, date)
+
 	// Setup and initialise application logging
 	wc.initLogging()
 

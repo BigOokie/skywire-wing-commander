@@ -28,7 +28,7 @@ type AppVersionInfo struct {
 
 var appverinfo *AppVersionInfo
 
-// NewAppVerInfo builds and initalises a new instance of the AppVerInfo structure
+// NewAppVerInfo builds and initialises a new instance of the AppVerInfo structure
 func NewAppVerInfo(versioninfo, commitinfo, dateinfo string) *AppVersionInfo {
 	return &AppVersionInfo{
 		version: versioninfo,
