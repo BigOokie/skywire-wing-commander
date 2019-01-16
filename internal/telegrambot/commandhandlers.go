@@ -198,7 +198,7 @@ func (bot *Bot) handleCommandCheckUpdate(ctx *BotContext, command, args string) 
 		return err
 	}
 
-	updateAvailable, updateMsg := utils.UpdateAvailable("BigOokie", "skywire-wing-commander", utils.AppVersionNumberString())
+	updateAvailable, updateMsg := utils.UpdateAvailable("BigOokie", "skywire-wing-commander", wcconst.BotVersion)
 	if updateAvailable {
 		bot.SendGAEvent("BotCommand", command+"-updateavailable", "Handle"+command)
 		err = bot.Send(ctx, getSendModeforContext(ctx), "markdown", fmt.Sprintf("*Update available:* %s", updateMsg))
@@ -277,7 +277,7 @@ func (bot *Bot) handleCommandDoUpdate(ctx *BotContext, command, args string) err
 		return err
 	}
 
-	updateAvailable, updateMsg := utils.UpdateAvailable("BigOokie", "skywire-wing-commander", utils.AppVersionNumberString())
+	updateAvailable, updateMsg := utils.UpdateAvailable("BigOokie", "skywire-wing-commander", wcconst.BotVersion)
 	if !updateAvailable {
 		return bot.Send(ctx, getSendModeforContext(ctx), "markdown", fmt.Sprintf("*Already up to date:* %s", updateMsg))
 	}
