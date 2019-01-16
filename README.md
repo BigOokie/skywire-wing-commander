@@ -42,8 +42,6 @@
 # Overview
 **Wing Commander** is a Telegram bot written in `Go` designed to help the **[Skyfleet](https://skycoin.net)** community monitor and manage their Skyminers and associated Nodes.
 
-This is currently a *Work In Progress (WIP)*. The initial *ALPHA* release phase has been completed, and the project is now being made available more broadly in *BETA* release form.
-
 Please note that this **is not an official [Skycoin](https://skycoin.net) project**. If you have issues or questions - please **do not bother the Skycoin or Skywire teams** - raise any issues or feature requests in [GitHub](https://github.com/BigOokie/skywire-wing-commander/issues/new/choose). Also note that this is not my job - I am doing this as an active member of the **Skyfleet** community and will endeavor to get back to you and resolve issues when I can. Please have patience and bare with me.
 
 The intention of this project is to have a specialised Telegram bot application (written in Go) to run on a Skycoin Skywire (Skyminer) Manager Node and provide its owner with realtime management and monitoring capabilities.
