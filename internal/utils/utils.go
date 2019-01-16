@@ -56,7 +56,7 @@ func AppVersionInfoString() string {
 
 // AppVersionNumberString returns a string containing the application version information
 func AppVersionNumberString() string {
-	return fmt.Sprintf("%s", appverinfo.Version)
+	return fmt.Sprintf("v%s", appverinfo.Version)
 }
 
 // UserHome returns the current user home path
