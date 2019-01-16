@@ -51,7 +51,8 @@ const (
 		"Note: I am bound to this chat. I will only respond to commands from my configured Admin (%s)."
 
 	// About cmd message
-	MsgAbout = "A Telegram bot written in *Go* designed to help the *Skyfleet* community monitor and manage their *Skyminers*.\n" +
+	MsgAbout = "*Wing Commander (" + BotVersion + ")*\n" +
+		"A Telegram bot written in *Go* designed to help the *Skyfleet* community monitor and manage their *Skyminers*.\n" +
 		"\n" +
 		"*Created by:* @BigOokie *2018*\n" +
 		"*GitHub:* https://github.com/BigOokie/skywire-wing-commander\n" +
