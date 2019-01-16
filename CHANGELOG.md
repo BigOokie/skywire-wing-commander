@@ -4,6 +4,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v1.0.7] - 2019-01-16
+### Added
+### Changed
+### Deprecated
+### Removed
+### Fixed
+- Fixed issued that were introduced by new version and update management changes from v1.0.0 thru v1.0.6. These releases are no longer available. If you have a release of Wing Commander v1.0.0 - v1.0.6 you should update to v1.0.7.
+### Security
+
+## [v1.0.0] - 2019-01-15
+### Added
+- Wing Commander is now out of Beta. v1.0.0
+### Changed
+### Deprecated
+### Removed
+### Fixed
+### Security
+
 ## [v0.2.0-beta.13] - 2018-11-03
 ### Added
 ### Changed
@@ -216,6 +234,10 @@ analyticsenabled = false
 
 [Unreleased]: 
 https://github.com/BigOokie/Skywire-Wing-Commander/compare/master...dev
+[v1.0.7]: 
+https://github.com/BigOokie/Skywire-Wing-Commander/compare/v1.0.0...v1.0.7
+[v1.0.0]: 
+https://github.com/BigOokie/Skywire-Wing-Commander/compare/v0.2.0-beta.13...v1.0.0
 [v0.2.0-beta.13]: 
 https://github.com/BigOokie/Skywire-Wing-Commander/compare/v0.2.0-beta.12...v0.2.0-beta.13
 [v0.2.0-beta.12]: 
