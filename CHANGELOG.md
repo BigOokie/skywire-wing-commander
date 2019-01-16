@@ -4,6 +4,52 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v1.0.6] - 2019-01-15
+### Added
+### Changed
+### Deprecated
+### Removed
+### Fixed
+- Fixed further issues with application version information rand autoupgrade processing.
+### Security
+
+## [v1.0.3] - 2019-01-15
+### Added
+### Changed
+### Deprecated
+### Removed
+### Fixed
+- Fixed further issues with application version information rand autoupgrade processing.
+### Security
+
+## [v1.0.2] - 2019-01-15
+### Added
+### Changed
+### Deprecated
+### Removed
+### Fixed
+- Fixed further issues with application version information rand autoupgrade processing.
+### Security
+
+## [v1.0.1] - 2019-01-15
+### Added
+### Changed
+### Deprecated
+### Removed
+### Fixed
+- Fixed minor issue with application version information reported by -v and during upgrade processing.
+### Security
+
+## [v1.0.0] - 2019-01-15
+### Added
+- Wing Commander is now out of Beta. v1.0.0 has been released.
+- Automated release packaging is being produced using GoReleaser. Binary versions for MacOS and Linux are available on GitHub.
+### Changed
+### Deprecated
+### Removed
+### Fixed
+### Security
+
 ## [v0.2.0-beta.13] - 2018-11-03
 ### Added
 ### Changed
@@ -216,6 +262,16 @@ analyticsenabled = false
 
 [Unreleased]: 
 https://github.com/BigOokie/Skywire-Wing-Commander/compare/master...dev
+[v1.0.6]: 
+https://github.com/BigOokie/Skywire-Wing-Commander/compare/v1.0.3...v1.0.6
+[v1.0.3]: 
+https://github.com/BigOokie/Skywire-Wing-Commander/compare/v1.0.2...v1.0.3
+[v1.0.2]: 
+https://github.com/BigOokie/Skywire-Wing-Commander/compare/v1.0.1...v1.0.2
+[v1.0.1]: 
+https://github.com/BigOokie/Skywire-Wing-Commander/compare/v1.0.0...v1.0.1
+[v1.0.0]: 
+https://github.com/BigOokie/Skywire-Wing-Commander/compare/v0.2.0-beta.13...v1.0.0
 [v0.2.0-beta.13]: 
 https://github.com/BigOokie/Skywire-Wing-Commander/compare/v0.2.0-beta.12...v0.2.0-beta.13
 [v0.2.0-beta.12]: 

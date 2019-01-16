@@ -16,9 +16,20 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-var wc wcBotApp
+var (
+	wc         wcBotApp
+	Version    = "0.0.0"
+	GitCommit  = "GitCommit"
+	GitBranch  = "GitBranch"
+	GitState   = "GitState"
+	GitSummary = "GitSummary"
+	BuildDate  = "BuildDate"
+)
 
 func main() {
+	// Setup application version information structures
+	utils.InitAppVersionInfo(Version, GitCommit, GitBranch, GitState, GitSummary, BuildDate)
+
 	// Setup and initialise application logging
 	wc.initLogging()
 
@@ -55,9 +66,9 @@ func main() {
 	var startmsg string
 	// Check to see if we are starting because of an upgrade.
 	if wc.cmdFlags.upgradecompleted {
-		startmsg = fmt.Sprintf("*Successfully restarted after upgrade to %s*", wcconst.BotVersion)
+		startmsg = fmt.Sprintf("*Successfully restarted after upgrade to %s*", utils.AppVersionInfoString())
 	} else {
-		startmsg = fmt.Sprintf("*Started: %s*", wcconst.BotAppVersion)
+		startmsg = fmt.Sprintf("*Started: %s*", utils.AppVersionInfoString())
 	}
 	log.Debug(startmsg)
 	err = bot.SendNewMessage("markdown", startmsg)

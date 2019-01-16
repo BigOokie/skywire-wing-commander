@@ -15,6 +15,7 @@ import (
 	"time"
 
 	"github.com/BigOokie/skywire-wing-commander/internal/skynode"
+	"github.com/BigOokie/skywire-wing-commander/internal/utils"
 	"github.com/BigOokie/skywire-wing-commander/internal/wcconst"
 	log "github.com/sirupsen/logrus"
 )
@@ -248,7 +249,7 @@ func getAllNodesList(managerAddr string) (cns skynode.NodeInfoSlice, err error) 
 	log.Debug("SkyManagerMonitor.getAllNodesList: Start")
 	defer log.Debug("SkyManagerMonitor.getAllNodesList: End")
 
-	userAgent := "Wing Commander Telegram Bot " + wcconst.BotVersion
+	userAgent := "Wing Commander Telegram Bot " + utils.AppVersionNumberString()
 
 	client := &http.Client{}
 	client.Timeout = time.Second * 30
