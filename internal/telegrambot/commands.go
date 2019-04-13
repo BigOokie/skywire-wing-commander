@@ -78,6 +78,11 @@ var commands = Commands{
 	},
 	Command{
 		false,
+		"whitelist",
+		(*Bot).handleCommandGetWhitelistLink,
+	},
+	Command{
+		false,
 		"menu",
 		(*Bot).handleCommandShowMenu,
 	},

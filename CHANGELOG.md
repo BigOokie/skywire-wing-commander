@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [v1.1.0] - 2019-04-13
+### Added
+- Added a new button to the bot which provides a link to the official Skycoin Whitelist site (https://whitelist.skycoin.net). The Skycoin Whitelisting site allows you to manage your whitelisting, and also check the official uptime for any registered Skywire Nodes. Users will be taken to the Whitelisting site and will need to login. For security reasons, Wing Commander will not manage these credentials.
+### Changed
+### Deprecated
+### Removed
+### Fixed
+### Security
+
 ## [v1.0.7] - 2019-01-16
 ### Added
 ### Changed
@@ -234,6 +243,8 @@ analyticsenabled = false
 
 [Unreleased]: 
 https://github.com/BigOokie/Skywire-Wing-Commander/compare/master...dev
+[v1.1.0]: 
+https://github.com/BigOokie/Skywire-Wing-Commander/compare/v1.0.7...v1.1.0
 [v1.0.7]: 
 https://github.com/BigOokie/Skywire-Wing-Commander/compare/v1.0.0...v1.0.7
 [v1.0.0]: 

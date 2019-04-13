@@ -14,7 +14,7 @@ import (
 	"github.com/BigOokie/skywire-wing-commander/internal/utils"
 	"github.com/BigOokie/skywire-wing-commander/internal/wcconst"
 	log "github.com/sirupsen/logrus"
-	"gopkg.in/telegram-bot-api.v4"
+	tgbotapi "gopkg.in/telegram-bot-api.v4"
 )
 
 func logSendError(from string, err error) {
@@ -99,6 +99,24 @@ func (bot *Bot) handleCommandGetUptimeLink(ctx *BotContext, command, args string
 	kb := tgbotapi.NewInlineKeyboardMarkup(kbRow)
 
 	err := bot.SendReplyInlineKeyboard(ctx, kb, "Check Node uptime here:")
+	if err != nil {
+		logSendError("Bot.handleCommandGetUptimeLink", err)
+	}
+	return err
+}
+
+// Handler for official skycoin whitelist site command
+func (bot *Bot) handleCommandGetWhitelistLink(ctx *BotContext, command, args string) error {
+	log.Debugf("Handle command: %s args: %s", command, args)
+
+	var whitelistURL = "https://whitelist.skycoin.net"
+	log.Debugf("Bot.handleCommandGetUptimeLink: Loading official Skycoin Whitelist site: %s", whitelistURL)
+
+	whitelistURLBtn := tgbotapi.NewInlineKeyboardButtonURL("Whitelist", whitelistURL)
+	kbRow := tgbotapi.NewInlineKeyboardRow(whitelistURLBtn)
+	kb := tgbotapi.NewInlineKeyboardMarkup(kbRow)
+
+	err := bot.SendReplyInlineKeyboard(ctx, kb, "Check Whitelisting and Uptime here:")
 	if err != nil {
 		logSendError("Bot.handleCommandGetUptimeLink", err)
 	}

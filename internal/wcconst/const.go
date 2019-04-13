@@ -7,7 +7,7 @@ package wcconst
 
 // Define constants used by the application
 const (
-	BotVersion    = "v1.0.7"
+	BotVersion    = "v1.1.0"
 	BotAppVersion = "Wing Commander " + BotVersion
 
 	AnalyticsID = "UA-125471033-1"
@@ -42,6 +42,7 @@ const (
 		"- /checkupdate - check GitHub for new updates.\n" +
 		"- /update - attempt to update *Wing Commander* to the latest version from GitHub source.\n" +
 		"- /uptime - dynamically generate a link to the Skywirenc.com site to check uptime for locally connected Nodes.\n" +
+		"- /whitelist - provides a link to the official Skycoin Whitelist site. Users must login." +
 		"- /menu - request the menu keyboard to be displayed."
 
 	MsgHelp = "*Wing Commander* here. I will help you to manage and monitor your Skyminer and its Nodes.\n\n" +
