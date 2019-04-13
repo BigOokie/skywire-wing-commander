@@ -76,13 +76,6 @@ var commands = Commands{
 		"uptime",
 		(*Bot).handleCommandGetUptimeLink,
 	},
-	/*
-		Command{
-			false,
-			"listnodes",
-			(*Bot).handleCommandListNodes,
-		},
-	*/
 	Command{
 		false,
 		"menu",
