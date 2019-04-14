@@ -14,9 +14,9 @@ import (
 	"github.com/BigOokie/skywire-wing-commander/internal/wcconfig"
 	"github.com/BigOokie/skywire-wing-commander/internal/wcconst"
 	"github.com/cloudfoundry/jibber_jabber"
-	"github.com/jpillora/go-ogle-analytics"
+	ga "github.com/jpillora/go-ogle-analytics"
 	log "github.com/sirupsen/logrus"
-	"gopkg.in/telegram-bot-api.v4"
+	tgbotapi "gopkg.in/telegram-bot-api.v4"
 )
 
 // Bot provides management of the interface to the Telegram Bot
@@ -614,10 +614,10 @@ func (bot *Bot) SendMainMenuMessage(ctx *BotContext) error {
 
 	if bot.skyMgrMonitor.IsRunning() {
 		// Monitor is running
-		menuKB = CreateMultiLineMarkup("stop", "|", "status", "uptime", "|", "help", "about", "update")
+		menuKB = CreateMultiLineMarkup("stop", "|", "status", "uptime", "whitelist", "|", "help", "about", "update")
 	} else {
 		// Monitor is not running
-		menuKB = CreateMultiLineMarkup("start", "|", "help", "about", "update")
+		menuKB = CreateMultiLineMarkup("start", "|", "whitelist", "|", "help", "about", "update")
 	}
 	return bot.SendReplyInlineKeyboard(ctx, menuKB, "*Menu*")
 }
