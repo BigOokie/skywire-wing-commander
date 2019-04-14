@@ -12,8 +12,8 @@
 
 | Build Status |  |
 |--------------|--|
-|**Master**|[![Build Status](https://travis-ci.com/BigOokie/skywire-wing-commander.svg?branch=master)](https://travis-ci.com/BigOokie/skywire-wing-commander)|
-|**Dev**|[![Build Status](https://travis-ci.com/BigOokie/skywire-wing-commander.svg?branch=dev)](https://travis-ci.com/BigOokie/skywire-wing-commander)|
+|**Master**|[![Build Status](https://travis-ci.org/BigOokie/skywire-wing-commander.svg?branch=master)](https://travis-ci.org/BigOokie/skywire-wing-commander)|
+|**Dev**|[![Build Status](https://travis-ci.org/BigOokie/skywire-wing-commander.svg?branch=dev)](https://travis-ci.org/BigOokie/skywire-wing-commander)|
 
 # Contents
 - [Changelog](CHANGELOG.md)
