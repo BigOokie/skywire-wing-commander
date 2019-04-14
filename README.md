@@ -12,8 +12,8 @@
 
 | Build Status |  |
 |--------------|--|
-|**Master**|[![Build Status](https://travis-ci.org/BigOokie/skywire-wing-commander.svg?branch=master)](https://travis-ci.org/BigOokie/skywire-wing-commander)|
-|**Dev**|[![Build Status](https://travis-ci.org/BigOokie/skywire-wing-commander.svg?branch=dev)](https://travis-ci.org/BigOokie/skywire-wing-commander)|
+|**Master**|[![Build Status](https://travis-ci.com/BigOokie/skywire-wing-commander.svg?branch=master)](https://travis-ci.com/BigOokie/skywire-wing-commander)|
+|**Dev**|[![Build Status](https://travis-ci.com/BigOokie/skywire-wing-commander.svg?branch=dev)](https://travis-ci.com/BigOokie/skywire-wing-commander)|
 
 # Contents
 - [Changelog](CHANGELOG.md)
@@ -226,6 +226,7 @@ This section outlines the Telegram Bot commands that are currently supported by 
 - [Check Updates](#check-updates)
 - [Do Update](#do-update)
 - [Up Time](#up-time)
+- [Whitelist](#whitelist)
 - [Main Menu](#main-menu)
 
 ## Help
@@ -281,6 +282,10 @@ Additionally, the `/start` command will initiate a Heartbeat which will provide 
 **Wing Commander** will dynamically generate a URL request to the [skywirenc.com](https://skywirenc.com) site for the currently connected local Nodes. The user will be presented with a hyperlink button in Telegram that they can click to be taken to the site to check their nodes uptime.
 
 Quite deliberatly, we have avoided attempting to compute uptime indipendantly. We prefer to utilise the same central source to remove ambiguity and potential for drift in calculations.
+
+## Whitelist
+`/whitelist`
+Provides a link to the official Skycoin Whitelisting site. Users must still login to the Whitelisting site themselves - for security reasons, **Wing Commander** will not manage any user credentials for this site.
 
 ## Main Menu
 `/menu`
