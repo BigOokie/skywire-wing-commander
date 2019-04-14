@@ -617,7 +617,7 @@ func (bot *Bot) SendMainMenuMessage(ctx *BotContext) error {
 		menuKB = CreateMultiLineMarkup("stop", "|", "status", "uptime", "whitelist", "|", "help", "about", "update")
 	} else {
 		// Monitor is not running
-		menuKB = CreateMultiLineMarkup("start", "|", "https://whitelist.skycoin.net", "|", "help", "about", "update")
+		menuKB = CreateMultiLineMarkup("start", "|", "whitelist", "|", "help", "about", "update")
 	}
 	return bot.SendReplyInlineKeyboard(ctx, menuKB, "*Menu*")
 }
