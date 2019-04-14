@@ -110,15 +110,15 @@ func (bot *Bot) handleCommandGetWhitelistLink(ctx *BotContext, command, args str
 	log.Debugf("Handle command: %s args: %s", command, args)
 
 	var whitelistURL = "https://whitelist.skycoin.net"
-	log.Debugf("Bot.handleCommandGetUptimeLink: Loading official Skycoin Whitelist site: %s", whitelistURL)
+	log.Debugf("Bot.handleCommandGetWhitelistLink: Loading official Skycoin Whitelist site: %s", whitelistURL)
 
-	whitelistURLBtn := tgbotapi.NewInlineKeyboardButtonURL("Whitelist", whitelistURL)
+	whitelistURLBtn := tgbotapi.NewInlineKeyboardButtonURL("Official Whitelist Site", whitelistURL)
 	kbRow := tgbotapi.NewInlineKeyboardRow(whitelistURLBtn)
 	kb := tgbotapi.NewInlineKeyboardMarkup(kbRow)
 
 	err := bot.SendReplyInlineKeyboard(ctx, kb, "Check Whitelisting and Uptime here:")
 	if err != nil {
-		logSendError("Bot.handleCommandGetUptimeLink", err)
+		logSendError("Bot.handleCommandGetWhitelistLink", err)
 	}
 	return err
 }
