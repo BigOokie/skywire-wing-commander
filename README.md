@@ -348,7 +348,14 @@ Alternatively, the discussion associated with the reported issue with the offici
 
 # Donations
 This is not my job, but I enjoy building things for the **Skyfleet** community. If you find my work useful, please consider donating to support it.
-```
-Skycoin:    ES5LccJDhBCK275APmW9tmQNEgiYwTFKQF
-Bitcoin:    1KedLdhvUubRMLVxw8XQWoEBMkvHvf8aGt 
-```
+
+**Skycoin:** 
+**ES5LccJDhBCK275APmW9tmQNEgiYwTFKQF**  
+<img src="https://raw.githubusercontent.com/BigOokie/wc-digital-assets/master/assets/images/BigOokie-5SKY-Donation-QR.jpg" width=300 height=300>
+
+
+**Bitcoin:**
+**1KedLdhvUubRMLVxw8XQWoEBMkvHvf8aGt**
+
+
+
