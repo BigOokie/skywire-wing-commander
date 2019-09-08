@@ -43,7 +43,7 @@ func (ba *wcBotApp) loadConfig() {
 		"monitor.heartbeatintmin":        120,
 		"monitor.discoverymonitorintmin": 120,
 		"skymanager.address":             "127.0.0.1:8000",
-		"skymanager.discoveryaddress":    "discovery.skycoin.net:8001",
+		"skymanager.discoveryaddress":    "discovery.skycoin.com:8001",
 	})
 
 	if err != nil {

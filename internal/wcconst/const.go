@@ -7,7 +7,7 @@ package wcconst
 
 // Define constants used by the application
 const (
-	BotVersion    = "v1.1.0"
+	BotVersion    = "v1.1.1"
 	BotAppVersion = "Wing Commander " + BotVersion
 
 	AnalyticsID = "UA-125471033-1"
@@ -61,7 +61,7 @@ const (
 		"\n" +
 		"Issues and feature requests must be logged via [GitHub](https://github.com/BigOokie/skywire-wing-commander/issues/new/choose)\n" +
 		"\n" +
-		"*Skycoin*: https://www.skycoin.net/\n" +
+		"*Skycoin*: https://www.skycoin.com/\n" +
 		"\n" +
 		"*Donations most welcome* 👍\n" +
 		"*Skycoin:* ES5LccJDhBCK275APmW9tmQNEgiYwTFKQF"

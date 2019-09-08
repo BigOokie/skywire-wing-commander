@@ -24,13 +24,39 @@
 #   go-tests = true
 #   unused-packages = true
 
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/cloudfoundry/jibber_jabber"
+
+[[constraint]]
+  name = "github.com/go-test/deep"
+  version = "1.0.3"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/jpillora/go-ogle-analytics"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/marcsauter/single"
+
 [[constraint]]
   name = "github.com/sirupsen/logrus"
-  version = "1.0.6"
+  version = "1.4.2"
+
+[[constraint]]
+  name = "github.com/spf13/viper"
+  version = "1.4.0"
+
+[[constraint]]
+  name = "github.com/tcnksm/go-latest"
+  #version = "0.1.1"
+  branch = "master"
 
 [[constraint]]
   name = "gopkg.in/telegram-bot-api.v4"
-  version = "4.6.2"
+  version = "4.6.4"
 
 [prune]
   go-tests = true

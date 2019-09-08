@@ -1,7 +1,7 @@
 # Wing Commander
 <img src="https://raw.githubusercontent.com/BigOokie/wc-digital-assets/master/assets/icons/WingCommanderLogoFull-600x600.png" width=250 height=250>
 
-**Note:** The Skycoin Cloud included in the logo above is the property of the [Skycoin project](https://skycoin.net), and has been used here with permission of the Skycoin project.
+**Note:** The Skycoin Cloud included in the logo above is the property of the [Skycoin project](https://skycoin.com), and has been used here with permission of the Skycoin project.
 
 ![GitHub (pre-)release](https://img.shields.io/github/release/BigOokie/skywire-wing-commander/all.svg)
 ![GitHub](https://img.shields.io/github/license/BigOokie/skywire-wing-commander.svg)
@@ -40,9 +40,9 @@
 ***
 
 # Overview
-**Wing Commander** is a Telegram bot written in `Go` designed to help the **[Skyfleet](https://skycoin.net)** community monitor and manage their Skyminers and associated Nodes.
+**Wing Commander** is a Telegram bot written in `Go` designed to help the **[Skyfleet](https://skycoin.com)** community monitor and manage their Skyminers and associated Nodes.
 
-Please note that this **is not an official [Skycoin](https://skycoin.net) project**. If you have issues or questions - please **do not bother the Skycoin or Skywire teams** - raise any issues or feature requests in [GitHub](https://github.com/BigOokie/skywire-wing-commander/issues/new/choose). Also note that this is not my job - I am doing this as an active member of the **Skyfleet** community and will endeavor to get back to you and resolve issues when I can. Please have patience and bare with me.
+Please note that this **is not an official [Skycoin](https://skycoin.com) project**. If you have issues or questions - please **do not bother the Skycoin or Skywire teams** - raise any issues or feature requests in [GitHub](https://github.com/BigOokie/skywire-wing-commander/issues/new/choose). Also note that this is not my job - I am doing this as an active member of the **Skyfleet** community and will endeavor to get back to you and resolve issues when I can. Please have patience and bare with me.
 
 The intention of this project is to have a specialised Telegram bot application (written in Go) to run on a Skycoin Skywire (Skyminer) Manager Node and provide its owner with realtime management and monitoring capabilities.
 

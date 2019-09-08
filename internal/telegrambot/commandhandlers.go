@@ -109,7 +109,7 @@ func (bot *Bot) handleCommandGetUptimeLink(ctx *BotContext, command, args string
 func (bot *Bot) handleCommandGetWhitelistLink(ctx *BotContext, command, args string) error {
 	log.Debugf("Handle command: %s args: %s", command, args)
 
-	var whitelistURL = "https://whitelist.skycoin.net"
+	var whitelistURL = "https://whitelist.skycoin.com"
 	log.Debugf("Bot.handleCommandGetWhitelistLink: Loading official Skycoin Whitelist site: %s", whitelistURL)
 
 	whitelistURLBtn := tgbotapi.NewInlineKeyboardButtonURL("Official Whitelist Site", whitelistURL)
