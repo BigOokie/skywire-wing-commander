@@ -21,7 +21,7 @@ func Test_ConfigString(t *testing.T) {
 		"  userid = \n" +
 		"[SkyManager]\n" +
 		"  address = \"127.0.0.1:8000\"\n" +
-		"  discoveryaddress = \"discovery.skycoin.com:8001\"\n" +
+		"  discoveryaddress = \"testnet.skywire.skycoin.com:8001\"\n" +
 		"[Telegram]\n" +
 		"  apikey = \"ABC123\"\n" +
 		"  chatid = 123456789\n" +
@@ -35,7 +35,7 @@ func Test_ConfigString(t *testing.T) {
 	var config Config
 	config.WingCommander.TwoFactorEnabled = false
 	config.SkyManager.Address = "127.0.0.1:8000"
-	config.SkyManager.DiscoveryAddress = "discovery.skycoin.com:8001"
+	config.SkyManager.DiscoveryAddress = "testnet.skywire.skycoin.com:8001"
 	config.Telegram.APIKey = "ABC123"
 	config.Telegram.ChatID = 123456789
 	config.Telegram.Admin = "@TESTUSER"
@@ -64,7 +64,7 @@ func Test_LoadConfigParameters_BadFileName(t *testing.T) {
 		"monitor.heartbeatintmin":        120,
 		"monitor.discoverymonitorintmin": 120,
 		"skymanager.address":             "127.0.0.1:8000",
-		"skymanager.discoveryaddress":    "discovery.skycoin.com:8001",
+		"skymanager.discoveryaddress":    "testnet.skywire.skycoin.com:8001",
 	})
 
 	if err == nil {
@@ -84,7 +84,7 @@ func Test_LoadConfigParameters_AllParams(t *testing.T) {
 		"monitor.heartbeatintmin":        120,
 		"monitor.discoverymonitorintmin": 120,
 		"skymanager.address":             "127.0.0.1:8000",
-		"skymanager.discoveryaddress":    "discovery.skycoin.com:8001",
+		"skymanager.discoveryaddress":    "testnet.skywire.skycoin.com:8001",
 	})
 
 	if err != nil {
@@ -104,7 +104,7 @@ func Test_LoadConfigParameters_NoAdminAtSym(t *testing.T) {
 		"monitor.heartbeatintmin":        120,
 		"monitor.discoverymonitorintmin": 120,
 		"skymanager.address":             "127.0.0.1:8000",
-		"skymanager.discoveryaddress":    "discovery.skycoin.com:8001",
+		"skymanager.discoveryaddress":    "testnet.skywire.skycoin.com:8001",
 	})
 
 	if err != nil {
@@ -124,7 +124,7 @@ func Test_LoadConfigParameters_NoDefaultParams(t *testing.T) {
 		"monitor.heartbeatintmin":        120,
 		"monitor.discoverymonitorintmin": 120,
 		"skymanager.address":             "127.0.0.1:8000",
-		"skymanager.discoveryaddress":    "discovery.skycoin.com:8001",
+		"skymanager.discoveryaddress":    "testnet.skywire.skycoin.com:8001",
 	})
 
 	if err != nil {
@@ -144,7 +144,7 @@ func Test_LoadConfigParameters_BadParamData(t *testing.T) {
 		"monitor.heartbeatintmin":        120,
 		"monitor.discoverymonitorintmin": 120,
 		"skymanager.address":             "127.0.0.1:8000",
-		"skymanager.discoveryaddress":    "discovery.skycoin.com:8001",
+		"skymanager.discoveryaddress":    "testnet.skywire.skycoin.com:8001",
 	})
 
 	if err == nil {

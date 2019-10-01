@@ -11,4 +11,4 @@ admin = "@USERNAME"
 
 [skymanager]
 #address="127.0.0.1:8000"
-#discoveryaddress="discovery.skycoin.com:8001"
+#discoveryaddress="testnet.skywire.skycoin.com:8001"
