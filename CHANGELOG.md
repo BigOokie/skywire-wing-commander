@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [v1.1.1] - TBA
+## [v1.1.1] - 2019-10-02
 ### Added
 ### Changed
 - Updated Wing Commander based on domain migration for Skycoin (from skycoin.net to skycoin.com). All references to the old domain have now been updated. Specific details relating to the changes made by the Skycoin team can be found here: https://github.com/skycoin/skywire/wiki/Testnet-Discovery-Address-Change-Instructions
